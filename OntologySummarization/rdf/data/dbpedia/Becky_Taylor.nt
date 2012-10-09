@@ -1,0 +1,60 @@
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/yearsActive>	"2001"^^<http://www.w3.org/2001/XMLSchema#int> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/birthDate>	"1988-09-26"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://dbpedia.org/ontology/MusicalArtist> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://xmlns.com/foaf/0.1/givenName>	"Rebecca Jane Grosvenor Taylor"@en .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://dbpedia.org/class/yago/EnglishFemaleSingers> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://xmlns.com/foaf/0.1/name>	"Becky Jane Taylor"@en .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://dbpedia.org/class/yago/LivingPeople> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/genre>	<http://dbpedia.org/resource/Crossover_(music)> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://schema.org/Person> .
+<http://dbpedia.org/resource/Becky_Jane_Taylor>	<http://dbpedia.org/ontology/wikiPageRedirects>	<http://dbpedia.org/resource/Becky_Taylor> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://dbpedia.org/class/yago/EnglishChildSingers> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://purl.org/dc/terms/subject>	<http://dbpedia.org/resource/Category:English_child_singers> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/ontology/activeYearsStartYear>	"2001-01-01T00:00:00+02:00"^^<http://www.w3.org/2001/XMLSchema#gYear> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/birthName>	"Rebecca Jane Grosvenor Taylor"@en .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://dbpedia.org/ontology/Person> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://xmlns.com/foaf/0.1/surname>	"Taylor"@en .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/ontology/wikiPageExternalLink>	<http://beckyjanetaylor.co.uk/> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/ontology/background>	"solo_singer"@en .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/2002/07/owl#sameAs>	<http://rdf.freebase.com/ns/m.05b6bzx> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/ns/prov#wasDerivedFrom>	<http://en.wikipedia.org/wiki/Becky_Taylor?oldid=480714102> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/2000/01/rdf-schema#label>	"Becky Taylor"@en .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/2000/01/rdf-schema#comment>	"Becky Jane Grosvenor-Taylor is an English singer notable for having landed a recording contract at a very young age."@en .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://www.w3.org/2002/07/owl#Thing> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/2000/01/rdf-schema#comment>	"Becky Jane Taylor, f\u00F6dd 29 juni 1988 i Hammersmith, London, England, \u00E4r en engelsk s\u00E5ngerska. Vid sju \u00E5rs \u00E5lder upptr\u00E4dde Taylor f\u00F6r f\u00F6rsta g\u00E5ngen p\u00E5 Palace Theatre i West End, London. Hon vann Thorndikes talangt\u00E4vling och British Arts Award vid \u00E5tta \u00E5rs \u00E5lder. Fil:MusicalnotesUK. svg\u00A0Denna artikel om en musiker fr\u00E5n Storbritannien \u00E4r bara p\u00E5b\u00F6rjad. Du kan hj\u00E4lpa till genom att ut\u00F6ka den. en:Becky Taylor Finns p\u00E5 youtube"@sv .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://xmlns.com/foaf/0.1/isPrimaryTopicOf>	<http://en.wikipedia.org/wiki/Becky_Taylor> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/birthPlace>	<http://dbpedia.org/resource/London> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://xmlns.com/foaf/0.1/name>	"Becky Taylor"@en .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://purl.org/dc/terms/subject>	<http://dbpedia.org/resource/Category:1988_births> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://purl.org/dc/terms/subject>	<http://dbpedia.org/resource/Category:Living_people> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/ontology/abstract>	"Becky Jane Taylor, f\u00F6dd 29 juni 1988 i Hammersmith, London, England, \u00E4r en engelsk s\u00E5ngerska. Vid sju \u00E5rs \u00E5lder upptr\u00E4dde Taylor f\u00F6r f\u00F6rsta g\u00E5ngen p\u00E5 Palace Theatre i West End, London. Hon vann Thorndikes talangt\u00E4vling och British Arts Award vid \u00E5tta \u00E5rs \u00E5lder. Fil:MusicalnotesUK. svg\u00A0Denna artikel om en musiker fr\u00E5n Storbritannien \u00E4r bara p\u00E5b\u00F6rjad. Du kan hj\u00E4lpa till genom att ut\u00F6ka den. en:Becky Taylor Finns p\u00E5 youtube"@sv .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/name>	"Taylor, Becky"@en .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://purl.org/dc/terms/subject>	<http://dbpedia.org/resource/Category:People_from_Hammersmith> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://purl.org/dc/terms/subject>	<http://dbpedia.org/resource/Category:English_female_singers> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/ontology/birthPlace>	<http://dbpedia.org/resource/London> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/website>	<http://beckyjanetaylor.co.uk/> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/ontology/abstract>	"Becky Jane Grosvenor-Taylor is an English singer notable for having landed a recording contract at a very young age."@en .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/placeOfBirth>	<http://dbpedia.org/resource/Hammersmith> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://xmlns.com/foaf/0.1/givenName>	"Becky"@en .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/ontology/genre>	<http://dbpedia.org/resource/Crossover_(music)> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/dateOfBirth>	"29"^^<http://www.w3.org/2001/XMLSchema#int> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/ontology/birthPlace>	<http://dbpedia.org/resource/Hammersmith> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/background>	"solo_singer"@en .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/wikiPageUsesTemplate>	<http://dbpedia.org/resource/Template:Infobox_musical_artist> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/wikiPageUsesTemplate>	<http://dbpedia.org/resource/Template:Persondata> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://schema.org/MusicGroup> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://dbpedia.org/ontology/Agent> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/birthPlace>	<http://dbpedia.org/resource/Hammersmith> .
+<http://en.wikipedia.org/wiki/Becky_Taylor>	<http://xmlns.com/foaf/0.1/primaryTopic>	<http://dbpedia.org/resource/Becky_Taylor> .
+<http://mpii.de/yago/resource/Becky_Taylor>	<http://www.w3.org/2002/07/owl#sameAs>	<http://dbpedia.org/resource/Becky_Taylor> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://dbpedia.org/ontology/Artist> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/2000/01/rdf-schema#label>	"Becky Taylor"@sv .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/ontology/wikiPageExternalLink>	<http://www.beckyjanetaylor.co.uk/> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/name>	"Becky Jane Taylor"@en .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://dbpedia.org/class/yago/Person100007846> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/ontology/birthDate>	"1988-09-26"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/ontology/birthDate>	"1988-06-29"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://xmlns.com/foaf/0.1/homepage>	<http://beckyjanetaylor.co.uk/> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/hasPhotoCollection>	<http://www4.wiwiss.fu-berlin.de/flickrwrappr/photos/Becky_Taylor> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://dbpedia.org/property/placeOfBirth>	<http://dbpedia.org/resource/London> .
+<http://dbpedia.org/resource/Becky_Taylor>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://xmlns.com/foaf/0.1/Person> .
