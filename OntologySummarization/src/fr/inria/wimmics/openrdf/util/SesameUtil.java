@@ -1,7 +1,11 @@
 package fr.inria.wimmics.openrdf.util;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
+import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.GraphQuery;
@@ -50,7 +54,7 @@ public class SesameUtil {
 	public static void printSPARQLQueryhResult(Repository repo, String queryString) throws RepositoryException, MalformedQueryException, QueryEvaluationException {
 		RepositoryConnection con = repo.getConnection();
 		TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
-
+		
 		TupleQueryResult result = tupleQuery.evaluate();
 		try {
 			
@@ -87,4 +91,25 @@ public class SesameUtil {
 		}
 		
 	}
+	
+	public static List<Statement> evaluateConstructQuery(Repository repo, String queryString) throws RepositoryException, MalformedQueryException, QueryEvaluationException {
+		RepositoryConnection con = repo.getConnection();
+		GraphQuery graphQuery = con.prepareGraphQuery(QueryLanguage.SPARQL, queryString);
+		GraphQueryResult graphResult = graphQuery.evaluate();
+		List<Statement> stmts = new ArrayList<Statement>();
+		try {
+			while (graphResult.hasNext()) {
+				   Statement st = graphResult.next();
+				   stmts.add(st);
+				   //System.out.println(st);
+				   // ... do something with the resulting statement here.
+				}			
+		} finally {
+			graphResult.close();
+			con.close();
+		}
+		return stmts;
+	}
+	
+	
 }

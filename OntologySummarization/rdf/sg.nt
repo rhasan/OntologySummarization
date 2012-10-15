@@ -1,0 +1,6 @@
+<http://www.example.com/Person> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.example.com/Animal> .
+<http://www.example.com/Man> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.example.com/Person> .
+<http://www.example.com/Person> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:blank1 .
+_:blank1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+_:blank1 <http://www.w3.org/2002/07/owl#onProperty> <http://www.example.com/hasFather> .
+_:blank1 <http://www.w3.org/2002/07/owl#cardinality> "1" .
