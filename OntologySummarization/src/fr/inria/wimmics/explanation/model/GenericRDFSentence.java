@@ -28,7 +28,7 @@ public class GenericRDFSentence {
 			str += s.toString()+"\n";
 		}
 		str += "\n}\n";
-		
+		/*
 		str += "Main statement: "+mainStmt.toString();
 		str += "\nSubject: "+subject.toString();
 		str += "\nPredicate:"+predicate.toString();
@@ -36,7 +36,7 @@ public class GenericRDFSentence {
 		
 		for(Value v:objects) {
 			str += v.toString()+"\n";
-		}
+		}*/
 		return str;
 	}
 	

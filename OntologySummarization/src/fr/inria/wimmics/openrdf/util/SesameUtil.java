@@ -1,5 +1,9 @@
 package fr.inria.wimmics.openrdf.util;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +23,12 @@ import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
+import org.openrdf.rio.RDFHandlerException;
+import org.openrdf.rio.ntriples.NTriplesParserFactory;
+import org.openrdf.rio.ntriples.NTriplesUtil;
+import org.openrdf.rio.ntriples.NTriplesWriter;
+import org.openrdf.rio.ntriples.NTriplesWriterFactory;
+import org.openrdf.rio.rdfxml.RDFXMLWriter;
 import org.openrdf.sail.Sail;
 import org.openrdf.sail.inferencer.fc.ForwardChainingRDFSInferencer;
 import org.openrdf.sail.memory.MemoryStore;
@@ -111,5 +121,26 @@ public class SesameUtil {
 		return stmts;
 	}
 	
+	public static void writeNTripletoFile(Set<Statement> statements, File file) throws IOException, RepositoryException, RDFHandlerException {
+		Writer writer = new FileWriter(file);
+		
+		Repository repo = getMemoryBasedRepository(false);
+		RepositoryConnection con = repo.getConnection();
+		con.add(statements);
+		con.export(new NTriplesWriter(writer));
+		writer.close();
+		
+	}
+	
+	public static void writeXMLtoFile(Set<Statement> statements, File file) throws IOException, RepositoryException, RDFHandlerException {
+		Writer writer = new FileWriter(file);
+		
+		Repository repo = getMemoryBasedRepository(false);
+		RepositoryConnection con = repo.getConnection();
+		con.add(statements);
+		con.export(new RDFXMLWriter(writer));
+		writer.close();
+		
+	}
 	
 }

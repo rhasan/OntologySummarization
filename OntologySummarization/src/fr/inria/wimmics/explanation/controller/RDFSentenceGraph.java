@@ -25,55 +25,60 @@ public class RDFSentenceGraph {
 	private HashMap<GenericRDFSentence,HashMap<GenericRDFSentence,Double>> allSentenceLinks = null;
 	
 	
+
+	
+	public RDFSentenceGraph(Set<Statement> statements, double p) {
+		navigProp = p;
+		T = statements;
+		graphSentences = new HashSet<GenericRDFSentence>();
+
+		
+		bConnected = new HashMap<Statement,Set<Statement>>();
+		constructBconnected();
+		constructGenericRDFSentences();
+		
+		constructRDFSentenceLinks();
+	}
+	
+	public Set<Statement> getStatements() {
+		return T;
+	}
+	
+	public RDFSentenceGraph(Set<GenericRDFSentence> sentences, double p, int nothing) {
+		navigProp = p;
+		graphSentences = sentences;
+		constructRDFSentenceLinks();
+	}
+	
 	public Set<GenericRDFSentence> getGraphSentences() {
 		return graphSentences;
 	}
 	
-	public RDFSentenceGraph(Set<Statement> statements, double p) {
-		bConnected = new HashMap<Statement,Set<Statement>>();
-		graphSentences = new HashSet<GenericRDFSentence>();
-		navigProp = p;
-		T = statements;
-		
-		constructBconnected();
-		constructGenericRDFSentences();
-		constructRDFSentenceLinks();
-	}
-	
-	
-	public void createLink(HashMap<GenericRDFSentence,Set<GenericRDFSentence>> links, GenericRDFSentence a, GenericRDFSentence b) {
-		
-		Set<GenericRDFSentence> d2 = null;
-		d2 = links.get(a);
-		if(d2 == null) {
-			
-			d2 = new HashSet<GenericRDFSentence>();
-			links.put(a, d2);
-		}
-		d2.add(b);
-	}
-	
-	
-	public void createWeightedLink(HashMap<GenericRDFSentence,HashMap<GenericRDFSentence, Double>> links, GenericRDFSentence a, GenericRDFSentence b, double w) {
-		
-		HashMap<GenericRDFSentence, Double> d2 = null;
-		d2 = links.get(a);
-		if(d2 == null) {
-			d2 = new HashMap<GenericRDFSentence, Double>();
-			links.put(a, d2);
-		}
-		d2.put(b, w);
-		
-	}
-
 	public double getWeight(GenericRDFSentence a, GenericRDFSentence b) {
+		
+		assert isEdge(a, b);
 		
 		HashMap<GenericRDFSentence, Double> d2 = allSentenceLinks.get(a);
 		Double w = d2.get(b);
 		return w;
 	}
 	
+	public boolean isEdge(GenericRDFSentence a, GenericRDFSentence b) {
+		
+		HashMap<GenericRDFSentence, Double> d2 = allSentenceLinks.get(a);
+		if(d2==null) return false;
+		
+		Double w = d2.get(b);
+		if(w==null) return false;
+		
+		return true;
+	}
 	
+	public HashMap<GenericRDFSentence, HashMap<GenericRDFSentence, Double>> getEdgeList() {
+		return allSentenceLinks;
+	}
+
+
 	public void printGraph() {
 		for(GenericRDFSentence s1:allSentenceLinks.keySet()) {
 			HashMap<GenericRDFSentence, Double> d2 = allSentenceLinks.get(s1);
@@ -86,12 +91,38 @@ public class RDFSentenceGraph {
 				System.out.print("Weight:"+w);
 				System.out.print("\n#################################\n\n");
 			}
-			
 		}
+	}
+		
+	
+	private void createLink(HashMap<GenericRDFSentence,Set<GenericRDFSentence>> links, GenericRDFSentence a, GenericRDFSentence b) {
+		
+		Set<GenericRDFSentence> d2 = null;
+		d2 = links.get(a);
+		if(d2 == null) {
+			
+			d2 = new HashSet<GenericRDFSentence>();
+			links.put(a, d2);
+		}
+		d2.add(b);
 	}
 	
 	
-	public void constructRDFSentenceLinks() {
+	private void createWeightedLink(HashMap<GenericRDFSentence,HashMap<GenericRDFSentence, Double>> links, GenericRDFSentence a, GenericRDFSentence b, double w) {
+		
+		HashMap<GenericRDFSentence, Double> d2 = null;
+		d2 = links.get(a);
+		if(d2 == null) {
+			d2 = new HashMap<GenericRDFSentence, Double>();
+			links.put(a, d2);
+		}
+		d2.put(b, w);
+		
+	}
+
+
+	
+	private void constructRDFSentenceLinks() {
 		coordinateLinks = new HashMap<GenericRDFSentence,Set<GenericRDFSentence>>();
 		sequentialLinks = new HashMap<GenericRDFSentence,Set<GenericRDFSentence>>();
 		allSentenceLinks = new HashMap<GenericRDFSentence,HashMap<GenericRDFSentence, Double>>();
@@ -124,7 +155,7 @@ public class RDFSentenceGraph {
 		}
 	}
 	
-	public boolean commonBlanNode(BNode bn, Statement st) {
+	private boolean commonBlanNode(BNode bn, Statement st) {
 		
 		if(st.getSubject() instanceof BNode) {
 			BNode subBn = (BNode)st.getSubject();
@@ -139,7 +170,7 @@ public class RDFSentenceGraph {
 		return false;
 	}
 	
-	public void constructBconnected(){
+	private void constructBconnected(){
 		
 		for(Statement i:T){
 			Resource stSubject = i.getSubject();
@@ -175,7 +206,7 @@ public class RDFSentenceGraph {
 	}
 	
 	
-	public boolean isBConnected(Statement i, Statement j) {
+	private boolean isBConnected(Statement i, Statement j) {
 		Set<Statement> stmts = bConnected.get(i);
 		if(stmts.contains(j)) {
 			return true;
@@ -183,7 +214,7 @@ public class RDFSentenceGraph {
 		return false;
 	}
 	
-	public Set<Value> getSentenceObjects(Statement i, Statement j) {
+	private Set<Value> getSentenceObjects(Statement i, Statement j) {
 		
 		Set<Value> set = new HashSet<Value>();
 		Set<Value> iSet = new HashSet<Value>();
@@ -215,7 +246,7 @@ public class RDFSentenceGraph {
 		return set;
 	}
 	
-	public void constructGenericRDFSentences() {
+	private void constructGenericRDFSentences() {
 
 		for(Statement i:T){
 			if((i.getSubject() instanceof BNode)==false) {

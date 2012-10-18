@@ -17,18 +17,20 @@ import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFFormat;
+import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
 
 import fr.inria.wimmics.explanation.model.GenericRDFSentence;
 import fr.inria.wimmics.explanation.controller.RDFSentenceGraph;
+import fr.inria.wimmics.explanation.controller.SentenceGraphSummarizer;
 import fr.inria.wimmics.openrdf.util.SesameUtil;
 
 public class RDFSentenceGraphUnitTest {
 
 	@Test
-	public void test() throws RepositoryException, RDFParseException, IOException, MalformedQueryException, QueryEvaluationException {
+	public void test() throws RepositoryException, RDFParseException, IOException, MalformedQueryException, QueryEvaluationException, RDFHandlerException {
 		//fail("Not yet implemented");
-		String filePath = "rdf/sg.nt";
+		String filePath = "rdf/animal.nt";
 		String baseURI = "http://www.example.com/";
 		Repository myRepository = SesameUtil.getMemoryBasedRepository();
 		
@@ -61,14 +63,22 @@ public class RDFSentenceGraphUnitTest {
 		Set<Statement> statementsSet = new HashSet<Statement>(stmts);
 		//Set<Statement> statementsSet = SesameUtil.evaluateConstructQueryReturnSet(myRepository, "CONSTRUCT {?s ?p ?o} where {?s ?p ?o.}");
 		
-		RDFSentenceGraph rdfSentenceGraph = new RDFSentenceGraph(statementsSet, 0.6);
+		RDFSentenceGraph rdfSentenceGraph = new RDFSentenceGraph(statementsSet, 0.5);
 		
-		/*
-		for(GenericRDFSentence sentence:rdfSentenceGraph.getGraphSentences()) {
-			System.out.println(sentence.toString());
-			System.out.println("-------------------------");
-		}*/
-		rdfSentenceGraph.printGraph();
+
+		SentenceGraphSummarizer summmarizer = new SentenceGraphSummarizer(rdfSentenceGraph);
+
+		//summmarizer.summarizeByCentralityThreshold(.1);
+		summmarizer.summarizeBySizeWOreRank(.20);
+		
+		
+		Set<Statement> summarizedStmts = summmarizer.summarizeBySize(.20);
+		
+		String outputFilePath = "rdf/summary.rdf";
+		File outputFile = new File(outputFilePath); 
+		//SesameUtil.writeNTripletoFile(summarizedStmts, outputFile);
+		SesameUtil.writeXMLtoFile(summarizedStmts, outputFile);
+		
 	}
 
 }
