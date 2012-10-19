@@ -1,0 +1,69 @@
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix data: <http://alphubel.unice.fr:8080/lodutil/data/> .
+@prefix other: <http://alphubel.unice.fr:8080/lodutil/other/> .
+@prefix r4ta: <http://ns.inria.fr/ratio4ta/v2#> .
+@prefix just: <http://alphubel.unice.fr:8080/lodutil/justification/> .
+@prefix lodhost: <http://alphubel.unice.fr:8080/lodutil/> .
+@prefix : <http://www.example.org/exampleDocument#> .
+@prefix schema: <http://alphubel.unice.fr:8080/schema/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+
+just:j1 {
+	other:result1 rdf:type r4ta:Result .
+	data:d8 r4ta:justifiedBy just:j1 .
+	data:d8 rdf:type r4ta:OutputData .
+	data:d8 r4ta:derivedFrom data:d1 .
+	data:d8 r4ta:belongsTo other:result1 .
+	data:d8 r4ta:derivedBy other:derivation1 .
+	data:d1 rdf:type r4ta:InputData .
+	just:j1 r4ta:justifies data:d8 .
+	other:derivation1 rdf:type r4ta:DataDerivation .
+	other:derivation1 r4ta:usedRule <http://example.org/rule1> .
+	other:derivation1 r4ta:wasInvolvedInComputing other:result1 .
+	other:derivation1 r4ta:derivationReasoner lodhost:FoafConnection .
+	other:derivation1 r4ta:performedAsPartOf other:process1 .
+	lodhost:FoafConnection rdf:type r4ta:SoftwareApplication .
+	other:process1 rdf:type r4ta:ReasoningProcess .
+	other:process1 r4ta:performedBy lodhost:FoafConnection .
+	other:process1 r4ta:usedData data:d6 .
+	other:process1 r4ta:usedData data:d7 .
+	other:process1 r4ta:usedData data:d1 .
+	other:process1 r4ta:computed other:result1 .
+	other:process1 r4ta:produced data:d8 .
+}
+
+data:d1 {
+	:Bob schema:birthPlace :London .
+}
+
+data:d3 {
+	:London schema:isPartOf :England .
+	:England schema:isPartOf :UnitedKingdom .
+}
+
+data:d4 {
+	:Bob rdf:type schema:ComputerScientist .
+}
+
+data:d5 {
+	schema:Scientist rdfs:subClassOf schema:ComputerScientist .
+}
+
+#inferred from d4 d5
+data:d6 {
+	:Bob rdf:type schema:Scientist .
+}
+
+#inferred from d3
+data:d7 {
+	:London schema:isPartOf :UnitedKingdom .
+}
+
+#inferred from d7 d6
+data:d8 {
+	:Bob rdf:type schema:BritishScientist .
+}
+
