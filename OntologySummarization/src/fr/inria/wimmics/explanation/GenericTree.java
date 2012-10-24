@@ -1,4 +1,4 @@
-package fr.inria.wimmics.explanation.controller;
+package fr.inria.wimmics.explanation;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 import java.util.Set;
 
 import org.junit.runners.ParentRunner;
@@ -142,7 +143,8 @@ public class GenericTree<Item> {
 			}
 			//if the color was black then it would have been a forward or cross edge
 			else if(v.getColor()==BLACK) {
-				v.setPath(u);
+				if(v.getPath()==null)
+					v.setPath(u);
 				// this setPath was not in the original cormen implementation
 				// if you do dfs visit of the nodes in a grap in a random order then 
 				// in a tree, the nodes which are down can become black before the nodes which are early
@@ -162,20 +164,30 @@ public class GenericTree<Item> {
 		
 		
 	}
-	public void calculateScore() {
+	private void calculateScore() {
 		double uScore = 0.0;
+		double maxScore = Double.NEGATIVE_INFINITY;
 
 		for(GenericTreeNode<Item> u:nodes) {
 			GenericTreeNode<Item> parentOfu = u.getPath();
 			
 			if(parentOfu==null) {
-				uScore = 1.0 + (SUBTREE_SIZE_IMPORTANCE * (1.0/(double)u.getSize()));
+				//uScore = 1.0 + (SUBTREE_SIZE_IMPORTANCE * (1.0/(double)u.getSize()));
+				uScore = 1.0;
 			}
 			else  {
-				uScore = ((double)u.getnSubTree()/ (double)parentOfu.getnSubTree()) + (SUBTREE_SIZE_IMPORTANCE * (1.0/(double)u.getSize()));
+				//uScore = ((double)u.getnSubTree()/ (double)parentOfu.getnSubTree()) + (SUBTREE_SIZE_IMPORTANCE * (1.0/(double)u.getSize()));
+				uScore = ((double)u.getnSubTree()/ (double)parentOfu.getnSubTree()) + (SUBTREE_SIZE_IMPORTANCE * (1.0/(double)parentOfu.getSize()));
 
 			}
 			u.setScore(uScore);
+			if(maxScore<uScore) {
+				maxScore = uScore;
+			}
+		}
+		
+		for(GenericTreeNode<Item> u:nodes) {
+			u.setNormalizedScore(u.getScore()/maxScore);
 		}
 		
 		
@@ -201,5 +213,31 @@ public class GenericTree<Item> {
 		}
 		return count+1;
 	}
+	
+	public void expandSubTree(GenericTreeNode<Item> s, double threshold) {
+		for(GenericTreeNode<Item> u:nodes) {
+			u.setColor(WHITE);
+			u.setDistance(Integer.MAX_VALUE);
+			u.setPath(null);
+		}
+		s.setColor(GRAY);
+		s.setDistance(0);
+		s.setPath(null);
+		Queue<GenericTreeNode<Item>> Q=new LinkedList<GenericTreeNode<Item>>();
+		Q.add(s);
+		while(Q.isEmpty()==false) {
+			GenericTreeNode<Item> u = Q.poll();
+			List<GenericTreeNode<Item>> list = getAdjacent(u);
+			for(GenericTreeNode<Item> v:list) {
+				if(v.getNormalizedScore()>threshold && v.getColor() == WHITE) {
+					v.setColor(GRAY);
+					v.setDistance(u.getDistance()+1);
+					v.setPath(u);
+					Q.add(v);
+				}
+			}
+			u.setColor(BLACK);
+		}
+	}	
 
 }

@@ -1,4 +1,4 @@
-package fr.inria.wimmics.explanation.controller;
+package fr.inria.wimmics.explanation;
 
 
 
@@ -13,8 +13,8 @@ import java.util.Set;
 
 import org.openrdf.model.Statement;
 
-import fr.inria.wimmics.explanation.model.GenericRDFSentence;
-import fr.inria.wimmics.explanation.model.RDFSentenceWithRank;
+import fr.inria.wimmics.explanation.GenericRDFSentence;
+import fr.inria.wimmics.explanation.RDFSentenceWithRank;
 
 public class SentenceGraphSummarizer {
 

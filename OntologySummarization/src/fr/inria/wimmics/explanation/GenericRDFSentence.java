@@ -1,4 +1,4 @@
-package fr.inria.wimmics.explanation.model;
+package fr.inria.wimmics.explanation;
 
 import java.util.Set;
 import java.util.HashSet;

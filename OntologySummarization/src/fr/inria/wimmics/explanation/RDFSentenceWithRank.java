@@ -1,4 +1,4 @@
-package fr.inria.wimmics.explanation.model;
+package fr.inria.wimmics.explanation;
 
 public class RDFSentenceWithRank {
 	private GenericRDFSentence sentence;

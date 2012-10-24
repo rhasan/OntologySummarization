@@ -1,4 +1,4 @@
-package fr.inria.wimmics.explanation.controller;
+package fr.inria.wimmics.explanation;
 
 
 public class GenericTreeNode<Item> {
@@ -6,6 +6,7 @@ public class GenericTreeNode<Item> {
 	private int nSubTree;
 	private int size;
 	private double score;
+	private double normalizedScore;
 
 	private int color;
 	private GenericTreeNode<Item> path;
@@ -17,6 +18,13 @@ public class GenericTreeNode<Item> {
 		nSubTree = 0;
 		size = 0;
 		score = 0.0;
+	}
+	
+	public double getNormalizedScore() {
+		return normalizedScore;
+	}
+	public void setNormalizedScore(double normalizedScore) {
+		this.normalizedScore = normalizedScore;
 	}
 
 	public int getDistance() {

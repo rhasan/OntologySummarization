@@ -20,9 +20,9 @@ import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
 
-import fr.inria.wimmics.explanation.model.GenericRDFSentence;
-import fr.inria.wimmics.explanation.controller.RDFSentenceGraph;
-import fr.inria.wimmics.explanation.controller.SentenceGraphSummarizer;
+import fr.inria.wimmics.explanation.RDFSentenceGraph;
+import fr.inria.wimmics.explanation.SentenceGraphSummarizer;
+import fr.inria.wimmics.explanation.GenericRDFSentence;
 import fr.inria.wimmics.openrdf.util.SesameUtil;
 
 public class RDFSentenceGraphUnitTest {

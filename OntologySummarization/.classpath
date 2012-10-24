@@ -30,5 +30,6 @@
 	<classpathentry kind="lib" path="/home/hrakebul/Documents/sw/openrdf/openrdf-sesame-2.6.9/lib/spring-web-2.5.6.jar"/>
 	<classpathentry kind="lib" path="/home/hrakebul/Documents/sw/openrdf/openrdf-sesame-2.6.9/lib/spring-webmvc-2.5.6.jar"/>
 	<classpathentry kind="lib" path="/home/hrakebul/Documents/sw/openrdf/openrdf-sesame-2.6.9/lib/standard-1.1.2.jar"/>
+	<classpathentry kind="lib" path="/home/hrakebul/Documents/sw/java-json/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

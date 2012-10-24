@@ -1,4 +1,4 @@
-package fr.inria.wimmics.explanation.controller;
+package fr.inria.wimmics.explanation;
 
 import java.io.File;
 import java.io.IOException;

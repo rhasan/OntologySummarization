@@ -1,4 +1,4 @@
-package fr.inria.wimmics.explanation.controller;
+package fr.inria.wimmics.explanation;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 
-import fr.inria.wimmics.explanation.model.GenericRDFSentence;
+import fr.inria.wimmics.explanation.GenericRDFSentence;
 
 public class RDFSentenceGraph {
 	
