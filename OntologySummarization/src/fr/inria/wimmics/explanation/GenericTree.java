@@ -9,7 +9,6 @@ import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Set;
 
-import org.junit.runners.ParentRunner;
 
 
 
@@ -143,8 +142,9 @@ public class GenericTree<Item> {
 			}
 			//if the color was black then it would have been a forward or cross edge
 			else if(v.getColor()==BLACK) {
-				if(v.getPath()==null)
+				if(v.getPath()==null) {
 					v.setPath(u);
+				}
 				// this setPath was not in the original cormen implementation
 				// if you do dfs visit of the nodes in a grap in a random order then 
 				// in a tree, the nodes which are down can become black before the nodes which are early
@@ -177,8 +177,21 @@ public class GenericTree<Item> {
 			}
 			else  {
 				//uScore = ((double)u.getnSubTree()/ (double)parentOfu.getnSubTree()) + (SUBTREE_SIZE_IMPORTANCE * (1.0/(double)u.getSize()));
+				//for second part (not using this): increases the current tree size by u.getSize()
+				
 				uScore = ((double)u.getnSubTree()/ (double)parentOfu.getnSubTree()) + (SUBTREE_SIZE_IMPORTANCE * (1.0/(double)parentOfu.getSize()));
-
+						
+				//firs tpart: percentage of explanation this sub-branch will cover if expanded with respect to total subtrees this branch has
+						
+				//second part: keep the proof tree size smaller (second).. 
+				//the calculated value is the inverse of the maximum number of nodes this branch will have if this node is expanded, assuming all 
+				//the other subtrees of this branch are expanded.. so if this node is expanded, the number of nodes will be equal to total nodes
+				//this branch have ((i.e. the maximum possible size))
+				//the maximum number of nodes in this branch without expanding the current node = parentOfu.getSize() - u.getSize()
+				//when the current node is expanded, maximum number of nodes added are u.getSize()
+				//therefore, if the current node is expanded then the maximum number of nodes this branch will have are 
+				//parentOfu.getSize() - u.getSize() + u.getSize()
+				//works relative to the whole branch size.. good for tree with depth
 			}
 			u.setScore(uScore);
 			if(maxScore<uScore) {

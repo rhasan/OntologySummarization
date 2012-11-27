@@ -12,27 +12,95 @@
 
 
 just:j1 {
-	other:result1 rdf:type r4ta:Result .
-	data:d8 r4ta:justifiedBy just:j1 .
+	other:process1 rdf:type r4ta:ReasoningProcess .
 	data:d8 rdf:type r4ta:OutputData .
-	data:d8 r4ta:derivedFrom data:d1 .
-	data:d8 r4ta:belongsTo other:result1 .
-	data:d8 r4ta:derivedBy other:derivation1 .
-	data:d1 rdf:type r4ta:InputData .
-	just:j1 r4ta:justifies data:d8 .
+	data:d7 rdf:type r4ta:InputData .
+	data:d6 rdf:type r4ta:InputData .
+
+	lodhost:FoafConnection rdf:type r4ta:SoftwareApplication .
 	other:derivation1 rdf:type r4ta:DataDerivation .
+
+	data:d8 r4ta:justifiedBy just:j1 .
+
+	
+	
+	data:d8 r4ta:derivedFrom data:d7 .
+	data:d8 r4ta:derivedFrom data:d6 .
+	
+	data:d8 r4ta:derivedBy other:derivation1 .
+	
+	
+	
+	just:j1 r4ta:justifies data:d8 .
+	
 	other:derivation1 r4ta:usedRule <http://example.org/rule1> .
-	other:derivation1 r4ta:wasInvolvedInComputing other:result1 .
 	other:derivation1 r4ta:derivationReasoner lodhost:FoafConnection .
 	other:derivation1 r4ta:performedAsPartOf other:process1 .
-	lodhost:FoafConnection rdf:type r4ta:SoftwareApplication .
-	other:process1 rdf:type r4ta:ReasoningProcess .
 	other:process1 r4ta:performedBy lodhost:FoafConnection .
+	
 	other:process1 r4ta:usedData data:d6 .
 	other:process1 r4ta:usedData data:d7 .
-	other:process1 r4ta:usedData data:d1 .
-	other:process1 r4ta:computed other:result1 .
 	other:process1 r4ta:produced data:d8 .
+}
+
+just:j2 {
+	other:process1 rdf:type r4ta:ReasoningProcess .
+	data:d7 rdf:type r4ta:OutputData .
+	lodhost:FoafConnection rdf:type r4ta:SoftwareApplication .
+	other:derivation2 rdf:type r4ta:DataDerivation .
+
+	data:d7 r4ta:justifiedBy just:j2 .
+
+	
+	
+	data:d7 r4ta:derivedFrom data:d3 .
+	data:d7 r4ta:derivedFrom data:d3-1 .
+	
+	data:d7 r4ta:derivedBy other:derivation2 .
+	
+	data:d3 rdf:type r4ta:InputData .
+	data:d3-1 rdf:type r4ta:InputData .
+	
+	just:j2 r4ta:justifies data:d7 .
+	
+	other:derivation2 r4ta:usedRule <http://example.org/rule2> .
+	other:derivation2 r4ta:derivationReasoner lodhost:FoafConnection .
+	other:derivation2 r4ta:performedAsPartOf other:process1 .
+	other:process1 r4ta:performedBy lodhost:FoafConnection .
+	
+	other:process1 r4ta:usedData data:d3 .
+	other:process1 r4ta:usedData data:d3-1 .
+	other:process1 r4ta:produced data:d7 .
+}
+
+just:j3 {
+	other:process1 rdf:type r4ta:ReasoningProcess .
+	data:d6 rdf:type r4ta:OutputData .
+	lodhost:FoafConnection rdf:type r4ta:SoftwareApplication .
+	other:derivation3 rdf:type r4ta:DataDerivation .
+
+	data:d6 r4ta:justifiedBy just:j3 .
+
+	
+	
+	data:d6 r4ta:derivedFrom data:d4 .
+	data:d6 r4ta:derivedFrom data:d5 .
+	
+	data:d6 r4ta:derivedBy other:derivation3 .
+	
+	data:d4 rdf:type r4ta:InputData .
+	data:d5 rdf:type r4ta:InputData .
+	
+	just:j3 r4ta:justifies data:d6 .
+	
+	other:derivation3 r4ta:usedRule <http://example.org/rule3> .
+	other:derivation3 r4ta:derivationReasoner lodhost:FoafConnection .
+	other:derivation3 r4ta:performedAsPartOf other:process1 .
+	other:process1 r4ta:performedBy lodhost:FoafConnection .
+	
+	other:process1 r4ta:usedData data:d4 .
+	other:process1 r4ta:usedData data:d4 .
+	other:process1 r4ta:produced data:d6 .
 }
 
 data:d1 {
@@ -41,6 +109,9 @@ data:d1 {
 
 data:d3 {
 	:London schema:isPartOf :England .
+}
+
+data:d3-1 {
 	:England schema:isPartOf :UnitedKingdom .
 }
 
@@ -57,7 +128,7 @@ data:d6 {
 	:Bob rdf:type schema:Scientist .
 }
 
-#inferred from d3
+#inferred from d3 d3-1
 data:d7 {
 	:London schema:isPartOf :UnitedKingdom .
 }

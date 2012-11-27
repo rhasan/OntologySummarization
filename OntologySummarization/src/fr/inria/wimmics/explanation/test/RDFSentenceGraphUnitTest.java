@@ -69,7 +69,7 @@ public class RDFSentenceGraphUnitTest {
 		SentenceGraphSummarizer summmarizer = new SentenceGraphSummarizer(rdfSentenceGraph);
 
 		//summmarizer.summarizeByCentralityThreshold(.1);
-		summmarizer.summarizeBySizeWOreRank(.20);
+		//summmarizer.summarizeBySizeWOreRank(.20);
 		
 		
 		Set<Statement> summarizedStmts = summmarizer.summarizeBySize(.20);

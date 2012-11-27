@@ -161,7 +161,7 @@ public class SentenceGraphSummarizer {
 		return statements;
 		
 	}	
-	
+	     
 	public Set<Statement> summarizeBySize(double percentage) {
 		assert percentage <= 1.0;
 		
