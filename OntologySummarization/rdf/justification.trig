@@ -26,6 +26,7 @@ just:j1 {
 	
 	data:d8 r4ta:derivedFrom data:d7 .
 	data:d8 r4ta:derivedFrom data:d6 .
+	data:d8 r4ta:derivedFrom data:d1 .
 	
 	data:d8 r4ta:derivedBy other:derivation1 .
 	
@@ -38,6 +39,7 @@ just:j1 {
 	other:derivation1 r4ta:performedAsPartOf other:process1 .
 	other:process1 r4ta:performedBy lodhost:FoafConnection .
 	
+	other:process1 r4ta:usedData data:d1 .
 	other:process1 r4ta:usedData data:d6 .
 	other:process1 r4ta:usedData data:d7 .
 	other:process1 r4ta:produced data:d8 .
@@ -137,4 +139,5 @@ data:d7 {
 data:d8 {
 	:Bob rdf:type schema:BritishScientist .
 }
+
 

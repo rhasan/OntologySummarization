@@ -39,7 +39,7 @@ public class DBPediaProcessor {
 
 			   // Add the first file
 			   con.add(inputFile1, baseURI, serializationFormat);
-
+			   
 			   // If everything went as planned, we can commit the result
 			   con.commit();
 			}

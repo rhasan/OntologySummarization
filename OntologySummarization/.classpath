@@ -31,5 +31,10 @@
 	<classpathentry kind="lib" path="/home/hrakebul/Documents/sw/openrdf/openrdf-sesame-2.6.9/lib/spring-webmvc-2.5.6.jar"/>
 	<classpathentry kind="lib" path="/home/hrakebul/Documents/sw/openrdf/openrdf-sesame-2.6.9/lib/standard-1.1.2.jar"/>
 	<classpathentry kind="lib" path="/home/hrakebul/Documents/sw/java-json/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/commons-collections-3.2.1.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/commons-collections-3.2.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

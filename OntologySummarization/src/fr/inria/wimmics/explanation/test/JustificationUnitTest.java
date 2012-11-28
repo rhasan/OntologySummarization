@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
 
@@ -61,6 +62,13 @@ public class JustificationUnitTest {
 		JustificationProcessor jp = new JustificationProcessor();
 		jp.parseJustificationFile("rdf/justification.trig","http://www.example.com/" );
 		jp.summarizedProofTree("http://alphubel.unice.fr:8080/lodutil/data/d8");
+	}
+	
+	@Test
+	public void topStatementSummaryTest() throws Exception {
+		JustificationProcessor jp = new JustificationProcessor();
+		jp.parseJustificationFile("rdf/justification.trig","http://www.example.com/" );
+		jp.summarizeJustificationKnowledgeStatements("http://alphubel.unice.fr:8080/lodutil/data/d8");
 	}
 
 }

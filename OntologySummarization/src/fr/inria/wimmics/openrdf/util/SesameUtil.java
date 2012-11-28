@@ -33,6 +33,8 @@ import org.openrdf.sail.Sail;
 import org.openrdf.sail.inferencer.fc.ForwardChainingRDFSInferencer;
 import org.openrdf.sail.memory.MemoryStore;
 
+import fr.inria.wimmics.explanation.KnowledgeStatement;
+
 
 
 public class SesameUtil {
@@ -142,5 +144,8 @@ public class SesameUtil {
 		writer.close();
 		
 	}
+	
+
+	
 	
 }

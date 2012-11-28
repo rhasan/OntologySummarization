@@ -5,21 +5,39 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
+
+import org.apache.commons.collections.MultiMap;
+import org.apache.commons.collections.map.MultiValueMap;
 import org.openrdf.model.Statement;
+import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.QueryEvaluationException;
+import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.helpers.StatementCollector;
 import org.openrdf.rio.trig.TriGParser;
 
+import fr.inria.wimmics.openrdf.util.MyMultiMap;
+
 public class JustificationProcessor {
 	
 	GenericTree<Statement> g = new GenericTree<Statement>();
-	Map<String,Statement> stmtMap = new HashMap<String,Statement>();
+	//Map<String,ArrayList<Statement>> stmtMap = new HashMap<String,ArrayList<Statement>>();
+	
+	MyMultiMap<String,Statement> stmtMap = new MyMultiMap<String,Statement>();
+	
 	Map<String,String> nameSpaces = null;
+	
+	
 	
 	public void parseJustificationFile(String filePath,String baseURI) throws RDFParseException, RDFHandlerException, IOException {
 		
@@ -38,17 +56,19 @@ public class JustificationProcessor {
 		nameSpaces = collector.getNamespaces();
 		
 		for(Statement st:myList) {
-			stmtMap.put(st.getContext().stringValue(), st);
+			String stKey = st.getContext().stringValue();
+			stmtMap.put(stKey, st);
+
 		}
-		//System.out.println(collector.getNamespaces().keySet().toString());
 		
 		for(Statement st:myList) {
 			
-			//System.out.println(st.toString());
 			if(st.getPredicate().toString().equals(Ratio4TA.derivedFrom)) {
-				//System.out.println(st.toString());
-				Statement a = stmtMap.get(st.getSubject().stringValue());
-				Statement b = stmtMap.get(st.getObject().stringValue());
+				String keyA = st.getSubject().stringValue();
+				String keyB = st.getObject().stringValue();
+				
+				Statement a = stmtMap.getFirst(keyA);
+				Statement b = stmtMap.getFirst(keyB);
 				
 				g.insterEdge(a, b);
 				
@@ -58,15 +78,55 @@ public class JustificationProcessor {
 		
 		
 	}
+	/**
+	 * summarizes the parsed justification file and returns the result in JSON
+	 * the javascript program takes this jason and outputs the proof tree
+	 * @param rootURL
+	 * the root node of the proof tree from which the summarization should start
+	 */
 	
-	public void summarizedProofTree(String rootURL) {
+	public String summarizedProofTree(String rootURL) {
 		g.countSubtrees();
-		Statement rootStmt = stmtMap.get(rootURL);
+
+		Statement rootStmt = stmtMap.getFirst(rootURL);
 		
 		GenericTreeNode<Statement> root = g.getNodeByObject(rootStmt);
 		JSONTreeGenrator<Statement> json = new JSONTreeGenrator<Statement>(nameSpaces);
 		String jsonString = json.generateJASON(g, root);
-		System.out.println(jsonString);			
+		//to-do: file write/method return
+		System.out.println(jsonString);	
+		return jsonString;
 	}
+	
+	
+	public void summarizeJustificationKnowledgeStatements(String statementURI) throws Exception {
+		
+		Set<Entry<String, ArrayList<Statement>>> entries = stmtMap.entrySet();
+		Set<Statement> stmts = new HashSet<Statement>();
+		
+		for(Entry<String, ArrayList<Statement>> entry:entries) {
+			
+			ArrayList<Statement> entryStatements = entry.getValue();
+			for(Statement entryStmt:entryStatements) {
+				if(entryStmt.getPredicate().toString().equals(Ratio4TA.derivedFrom)) {
+					//stmts.add(entryStmt);
+					String key1 = entryStmt.getSubject().toString();
+					String key2 = entryStmt.getObject().toString();
+					Statement st1 = stmtMap.getFirst(key1);
+					Statement st2 = stmtMap.getFirst(key2);
+					if(st1.getContext().toString().equals(statementURI)==false)
+						stmts.add(st1);
+					if(st2.getContext().toString().equals(statementURI)==false)
+						stmts.add(st2);
+				}
+			}
+		}
+		
+		ArrayList<Statement> statements = new ArrayList<Statement>(stmts);
+		StatementSummarizer summerizer = new StatementSummarizer(statements,0.0);
+		summerizer.summarize();
+		
+	}
+	
 
 }
