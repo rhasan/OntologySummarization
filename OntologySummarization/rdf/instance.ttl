@@ -1,0 +1,24 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix data: <http://alphubel.unice.fr:8080/lodutil/data/> .
+@prefix other: <http://alphubel.unice.fr:8080/lodutil/other/> .
+@prefix r4ta: <http://ns.inria.fr/ratio4ta/v2#> .
+@prefix just: <http://alphubel.unice.fr:8080/lodutil/justification/> .
+@prefix lodhost: <http://alphubel.unice.fr:8080/lodutil/> .
+@prefix : <http://www.example.org/exampleDocument#> .
+@prefix schema: <http://alphubel.unice.fr:8080/schema/> .
+@prefix dbp-ont: <http://dbpedia.org/ontology/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+
+:England rdf:type  dbp-ont:Country.
+
+:Bob rdf:type dbp-ont:ComputerScientist .
+
+:Bob rdf:type dbp-ont:Scientist .
+
+:London rdf:type  dbp-ont:City.
+:UnitedKingdom rdf:type  dbp-ont:Country.
+
+
+#:Bob rdf:type dbp-ont:BritishScientist .

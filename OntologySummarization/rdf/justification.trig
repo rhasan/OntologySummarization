@@ -7,6 +7,7 @@
 @prefix lodhost: <http://alphubel.unice.fr:8080/lodutil/> .
 @prefix : <http://www.example.org/exampleDocument#> .
 @prefix schema: <http://alphubel.unice.fr:8080/schema/> .
+@prefix dbp-ont: <http://dbpedia.org/ontology/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 
@@ -118,16 +119,16 @@ data:d3-1 {
 }
 
 data:d4 {
-	:Bob rdf:type schema:ComputerScientist .
+	:Bob rdf:type dbp-ont:ComputerScientist .
 }
 
 data:d5 {
-	schema:Scientist rdfs:subClassOf schema:ComputerScientist .
+	dbp-ont:Scientist rdfs:subClassOf dbp-ont:ComputerScientist .
 }
 
 #inferred from d4 d5
 data:d6 {
-	:Bob rdf:type schema:Scientist .
+	:Bob rdf:type dbp-ont:Scientist .
 }
 
 #inferred from d3 d3-1

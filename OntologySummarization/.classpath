@@ -36,5 +36,6 @@
 			<attribute name="javadoc_location" value="jar:file:/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/commons-collections-3.2.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/home/hrakebul/git/OntologySummarization/OntologySummarization/lib/corese-3.0.14.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

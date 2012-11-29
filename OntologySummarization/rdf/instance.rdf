@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:data="http://alphubel.unice.fr:8080/lodutil/data/"
+	xmlns:other="http://alphubel.unice.fr:8080/lodutil/other/"
+	xmlns:r4ta="http://ns.inria.fr/ratio4ta/v2#"
+	xmlns:just="http://alphubel.unice.fr:8080/lodutil/justification/"
+	xmlns:lodhost="http://alphubel.unice.fr:8080/lodutil/"
+	xmlns="http://www.example.org/exampleDocument#"
+	xmlns:schema="http://alphubel.unice.fr:8080/schema/"
+	xmlns:dbp-ont="http://dbpedia.org/ontology/"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#">
+
+<rdf:Description rdf:about="http://www.example.org/exampleDocument#England">
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/Country"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.example.org/exampleDocument#Bob">
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/ComputerScientist"/>
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/Scientist"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.example.org/exampleDocument#London">
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/City"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.example.org/exampleDocument#UnitedKingdom">
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/Country"/>
+</rdf:Description>
+
+</rdf:RDF>
