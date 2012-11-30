@@ -2,40 +2,40 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/openrdf-sesame-2.6.9-onejar.jar">
+	<classpathentry kind="lib" path="lib/openrdf-sesame-2.6.9-onejar.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://www.openrdf.org/doc/sesame2/2.6.7/apidocs/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/aopalliance-1.0.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/asm-3.1.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/cglib-2.2.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/commons-cli-1.2.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/commons-codec-1.4.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/commons-dbcp-1.3.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/commons-httpclient-3.1.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/commons-pool-1.5.4.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/jcl-over-slf4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/jstl-1.1.2.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/logback-classic-0.9.28.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/logback-core-0.9.28.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/opencsv-2.0.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/slf4j-api-1.6.1.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/spring-aop-2.5.6.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/spring-beans-2.5.6.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/spring-context-2.5.6.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/spring-context-support-2.5.6.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/spring-core-2.5.6.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/spring-web-2.5.6.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/spring-webmvc-2.5.6.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/standard-1.1.2.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/json-simple-1.1.1.jar"/>
-	<classpathentry kind="lib" path="/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/commons-collections-3.2.1.jar">
+	<classpathentry kind="lib" path="lib/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/asm-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/cglib-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-cli-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-dbcp-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-pool-1.5.4.jar"/>
+	<classpathentry kind="lib" path="lib/jcl-over-slf4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/jstl-1.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/logback-classic-0.9.28.jar"/>
+	<classpathentry kind="lib" path="lib/logback-core-0.9.28.jar"/>
+	<classpathentry kind="lib" path="lib/opencsv-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/spring-aop-2.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/spring-beans-2.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context-2.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context-support-2.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/spring-core-2.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/spring-web-2.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/spring-webmvc-2.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/standard-1.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/user/hrakebul/home/git/OntologySummarization/OntologySummarization/lib/commons-collections-3.2.1-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:file:lib/commons-collections-3.2.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/hrakebul/git/OntologySummarization/OntologySummarization/lib/corese-3.0.14.jar"/>
+	<classpathentry kind="lib" path="lib/corese-3.0.14.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
