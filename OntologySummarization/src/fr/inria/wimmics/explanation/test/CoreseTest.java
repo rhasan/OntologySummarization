@@ -19,7 +19,7 @@ public class CoreseTest {
 		
 		Load ld = Load.create(graph);
 		//ld.load("rdf/summary.rdf");
-		ld.load("/user/hrakebul/home/Documents/sw/ontology-summary/dbpedia/dbpedia_3.8.owl");
+		ld.load("rdf/ontology/dbpedia_3.8.owl");
 		ld.load("rdf/instance.rdf");
 		
 		//users preference/interest class <http://dbpedia.org/ontology/Scientist>
