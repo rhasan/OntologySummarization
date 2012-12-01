@@ -30,23 +30,25 @@ public class StatementSummarizer {
 	private List<KnowledgeStatement> statements;
 	private StatementGraph statementGraph = null;
 	String baseURI;
+	private List<String> ontologyLocations;
+	private List<String> instanceLocations;
 	
 	public StatementSummarizer() {
 		statements = null;
 	}
-	public StatementSummarizer(List<KnowledgeStatement> knowledgeStatements) throws RepositoryException  {
-		this.statements = knowledgeStatements;
-		
-		statementGraph = StatementGraph.getInstance(SummarizationUtil.getRDFStatementList(this.statements));
-	}
+//	public StatementSummarizer(List<KnowledgeStatement> knowledgeStatements) throws RepositoryException  {
+//		this.statements = knowledgeStatements;
+//		
+//		statementGraph = StatementGraph.getInstance(SummarizationUtil.getRDFStatementList(this.statements));
+//	}
 	
-	public StatementSummarizer(List<Statement> stmts,double initialScore) throws Exception {
+	public StatementSummarizer(List<Statement> stmts) throws Exception {
 		statements = new ArrayList<KnowledgeStatement>();
 		for(Statement stmt:stmts) {
-			KnowledgeStatement kStatement  = new KnowledgeStatement(stmt, initialScore);
+			KnowledgeStatement kStatement  = new KnowledgeStatement(stmt);
 			statements.add(kStatement);
 		}
-		statementGraph = StatementGraph.getInstance(SummarizationUtil.getRDFStatementList(this.statements));
+		statementGraph = StatementGraph.getInstance(statements);
 	}
 	
 	
@@ -86,7 +88,7 @@ public class StatementSummarizer {
 		rdfParser.parse(inputStream, baseURI);
 		
 		for(Statement st:myList) {
-			KnowledgeStatement kst = new KnowledgeStatement(st,0.0);
+			KnowledgeStatement kst = new KnowledgeStatement(st);
 			statements.add(kst);
 		}
 		return statements;
@@ -103,15 +105,29 @@ public class StatementSummarizer {
 		}
 		
 	}
-	
 	public List<KnowledgeStatement> summarize() throws Exception {
+		return summarize(null,null,null);
+		
+	}
+	
+	public List<KnowledgeStatement> summarize(  List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
 		List<KnowledgeStatement> kStatements = null;
 		kStatements = statementGraph.computeDegreeCentrality();
+		SummarizationUtil.normalizeDegreeCentrality(kStatements);
+		
+		//SummarizationUtil.normalizeDegreeKnowledgeStatements(kStatements);
+		
+		//similarity measure
+		if(prefs!=null && ontologyLocations!=null && instanceLocations!=null) {
+			statementGraph.computeSimilarity(prefs, ontologyLocations, instanceLocations);
+			//it's already normalized.. value is between 0 to 1
+		}
+		
+		statementGraph.computeScore();
 		
 		//to-do: re-ranking
-		//add similarity measure
 		
-		SummarizationUtil.normalizeKnowledgeStatements(kStatements);
+		SummarizationUtil.normalizeScores(kStatements);
 		MyComparatorDescending myCmpD = new MyComparatorDescending();
 		Collections.sort(kStatements,myCmpD);		
 		
@@ -128,6 +144,22 @@ public class StatementSummarizer {
 	}
 	public String getBaseURI() {
 		return baseURI;
+	}
+
+	public List<String> getOntologyLocations() {
+		return ontologyLocations;
+	}
+
+	public void setOntologyLocations(List<String> ontologyLocations) {
+		this.ontologyLocations = ontologyLocations;
+	}
+
+	public List<String> getInstanceLocations() {
+		return instanceLocations;
+	}
+
+	public void setInstanceLocations(List<String> instanceLocations) {
+		this.instanceLocations = instanceLocations;
 	}	
 
 }

@@ -1,0 +1,79 @@
+
+no normalization of degree and similarity
+normalized the final scores
+Statement: (http://www.example.org/exampleDocument#Bob, http://alphubel.unice.fr:8080/schema/birthPlace, http://www.example.org/exampleDocument#London) [http://alphubel.unice.fr:8080/lodutil/data/d1]
+Score:1.0
+Statement: (http://www.example.org/exampleDocument#Bob, http://www.w3.org/1999/02/22-rdf-syntax-ns#type, http://dbpedia.org/ontology/Scientist) [http://alphubel.unice.fr:8080/lodutil/data/d6]
+Score:0.938457330415755
+Statement: (http://www.example.org/exampleDocument#Bob, http://www.w3.org/1999/02/22-rdf-syntax-ns#type, http://dbpedia.org/ontology/ComputerScientist) [http://alphubel.unice.fr:8080/lodutil/data/d4]
+Score:0.933222320466604
+Statement: (http://dbpedia.org/ontology/Scientist, http://www.w3.org/2000/01/rdf-schema#subClassOf, http://dbpedia.org/ontology/ComputerScientist) [http://alphubel.unice.fr:8080/lodutil/data/d5]
+Score:0.7991569875500676
+Statement: (http://www.example.org/exampleDocument#London, http://alphubel.unice.fr:8080/schema/isPartOf, http://www.example.org/exampleDocument#England) [http://alphubel.unice.fr:8080/lodutil/data/d3]
+Score:0.7945818079844338
+Statement: (http://www.example.org/exampleDocument#London, http://alphubel.unice.fr:8080/schema/isPartOf, http://www.example.org/exampleDocument#UnitedKingdom) [http://alphubel.unice.fr:8080/lodutil/data/d7]
+Score:0.7945818079844338
+Statement: (http://www.example.org/exampleDocument#England, http://alphubel.unice.fr:8080/schema/isPartOf, http://www.example.org/exampleDocument#UnitedKingdom) [http://alphubel.unice.fr:8080/lodutil/data/d3-1]
+Score:0.661686279301159
+
+
+
+degree is not normalized
+similarity is normalized
+score is normalized
+
+
+Statement: (http://www.example.org/exampleDocument#Bob, http://alphubel.unice.fr:8080/schema/birthPlace, http://www.example.org/exampleDocument#London) [http://alphubel.unice.fr:8080/lodutil/data/d1]
+Score:1.0
+Statement: (http://www.example.org/exampleDocument#Bob, http://www.w3.org/1999/02/22-rdf-syntax-ns#type, http://dbpedia.org/ontology/Scientist) [http://alphubel.unice.fr:8080/lodutil/data/d6]
+Score:0.8736295009286442
+Statement: (http://www.example.org/exampleDocument#Bob, http://www.w3.org/1999/02/22-rdf-syntax-ns#type, http://dbpedia.org/ontology/ComputerScientist) [http://alphubel.unice.fr:8080/lodutil/data/d4]
+Score:0.8716228150707167
+Statement: (http://www.example.org/exampleDocument#London, http://alphubel.unice.fr:8080/schema/isPartOf, http://www.example.org/exampleDocument#England) [http://alphubel.unice.fr:8080/lodutil/data/d3]
+Score:0.8184790849849863
+Statement: (http://www.example.org/exampleDocument#London, http://alphubel.unice.fr:8080/schema/isPartOf, http://www.example.org/exampleDocument#UnitedKingdom) [http://alphubel.unice.fr:8080/lodutil/data/d7]
+Score:0.8184790849849863
+Statement: (http://dbpedia.org/ontology/Scientist, http://www.w3.org/2000/01/rdf-schema#subClassOf, http://dbpedia.org/ontology/ComputerScientist) [http://alphubel.unice.fr:8080/lodutil/data/d5]
+Score:0.7174529031421324
+Statement: (http://www.example.org/exampleDocument#England, http://alphubel.unice.fr:8080/schema/isPartOf, http://www.example.org/exampleDocument#UnitedKingdom) [http://alphubel.unice.fr:8080/lodutil/data/d3-1]
+Score:0.6647575828272011
+
+degree is normalized
+similarity is normalized
+score is normalized
+
+
+Statement: (http://www.example.org/exampleDocument#Bob, http://www.w3.org/1999/02/22-rdf-syntax-ns#type, http://dbpedia.org/ontology/Scientist) [http://alphubel.unice.fr:8080/lodutil/data/d6]
+Score:1.0
+Statement: (http://www.example.org/exampleDocument#Bob, http://www.w3.org/1999/02/22-rdf-syntax-ns#type, http://dbpedia.org/ontology/ComputerScientist) [http://alphubel.unice.fr:8080/lodutil/data/d4]
+Score:0.9913226221951055
+Statement: (http://www.example.org/exampleDocument#Bob, http://alphubel.unice.fr:8080/schema/birthPlace, http://www.example.org/exampleDocument#London) [http://alphubel.unice.fr:8080/lodutil/data/d1]
+Score:0.9908999643770847
+Statement: (http://dbpedia.org/ontology/Scientist, http://www.w3.org/2000/01/rdf-schema#subClassOf, http://dbpedia.org/ontology/ComputerScientist) [http://alphubel.unice.fr:8080/lodutil/data/d5]
+Score:0.8802115110839943
+Statement: (http://www.example.org/exampleDocument#London, http://alphubel.unice.fr:8080/schema/isPartOf, http://www.example.org/exampleDocument#England) [http://alphubel.unice.fr:8080/lodutil/data/d3]
+Score:0.7615167349938554
+Statement: (http://www.example.org/exampleDocument#London, http://alphubel.unice.fr:8080/schema/isPartOf, http://www.example.org/exampleDocument#UnitedKingdom) [http://alphubel.unice.fr:8080/lodutil/data/d7]
+Score:0.7615167349938554
+Statement: (http://www.example.org/exampleDocument#England, http://alphubel.unice.fr:8080/schema/isPartOf, http://www.example.org/exampleDocument#UnitedKingdom) [http://alphubel.unice.fr:8080/lodutil/data/d3-1]
+Score:0.6523446523446523
+
+degree used only
+similarity is not used normalized
+score is normalized
+
+
+Statement: (http://www.example.org/exampleDocument#Bob, http://alphubel.unice.fr:8080/schema/birthPlace, http://www.example.org/exampleDocument#London) [http://alphubel.unice.fr:8080/lodutil/data/d1]
+Score:1.0
+Statement: (http://www.example.org/exampleDocument#Bob, http://www.w3.org/1999/02/22-rdf-syntax-ns#type, http://dbpedia.org/ontology/ComputerScientist) [http://alphubel.unice.fr:8080/lodutil/data/d4]
+Score:0.8333333333333334
+Statement: (http://www.example.org/exampleDocument#Bob, http://www.w3.org/1999/02/22-rdf-syntax-ns#type, http://dbpedia.org/ontology/Scientist) [http://alphubel.unice.fr:8080/lodutil/data/d6]
+Score:0.8333333333333334
+Statement: (http://www.example.org/exampleDocument#London, http://alphubel.unice.fr:8080/schema/isPartOf, http://www.example.org/exampleDocument#England) [http://alphubel.unice.fr:8080/lodutil/data/d3]
+Score:0.8333333333333334
+Statement: (http://www.example.org/exampleDocument#London, http://alphubel.unice.fr:8080/schema/isPartOf, http://www.example.org/exampleDocument#UnitedKingdom) [http://alphubel.unice.fr:8080/lodutil/data/d7]
+Score:0.8333333333333334
+Statement: (http://www.example.org/exampleDocument#England, http://alphubel.unice.fr:8080/schema/isPartOf, http://www.example.org/exampleDocument#UnitedKingdom) [http://alphubel.unice.fr:8080/lodutil/data/d3-1]
+Score:0.6666666666666666
+Statement: (http://dbpedia.org/ontology/Scientist, http://www.w3.org/2000/01/rdf-schema#subClassOf, http://dbpedia.org/ontology/ComputerScientist) [http://alphubel.unice.fr:8080/lodutil/data/d5]
+Score:0.6666666666666666

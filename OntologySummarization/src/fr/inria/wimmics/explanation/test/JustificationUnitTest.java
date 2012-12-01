@@ -3,6 +3,8 @@ package fr.inria.wimmics.explanation.test;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.openrdf.repository.RepositoryException;
@@ -69,6 +71,20 @@ public class JustificationUnitTest {
 		JustificationProcessor jp = new JustificationProcessor();
 		jp.parseJustificationFile("rdf/justification.trig","http://www.example.com/" );
 		jp.summarizeJustificationKnowledgeStatements("http://alphubel.unice.fr:8080/lodutil/data/d8");
+	}
+	
+	@Test
+	public void topRelevantStatementSummaryTest() throws Exception {
+		JustificationProcessor jp = new JustificationProcessor();
+		List<String> prefs = new ArrayList<String>();
+		prefs.add("http://dbpedia.org/ontology/Scientist");
+		List<String> ontologyLocations = new ArrayList<String>();
+		List<String> instanceLocations = new ArrayList<String>();
+		ontologyLocations.add("rdf/ontology/dbpedia_3.8.owl");
+		instanceLocations.add("rdf/instance.rdf");
+		jp.parseJustificationFile("rdf/justification.trig","http://www.example.com/" );
+		jp.summarizeJustificationKnowledgeStatements("http://alphubel.unice.fr:8080/lodutil/data/d8",prefs,ontologyLocations,instanceLocations);
+	
 	}
 
 }

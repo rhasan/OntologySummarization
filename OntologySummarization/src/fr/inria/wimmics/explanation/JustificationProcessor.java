@@ -36,6 +36,8 @@ public class JustificationProcessor {
 	MyMultiMap<String,Statement> stmtMap = new MyMultiMap<String,Statement>();
 	
 	Map<String,String> nameSpaces = null;
+	private List<String> ontologyLocations;
+	private List<String> instanceLocations;
 	
 	
 	
@@ -99,7 +101,7 @@ public class JustificationProcessor {
 	}
 	
 	
-	public void summarizeJustificationKnowledgeStatements(String statementURI) throws Exception {
+	public void summarizeJustificationKnowledgeStatements(String statementURI, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
 		
 		Set<Entry<String, ArrayList<Statement>>> entries = stmtMap.entrySet();
 		Set<Statement> stmts = new HashSet<Statement>();
@@ -123,10 +125,27 @@ public class JustificationProcessor {
 		}
 		
 		ArrayList<Statement> statements = new ArrayList<Statement>(stmts);
-		StatementSummarizer summerizer = new StatementSummarizer(statements,0.0);
-		summerizer.summarize();
+		StatementSummarizer summerizer = new StatementSummarizer(statements);
+		summerizer.summarize(prefs,ontologyLocations,instanceLocations);
 		
 	}
-	
+	public void summarizeJustificationKnowledgeStatements(String statementURI) throws Exception {
+		summarizeJustificationKnowledgeStatements( statementURI,  null, null, null);
+	}
+	public void summarizeRelevantJustificationKnowledgeStatements(String statementURI, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
+		summarizeJustificationKnowledgeStatements( statementURI,  prefs, ontologyLocations, instanceLocations);
+	}
+	public List<String> getOntologyLocations() {
+		return ontologyLocations;
+	}
+	public void setOntologyLocations(List<String> ontologyLocations) {
+		this.ontologyLocations = ontologyLocations;
+	}
+	public List<String> getInstanceLocations() {
+		return instanceLocations;
+	}
+	public void setInstanceLocations(List<String> instanceLocations) {
+		this.instanceLocations = instanceLocations;
+	}	
 
 }

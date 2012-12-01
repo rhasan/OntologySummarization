@@ -23,16 +23,20 @@ import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 
+import fr.inria.acacia.corese.exceptions.EngineException;
+import fr.inria.wimmics.exception.NoTypeFoundInTheOntology;
 import fr.inria.wimmics.openrdf.util.SesameUtil;
 import fr.inria.wimmics.openrdf.util.SummarizationUtil;
 
 public class StatementGraph {
 	private List<Statement> rdfStatements;
+	private List<KnowledgeStatement> knowledgeStatements;
 	private Set<String> resourceURIs;
 	private Repository myRepository = null;
 	private Map<String,Integer> outDegree = null;
 	private Map<String,Integer> inDegree = null;
 	private Map<Statement,Double> centrality = null;
+	private Map<Statement,KnowledgeStatement> stmtKstmtMap = null;
 	
 	private static StatementGraph instance = null;
 
@@ -42,32 +46,32 @@ public class StatementGraph {
 		outDegree = new HashMap<String, Integer>();
 		inDegree = new HashMap<String, Integer>();
 		centrality = new HashMap<Statement,Double>();
+		stmtKstmtMap = new HashMap<Statement,KnowledgeStatement>();
+		
+		for(KnowledgeStatement kst:knowledgeStatements) {
+			stmtKstmtMap.put(kst.getStatement(), kst);
+		}
+		
+		
+		
 		
 	}
 	
-	private StatementGraph(List<Statement> rdfStatements) throws RepositoryException {
-		this.rdfStatements = rdfStatements;
+	private StatementGraph(List<KnowledgeStatement> kStatements) throws RepositoryException {
+		knowledgeStatements = kStatements;
+		this.rdfStatements = SummarizationUtil.getRDFStatementList(kStatements);
 		init();
 		loadStatementsInRepo();
 	}
-	private StatementGraph() throws RepositoryException {
-		init();
-	}
 	
-	public static StatementGraph getInstance(List<Statement> rdfStatements) throws RepositoryException {
+	public static StatementGraph getInstance(List<KnowledgeStatement> kStatements) throws RepositoryException {
 		if(instance==null) {
-			instance = new StatementGraph(rdfStatements);
+			instance = new StatementGraph(kStatements);
 		}
 		return instance;
 	}
 
-	public static StatementGraph getInstance() throws RepositoryException {
-		if(instance==null) {
-			instance = new StatementGraph();
-		}
-		return instance;
-	}	
-	
+
 	public List<Statement> getRdfStatements() {
 		return rdfStatements;
 	}
@@ -124,13 +128,43 @@ public class StatementGraph {
 				d += getInAndOutDegreeSum(st.getObject().toString());
 			}
 			centrality.put(st, d);
-			System.out.println(d+" : "+st.toString());
-			KnowledgeStatement kStmt = new KnowledgeStatement(st,d);
+			//System.out.println(d+" : "+st.toString());
+			//KnowledgeStatement kStmt = new KnowledgeStatement(st,d);
+			KnowledgeStatement kStmt = stmtKstmtMap.get(st);
+			kStmt.setDegreeCentrality(d);
+			//kStmt.setScore(d)
 			kStatements.add(kStmt);
 		}
 		
 		
 		return kStatements;
+	}
+	
+	public List<KnowledgeStatement> computeSimilarity(List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws EngineException {
+
+		
+		SimilarityCalculator simCal = new SimilarityCalculator();
+		simCal.initialize(prefs, ontologyLocations, instanceLocations);
+		
+		for(KnowledgeStatement st:knowledgeStatements) {
+			//System.out.println("Statement: "+ st.getStatement().toString());
+			//System.out.println("Subject:"+st.getStatement().getSubject().stringValue());
+			double statementSimilarity = simCal.statementSimilarityScore(st.getStatement().getSubject().stringValue(),st.getStatement().getPredicate().stringValue() , st.getStatement().getObject().stringValue());
+			st.setSimilarityScore(statementSimilarity);
+			
+//			System.out.println("Similarity Score:"+st.getSimilarityScore());
+//			System.out.println("Score:"+st.getScore());
+
+		}		
+		return knowledgeStatements;
+	}
+	public  List<KnowledgeStatement> computeScore() {
+		for(KnowledgeStatement st:knowledgeStatements) {
+			st.setScore(st.getDegreeCentrality()+st.getSimilarityScore());
+
+		}		
+		
+		return knowledgeStatements;
 	}
 	
 	public int getInAndOutDegreeSum(String resUri) {
