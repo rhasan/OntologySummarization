@@ -127,8 +127,7 @@ public class SimilarityCalculator {
 		return getValue(classURI1, classURI2);
 	}
 	
-	public List<String> getResourceTypes(String resUri) throws NoTypeFoundInTheOntology {
-		if(resTypes.containsKey(resUri)==false) throw new NoTypeFoundInTheOntology("No type found for "+resUri);
+	public List<String> getResourceTypes(String resUri) {
 		return resTypes.get(resUri);
 	}
 	
@@ -137,8 +136,9 @@ public class SimilarityCalculator {
 	}
 	
 	public double resourceSimilarityScore(String resURI) {
+		List<Double> scores = new ArrayList<Double>();
 		if(isClass(resURI)) {
-			List<Double> scores = new ArrayList<Double>();
+			
 			for(String pref:prefs) {
 				
 				double d = similarity(resURI, pref);
@@ -146,30 +146,24 @@ public class SimilarityCalculator {
 				//System.out.println("Pref:"+pref);
 				//System.out.println("Score:"+d);
 			}
-			double max = Collections.max(scores);
-			
-			return max;
 		}
 		
 		List<String> types=null;
-		try {
-			types = getResourceTypes(resURI);
-		} catch (NoTypeFoundInTheOntology e) {
-			//System.out.println("No type found for:"+resURI);
-			return 0.0;
-		}
-		List<Double> scores = new ArrayList<Double>();
-		for(String type:types) {
-			//System.out.println("Type:"+type);
-			for(String pref:prefs) {
-				
-				double d = similarity(type, pref);
-				scores.add(d);
-				//System.out.println("Pref:"+pref);
-				//System.out.println("Score:"+d);
+		
+		types = getResourceTypes(resURI);
+		if(types!=null) {
+			for(String type:types) {
+				//System.out.println("Type:"+type);
+				for(String pref:prefs) {
+					
+					double d = similarity(type, pref);
+					scores.add(d);
+					//System.out.println("Pref:"+pref);
+					//System.out.println("Score:"+d);
+				}
 			}
 		}
-		double max = Collections.max(scores);
+		double max = scores.size()>0? Collections.max(scores):0.0;
 		
 		return max;
 	}
