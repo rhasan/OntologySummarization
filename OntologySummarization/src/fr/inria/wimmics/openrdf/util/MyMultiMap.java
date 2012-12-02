@@ -11,6 +11,24 @@ import java.util.Set;
 public class MyMultiMap<Key,Val> {
 
 	Map<Key, ArrayList<Val>> map = new HashMap<Key, ArrayList<Val>>();
+	
+	public MyMultiMap(MyMultiMap<Key,Val> multiMap) {
+		
+		MyMultiMap<Key,Val> tm = new MyMultiMap<Key,Val>();
+		
+		for(Entry<Key, ArrayList<Val>> en:entrySet()) {
+			
+			ArrayList<Val> nList = new ArrayList<Val>(en.getValue());
+			map.put(en.getKey(), nList);
+			
+		}
+		this.map = tm.map;
+		
+	}
+	public MyMultiMap() {
+		
+	}
+	
 
 	public int size() {
 

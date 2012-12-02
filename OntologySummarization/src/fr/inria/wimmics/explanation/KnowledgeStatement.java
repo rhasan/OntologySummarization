@@ -7,7 +7,15 @@ public class KnowledgeStatement {
 	private double degreeCentrality;
 	private double similarityScore;
 	private double score;
+	private double reRankedScore;
 	
+	
+	public double getReRankedScore() {
+		return reRankedScore;
+	}
+	public void setReRankedScore(double reRankedScore) {
+		this.reRankedScore = reRankedScore;
+	}
 	public Statement getStatement() {
 		return statement;
 	}

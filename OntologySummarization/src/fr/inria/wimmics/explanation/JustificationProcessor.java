@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,9 +18,16 @@ import java.util.Map.Entry;
 
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
+import org.openrdf.model.Literal;
 import org.openrdf.model.Statement;
+import org.openrdf.query.BindingSet;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
+import org.openrdf.query.QueryLanguage;
+import org.openrdf.query.TupleQuery;
+import org.openrdf.query.TupleQueryResult;
+import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
@@ -27,6 +36,7 @@ import org.openrdf.rio.helpers.StatementCollector;
 import org.openrdf.rio.trig.TriGParser;
 
 import fr.inria.wimmics.openrdf.util.MyMultiMap;
+import fr.inria.wimmics.openrdf.util.SesameUtil;
 
 public class JustificationProcessor {
 	
@@ -35,13 +45,16 @@ public class JustificationProcessor {
 	
 	MyMultiMap<String,Statement> stmtMap = new MyMultiMap<String,Statement>();
 	
+
 	Map<String,String> nameSpaces = null;
 	private List<String> ontologyLocations;
 	private List<String> instanceLocations;
+	private Repository myRepository = null;
+	List<Statement> rdfStatements = null;
 	
 	
 	
-	public void parseJustificationFile(String filePath,String baseURI) throws RDFParseException, RDFHandlerException, IOException {
+	public void parseJustificationFile(String filePath,String baseURI) throws RDFParseException, RDFHandlerException, IOException, RepositoryException {
 		
 		//linked data read by dereferencing
 		//java.net.URL documentUrl = new URL(“http://example.org/example.ttl”);
@@ -78,8 +91,33 @@ public class JustificationProcessor {
 						
 		}
 		
-		
+		rdfStatements = myList;
+		loadStatementsInRepo();
 	}
+	
+	private void loadStatementsInRepo() throws RepositoryException {
+		myRepository = SesameUtil.getMemoryBasedRepository();
+		
+		RepositoryConnection con = myRepository.getConnection();
+
+		try {
+			con.setAutoCommit(false);
+
+			// Add the first file
+			con.add(this.rdfStatements);
+
+			// If everything went as planned, we can commit the result
+			con.commit();
+		} catch (RepositoryException e) {
+			// Something went wrong during the transaction, so we roll it back
+			con.rollback();
+		} finally {
+			// Whatever happens, we want to close the connection when we are
+			// done.
+			con.close();
+		}		
+	}
+		
 	/**
 	 * summarizes the parsed justification file and returns the result in JSON
 	 * the javascript program takes this jason and outputs the proof tree
@@ -101,7 +139,7 @@ public class JustificationProcessor {
 	}
 	
 	
-	public void summarizeJustificationKnowledgeStatements(String statementURI, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
+	public List<KnowledgeStatement> summarizeJustificationKnowledgeStatements(String statementURI, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
 		
 		Set<Entry<String, ArrayList<Statement>>> entries = stmtMap.entrySet();
 		Set<Statement> stmts = new HashSet<Statement>();
@@ -126,14 +164,160 @@ public class JustificationProcessor {
 		
 		ArrayList<Statement> statements = new ArrayList<Statement>(stmts);
 		StatementSummarizer summerizer = new StatementSummarizer(statements);
-		summerizer.summarize(prefs,ontologyLocations,instanceLocations);
+		List<KnowledgeStatement> kStatements = summerizer.summarize(prefs,ontologyLocations,instanceLocations);
+		return kStatements;
+
+	}
+	
+	public List<KnowledgeStatement> summarizeJustificationKnowledgeStatementsRerank(String statementURI, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
+
+		List<KnowledgeStatement> kStatements = summarizeJustificationKnowledgeStatements(statementURI, prefs, ontologyLocations, instanceLocations);
+		List<KnowledgeStatement> kStatementsReRanked = reRank(statementURI, kStatements);
+		Collections.sort(kStatementsReRanked, new Comparator<KnowledgeStatement>() {
+
+			@Override
+			public int compare(KnowledgeStatement o1, KnowledgeStatement o2) {
+				if(o1.getReRankedScore()>o2.getReRankedScore()) return -1;
+				if(o1.getReRankedScore()<o2.getReRankedScore()) return 1;
+				return 0;
+			}
+		});
 		
+		System.out.println("After reRanking:");
+		for(KnowledgeStatement kst:kStatementsReRanked) {
+			System.out.println("Statement:"+kst.getStatement().toString());
+			System.out.println("ReRanked Score:"+kst.getReRankedScore());
+			//System.out.println(kst.getStatement().getContext().stringValue()+" "+index++);
+		}
+		return kStatementsReRanked;
+
 	}
-	public void summarizeJustificationKnowledgeStatements(String statementURI) throws Exception {
-		summarizeJustificationKnowledgeStatements( statementURI,  null, null, null);
+
+	
+	public int oneStepProofTreeLink(List<KnowledgeStatement> S) throws RepositoryException, MalformedQueryException, QueryEvaluationException {
+		RepositoryConnection con = myRepository.getConnection();
+		Set<String> summaryUris = new HashSet<String>();
+		
+		for(KnowledgeStatement st:S) {
+			String stUri = st.getStatement().getContext().stringValue();
+			summaryUris.add(stUri);
+		}
+		int count = 0;
+		
+		for(KnowledgeStatement st:S) {	
+			
+			String stUri = st.getStatement().getContext().stringValue();
+			String queryString = "PREFIX  r4ta:  <http://ns.inria.fr/ratio4ta/v2#> " +
+					"SELECT ?o " +
+					"WHERE {" +
+					"<"+stUri+"> r4ta:derivedFrom ?o ." +
+					"}";
+
+			TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+			
+			TupleQueryResult result = tupleQuery.evaluate();
+			
+			try {
+				while(result.hasNext()) {
+					
+					String foundUri = result.next().getValue("o").stringValue();
+					if(summaryUris.contains(foundUri))
+						count++;
+					
+				}
+			} finally {
+				result.close();
+
+			}
+
+			
+			
+			String queryString1 = "PREFIX  r4ta:  <http://ns.inria.fr/ratio4ta/v2#> " +
+					"SELECT ?s " +
+					"WHERE {" +
+					"?s r4ta:derivedFrom <"+stUri+"> ." +
+					"}";
+
+			TupleQuery tupleQuery1 = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString1);
+			
+			TupleQueryResult result1 = tupleQuery1.evaluate();
+			
+			try {
+				while(result1.hasNext()) {
+					String foundUri = result1.next().getValue("s").stringValue();
+					if(summaryUris.contains(foundUri))
+						count++;
+
+				}
+			} finally {
+				result1.close();
+
+			}
+					
+		
+		}
+
+		return count;
 	}
-	public void summarizeRelevantJustificationKnowledgeStatements(String statementURI, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
-		summarizeJustificationKnowledgeStatements( statementURI,  prefs, ontologyLocations, instanceLocations);
+	public double reward(KnowledgeStatement st, List<KnowledgeStatement> S) throws RepositoryException, MalformedQueryException, QueryEvaluationException {
+		
+		 List<KnowledgeStatement> newS = new ArrayList<KnowledgeStatement>(S);
+		 newS.add(st);
+		 
+		 int one_step_pt_links = oneStepProofTreeLink(S);
+		 int one_step_pt_links_st = oneStepProofTreeLink(newS);
+		 if(one_step_pt_links_st==0)
+			 return 0.0;
+		 
+		 double r = 1.0 - (double) one_step_pt_links/ (double) one_step_pt_links_st;
+		
+		return r;
+	}
+	
+	List<KnowledgeStatement> reRank(String statementURI, List<KnowledgeStatement> kStatements) throws RepositoryException, MalformedQueryException, QueryEvaluationException {
+		
+		Statement rootRdfStmt = stmtMap.getFirst(statementURI);
+		KnowledgeStatement kRootStmt = new KnowledgeStatement(rootRdfStmt);
+		
+		//adding a root statement
+		List<KnowledgeStatement> S = new ArrayList<KnowledgeStatement>();
+		S.add(kRootStmt);
+		
+		int i=0;
+		while(i<kStatements.size()) {
+			
+			double maxScore = Double.NEGATIVE_INFINITY;
+			int iMax = -1;
+			for(int index=0;index<kStatements.size();index++) {
+				
+				KnowledgeStatement kstmt = kStatements.get(index);
+				if(S.contains(kstmt)==false) {
+					double sc = kstmt.getScore();
+					double rsc = reward(kstmt, S);
+					double rScore = (.6 * sc+ .4 * rsc);
+					//double rScore = sc;
+					if(maxScore<rScore) {
+						iMax = index;
+						maxScore = rScore;
+					}
+				}
+			}
+			
+			kStatements.get(iMax).setReRankedScore(maxScore);
+			S.add(kStatements.get(iMax));
+			
+			//last statement
+			i++;
+		}
+		//removing the root statement
+		S.remove(0);
+		return S;
+	}
+	public List<KnowledgeStatement>  summarizeJustificationKnowledgeStatements(String statementURI) throws Exception {
+		return summarizeJustificationKnowledgeStatements( statementURI,  null, null, null);
+	}
+	public List<KnowledgeStatement>  summarizeRelevantJustificationKnowledgeStatements(String statementURI, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
+		return summarizeJustificationKnowledgeStatements( statementURI,  prefs, ontologyLocations, instanceLocations);
 	}
 	public List<String> getOntologyLocations() {
 		return ontologyLocations;
@@ -147,5 +331,11 @@ public class JustificationProcessor {
 	public void setInstanceLocations(List<String> instanceLocations) {
 		this.instanceLocations = instanceLocations;
 	}	
+	public MyMultiMap<String, Statement> getStmtMap() {
+		return stmtMap;
+	}
 
+	public void setStmtMap(MyMultiMap<String, Statement> stmtMap) {
+		this.stmtMap = stmtMap;
+	}
 }

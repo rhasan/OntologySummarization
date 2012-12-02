@@ -1,0 +1,18 @@
+#in degree + similarity + re-ranking measure ranking
+http://alphubel.unice.fr:8080/lodutil/data/d6 1
+http://alphubel.unice.fr:8080/lodutil/data/d4 2
+http://alphubel.unice.fr:8080/lodutil/data/d1 3
+http://alphubel.unice.fr:8080/lodutil/data/d5 4
+http://alphubel.unice.fr:8080/lodutil/data/d3 5
+http://alphubel.unice.fr:8080/lodutil/data/d7 6
+http://alphubel.unice.fr:8080/lodutil/data/d3-1 7
+0 0
+#indegree + similarity measure
+http://alphubel.unice.fr:8080/lodutil/data/d6 1
+http://alphubel.unice.fr:8080/lodutil/data/d4 2
+http://alphubel.unice.fr:8080/lodutil/data/d1 3
+http://alphubel.unice.fr:8080/lodutil/data/d5 4
+http://alphubel.unice.fr:8080/lodutil/data/d7 5
+http://alphubel.unice.fr:8080/lodutil/data/d3 6
+http://alphubel.unice.fr:8080/lodutil/data/d3-1 7
+0 0

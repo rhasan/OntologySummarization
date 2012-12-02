@@ -125,7 +125,6 @@ public class StatementSummarizer {
 		
 		statementGraph.computeScore();
 		
-		//to-do: re-ranking
 		
 		SummarizationUtil.normalizeScores(kStatements);
 		MyComparatorDescending myCmpD = new MyComparatorDescending();
