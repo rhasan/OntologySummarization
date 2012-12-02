@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.ibm.icu.text.DecimalFormat;
+
+import fr.inria.wimmics.openrdf.util.Util;
+
 
 public class SentenceRankCorrelation {
 	
@@ -63,13 +67,14 @@ public class SentenceRankCorrelation {
 
 	public static void main(String[] args) throws Exception {
 		double tau = sentenceRankCorrelation("files/degree-vs-sim.txt");
-		System.out.println("Degree vs Similarity: "+tau);
+		
+		System.out.println("Degree vs Similarity: "+Util.round(tau));
 		
 		tau = sentenceRankCorrelation("files/sim-vs-rerank.txt");
-		System.out.println("Similarity vs Rerank: "+tau);		
+		System.out.println("Similarity vs Rerank: "+Util.round(tau));		
 		
 		tau = sentenceRankCorrelation("files/degree-vs-rerank.txt");
-		System.out.println("Degree vs Rerank: "+tau);
+		System.out.println("Degree vs Rerank: "+Util.round(tau));
 		
 	}
 }
