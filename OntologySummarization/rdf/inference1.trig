@@ -1,0 +1,205 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix data: <http://alphubel.unice.fr:8080/lodutil/data/> .
+@prefix other: <http://alphubel.unice.fr:8080/lodutil/other/> .
+@prefix r4ta: <http://ns.inria.fr/ratio4ta/v2#> .
+@prefix just: <http://alphubel.unice.fr:8080/lodutil/justification/> .
+@prefix lodhost: <http://alphubel.unice.fr:8080/lodutil/> .
+@prefix : <http://www.example.org/exampleDocument#> .
+@prefix schema: <http://alphubel.unice.fr:8080/schema/> .
+@prefix dbp-ont: <http://dbpedia.org/ontology/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix geodata: <http://sws.geonames.org/> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix geo-ont: <http://www.geonames.org/ontology#> .
+@prefix wimo: <http://wimmics.inria.fr/onto/> .
+@prefix dbp-ont: <http://dbpedia.org/ontology/>.
+
+
+just:j10 {
+
+	data:d21 r4ta:justifiedBy just:j10 .
+
+	data:d21 r4ta:derivedFrom data:d5 .
+	data:d21 r4ta:derivedFrom data:d6 .
+	data:d21 r4ta:derivedFrom data:d22 .
+}
+
+
+just:j1 {
+
+	data:d5 r4ta:justifiedBy just:j1 .
+
+	data:d5 r4ta:derivedFrom data:d3 .
+	data:d5 r4ta:derivedFrom data:d4 .
+}
+just:j2 {
+
+	data:d3 r4ta:justifiedBy just:j2 .
+
+	data:d3 r4ta:derivedFrom data:d1 .
+	data:d3 r4ta:derivedFrom data:d2 .
+}
+just:j3 {
+
+	data:d6 r4ta:justifiedBy just:j3 .
+
+	data:d6 r4ta:derivedFrom data:d7 .
+	data:d6 r4ta:derivedFrom data:d8 .
+}
+just:j4 {
+
+	data:d8 r4ta:justifiedBy just:j4 .
+
+	data:d8 r4ta:derivedFrom data:d9 .
+	data:d8 r4ta:derivedFrom data:d10 .
+}
+
+just:j5 {
+
+	data:d9 r4ta:justifiedBy just:j5 .
+
+	data:d9 r4ta:derivedFrom data:d11 .
+	data:d9 r4ta:derivedFrom data:d12 .
+}
+
+just:j6 {
+
+	data:d12 r4ta:justifiedBy just:j6 .
+
+	data:d12 r4ta:derivedFrom data:d13 .
+	data:d12 r4ta:derivedFrom data:d14 .
+}
+
+just:j7 {
+
+	data:d14 r4ta:justifiedBy just:j7 .
+
+	data:d14 r4ta:derivedFrom data:d15 .
+	data:d14 r4ta:derivedFrom data:d16 .
+}
+just:j8 {
+
+	data:d16 r4ta:justifiedBy just:j8 .
+
+	data:d16 r4ta:derivedFrom data:d17 .
+	data:d16 r4ta:derivedFrom data:d18 .
+}
+
+just:j9 {
+
+	data:d18 r4ta:justifiedBy just:j9 .
+
+	data:d18 r4ta:derivedFrom data:d19 .
+	data:d18 r4ta:derivedFrom data:d20 .
+}
+data:d1 {
+	dbpedia:Bobsleigh_at_the_1924_Winter_Olympics rdf:type dbp-ont:Olympics .
+}
+data:d2 {
+	dbpedia:Olympics rdfs:subClassOf dbpedia:SportsEvent.
+}
+
+data:d3 {
+	dbpedia:Bobsleigh_at_the_1924_Winter_Olympics rdf:type dbp-ont:SportsEvent .
+}
+data:d4 { 
+	dbpedia:SportsEvent rdfs:subClassOf dbpedia:Event.
+}
+
+data:d5 {
+	dbpedia:Bobsleigh_at_the_1924_Winter_Olympics rdf:type dbp-ont:Event .
+}
+
+
+# d6 derived from d7 d8
+
+data:d6 {
+	dbpedia:Chamonix geo-ont:parentFeature dbpedia:Europe .
+}
+
+data:d7 {
+
+	dbpedia:Chamonix owl:sameAs <http://sws.geonames.org/3027301/> .
+}
+
+# d8 derived from d9 d10
+data:d8 {
+
+	<http://sws.geonames.org/3027301/> geo-ont:parentFeature dbpedia:Europe .
+}
+
+
+# d9 derived from d11 d12
+data:d9 {
+
+	<http://sws.geonames.org/3027301/> geo-ont:parentFeature <http://sws.geonames.org/6255148/> .
+}
+
+data:d10 {
+	<http://sws.geonames.org/6255148/> owl:sameAs dbpedia:Europe .
+}
+
+data:d11 {
+	<http://sws.geonames.org/3027301/> geo-ont:parentFeature <http://sws.geonames.org/6614739/> .
+}
+
+
+
+# d12 derived from d13 d14
+data:d12 {
+	<http://sws.geonames.org/6614739/> geo-ont:parentFeature <http://sws.geonames.org/6255148/> .
+}
+
+data:d13 {
+	<http://sws.geonames.org/6614739/> geo-ont:parentFeature <http://sws.geonames.org/3031676/> .
+}
+
+
+
+# d14 derived from d15 d16
+data:d14 {
+	<http://sws.geonames.org/3031676/> geo-ont:parentFeature <http://sws.geonames.org/6255148/> .
+}
+
+
+data:d15 {
+	<http://sws.geonames.org/3031676/> geo-ont:parentFeature <http://sws.geonames.org/3013736/> .
+}
+
+
+
+
+# d16 derived from d17 d18
+data:d16 {
+	<http://sws.geonames.org/3013736/> geo-ont:parentFeature <http://sws.geonames.org/6255148/> .
+}
+
+data:d17 {
+	<http://sws.geonames.org/3013736/> geo-ont:parentFeature <http://sws.geonames.org/2983751/> .
+}
+
+
+
+
+# d18 derived from d19 d20
+data:d18 {
+	<http://sws.geonames.org/2983751/> geo-ont:parentFeature <http://sws.geonames.org/6255148/> .
+}
+
+data:d19 {
+	<http://sws.geonames.org/2983751/> geo-ont:parentFeature <http://sws.geonames.org/3017382/> .
+}
+
+data:d20 {
+	<http://sws.geonames.org/3017382/> geo-ont:parentFeature <http://sws.geonames.org/6255148/> .
+}
+# d21 derived from d5 d6 d22
+data:d21 {
+	dbpedia:Bobsleigh_at_the_1924_Winter_Olympics wimo:hostedIn dbpedia:Europe .
+}
+
+
+data:d22 {
+	dbpedia:Bobsleigh_at_the_1924_Winter_Olympics dbp-ont:city dbpedia:Chamonix .
+}

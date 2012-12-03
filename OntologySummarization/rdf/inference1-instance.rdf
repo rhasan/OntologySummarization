@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:data="http://alphubel.unice.fr:8080/lodutil/data/"
+	xmlns:other="http://alphubel.unice.fr:8080/lodutil/other/"
+	xmlns:r4ta="http://ns.inria.fr/ratio4ta/v2#"
+	xmlns:just="http://alphubel.unice.fr:8080/lodutil/justification/"
+	xmlns:lodhost="http://alphubel.unice.fr:8080/lodutil/"
+	xmlns="http://www.example.org/exampleDocument#"
+	xmlns:schema="http://alphubel.unice.fr:8080/schema/"
+	xmlns:dbp-ont="http://dbpedia.org/ontology/"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:geodata="http://sws.geonames.org/"
+	xmlns:dbpedia="http://dbpedia.org/resource/"
+	xmlns:geo-ont="http://www.geonames.org/ontology#"
+	xmlns:wimo="http://wimmics.inria.fr/onto/">
+
+<rdf:Description rdf:about="http://sws.geonames.org/6255148/">
+	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
+	<geo-ont:name>Europe</geo-ont:name>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://sws.geonames.org/3017382/">
+	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
+	<geo-ont:name>Republic of France</geo-ont:name>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://sws.geonames.org/2983751/">
+	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
+	<geo-ont:name>Région Rhône-Alpes</geo-ont:name>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://sws.geonames.org/3013736/">
+	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
+	<geo-ont:name>Département de la Haute-Savoie</geo-ont:name>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://sws.geonames.org/3031676/">
+	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
+	<geo-ont:name>Arrondissement de Bonneville</geo-ont:name>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://sws.geonames.org/6614739/">
+	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
+	<geo-ont:name>Chamonix-Mont-Blanc</geo-ont:name>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://sws.geonames.org/3027301/">
+	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
+	<geo-ont:name>Chamonix-Mont-Blanc</geo-ont:name>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://dbpedia.org/resource/Bobsleigh_at_the_1924_Winter_Olympics">
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/Olympics"/>
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/SportsEvent"/>
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/Event"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://dbpedia.org/resource/Chamonix">
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/Settlement"/>
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/Place"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://dbpedia.org/resource/Europe">
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/Place"/>
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/Continent"/>
+</rdf:Description>
+
+</rdf:RDF>

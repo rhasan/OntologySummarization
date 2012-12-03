@@ -1,0 +1,55 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix data: <http://alphubel.unice.fr:8080/lodutil/data/> .
+@prefix other: <http://alphubel.unice.fr:8080/lodutil/other/> .
+@prefix r4ta: <http://ns.inria.fr/ratio4ta/v2#> .
+@prefix just: <http://alphubel.unice.fr:8080/lodutil/justification/> .
+@prefix lodhost: <http://alphubel.unice.fr:8080/lodutil/> .
+@prefix : <http://www.example.org/exampleDocument#> .
+@prefix schema: <http://alphubel.unice.fr:8080/schema/> .
+@prefix dbp-ont: <http://dbpedia.org/ontology/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix geodata: <http://sws.geonames.org/> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix geo-ont: <http://www.geonames.org/ontology#> .
+@prefix wimo: <http://wimmics.inria.fr/onto/> .
+@prefix dbp-ont: <http://dbpedia.org/ontology/>.
+
+
+
+<http://sws.geonames.org/6255148/> a geo-ont:Feature.
+<http://sws.geonames.org/6255148/> geo-ont:name "Europe".
+
+<http://sws.geonames.org/3017382/> a geo-ont:Feature.
+<http://sws.geonames.org/3017382/> geo-ont:name "Republic of France".
+
+<http://sws.geonames.org/2983751/> a geo-ont:Feature.
+<http://sws.geonames.org/2983751/> geo-ont:name "Région Rhône-Alpes" .
+
+<http://sws.geonames.org/3013736/> a geo-ont:Feature .
+<http://sws.geonames.org/3013736/> geo-ont:name "Département de la Haute-Savoie".
+
+
+<http://sws.geonames.org/3031676/> a geo-ont:Feature .
+<http://sws.geonames.org/3031676/> geo-ont:name "Arrondissement de Bonneville" .
+
+
+<http://sws.geonames.org/6614739/> a geo-ont:Feature .
+<http://sws.geonames.org/6614739/> geo-ont:name "Chamonix-Mont-Blanc".
+
+
+<http://sws.geonames.org/3027301/> a geo-ont:Feature .
+<http://sws.geonames.org/3027301/> geo-ont:name "Chamonix-Mont-Blanc" .
+
+dbpedia:Bobsleigh_at_the_1924_Winter_Olympics rdf:type dbp-ont:Olympics .
+dbpedia:Bobsleigh_at_the_1924_Winter_Olympics rdf:type dbp-ont:SportsEvent .
+dbpedia:Bobsleigh_at_the_1924_Winter_Olympics rdf:type dbp-ont:Event .
+
+dbpedia:Chamonix rdf:type dbp-ont:Settlement .
+dbpedia:Chamonix rdf:type dbp-ont:PopulatedPlace.
+dbpedia:Chamonix rdf:type dbp-ont:Place .
+
+
+dbpedia:Europe rdf:type dbp-ont:Place .
+dbpedia:Europe rdf:type dbp-ont:PopulatedPlace.
+dbpedia:Europe rdf:type dbp-ont:Continent.
