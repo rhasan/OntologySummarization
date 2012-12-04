@@ -19,7 +19,7 @@ var vis = d3.select("#chart").append("svg:svg")
     //.selectAll('g.x.axis g text').each(insertLinebreaks);
 //svg = body.append('svg');
 //svg.selectAll('g.x.axis g text').each(insertLinebreaks);
-d3.json("inference1.json", function(json) {
+d3.json("inference3.json", function(json) {
 //d3.json("../data/flare-wrong.json", function(json) {
   root = json;
   root.x0 = h / 2;
@@ -96,7 +96,6 @@ function update(source) {
   nodeEnter.append('svg:foreignObject')
       .attr("x", function(d) {
     	  return d==root? -150:-10 ; })
-    	  //return d==root? -150: d.children || d._children ? -10 : -5; })
 //      .attr("text-anchor", function(d) {
 //    	  return d!=root? "middle":"end";
 //    	  //return d.children || d._children ? "middle" : "middle"; 

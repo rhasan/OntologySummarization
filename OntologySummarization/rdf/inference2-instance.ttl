@@ -1,0 +1,40 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix data: <http://alphubel.unice.fr:8080/lodutil/data/> .
+@prefix other: <http://alphubel.unice.fr:8080/lodutil/other/> .
+@prefix r4ta: <http://ns.inria.fr/ratio4ta/v2#> .
+@prefix just: <http://alphubel.unice.fr:8080/lodutil/justification/> .
+@prefix lodhost: <http://alphubel.unice.fr:8080/lodutil/> .
+@prefix : <http://www.example.org/exampleDocument#> .
+@prefix schema: <http://alphubel.unice.fr:8080/schema/> .
+@prefix dbp-ont: <http://dbpedia.org/ontology/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix geo: <http://sws.geonames.org/> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix g-ont: <http://www.geonames.org/ontology#> .
+@prefix wimo: <http://wimmics.inria.fr/onto/> .
+@prefix dbp-ont: <http://dbpedia.org/ontology/>.
+
+
+dbpedia:Washburn_Tunnel  rdf:type  dbp-ont:Place .
+dbpedia:Washburn_Tunnel  rdf:type  dbp-ont:ArchitecturalStructure .
+dbpedia:Washburn_Tunnel  rdf:type  dbp-ont:Infrastructure .
+dbpedia:Washburn_Tunnel  rdf:type  dbp-ont:RouteOfTransportation .
+dbpedia:Washburn_Tunnel  rdf:type  dbp-ont:RoadTunnel .
+dbpedia:Washburn_Tunnel  rdf:type  dbp-ont:Tunnel .
+
+
+<http://sws.geonames.org/4699163/> a g-ont:Feature.
+<http://sws.geonames.org/4699163/> g-ont:name "Houston Ship Channel".
+
+<http://sws.geonames.org/4680335/> a g-ont:Feature.
+<http://sws.geonames.org/4680335/> g-ont:name "Chambers County".
+
+<http://sws.geonames.org/4736286/> a g-ont:Feature.
+<http://sws.geonames.org/4736286/> g-ont:name "Texas".
+
+<http://sws.geonames.org/6252001/> a g-ont:Feature.
+<http://sws.geonames.org/6252001/> g-ont:name "United States".
+
+
+

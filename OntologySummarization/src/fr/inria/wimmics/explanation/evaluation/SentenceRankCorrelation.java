@@ -12,11 +12,11 @@ import fr.inria.wimmics.util.Util;
 
 public class SentenceRankCorrelation {
 	
-	public static double sentenceRankCorrelation(String filePath) throws Exception {
+	public static double sentenceRankCorrelation(String filePath1, String filePath2) throws Exception {
 		List<Entry> list1 = new ArrayList<Entry>();
 		List<Entry> list2 = new ArrayList<Entry>();
 		
-		Scanner in = new Scanner(new File(filePath));
+		Scanner in = new Scanner(new File(filePath1));
 //		while(in.hasNext()) {
 			
 			//start list1
@@ -37,16 +37,16 @@ public class SentenceRankCorrelation {
 				list1.add(e);
 			}
 
-			
+			Scanner in1 = new Scanner(new File(filePath2));
 			//start list2
-			while(in.hasNext()) {
-				String name = in.next();
+			while(in1.hasNext()) {
+				String name = in1.next();
 				if(name.startsWith("#")) {
-					in.nextLine();
+					in1.nextLine();
 					continue;
 				}
 
-				String rankStr = in.next();
+				String rankStr = in1.next();
 				if(name.equals("0") && rankStr.equals("0")) {
 					break;
 				}
@@ -60,20 +60,22 @@ public class SentenceRankCorrelation {
 //		}
 		double tau = KendallTauCalculator.computeKendallTau(list1, list2);
 		
-		return tau;
 		
+		in1.close();
+		in.close();
+		return tau;
 	}
 	
 
 	public static void main(String[] args) throws Exception {
-		double tau = sentenceRankCorrelation("files/degree-vs-sim.txt");
+		double tau = sentenceRankCorrelation("files/degree.txt","files/similarity.txt");
 		
 		System.out.println("Degree vs Similarity: "+Util.round(tau));
 		
-		tau = sentenceRankCorrelation("files/sim-vs-rerank.txt");
+		tau = sentenceRankCorrelation("files/similarity.txt","files/rerank.txt");
 		System.out.println("Similarity vs Rerank: "+Util.round(tau));		
 		
-		tau = sentenceRankCorrelation("files/degree-vs-rerank.txt");
+		tau = sentenceRankCorrelation("files/degree.txt","files/rerank.txt");
 		System.out.println("Degree vs Rerank: "+Util.round(tau));
 		
 	}

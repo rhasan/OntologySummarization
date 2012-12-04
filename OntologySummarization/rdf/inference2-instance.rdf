@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:data="http://alphubel.unice.fr:8080/lodutil/data/"
+	xmlns:other="http://alphubel.unice.fr:8080/lodutil/other/"
+	xmlns:r4ta="http://ns.inria.fr/ratio4ta/v2#"
+	xmlns:just="http://alphubel.unice.fr:8080/lodutil/justification/"
+	xmlns:lodhost="http://alphubel.unice.fr:8080/lodutil/"
+	xmlns="http://www.example.org/exampleDocument#"
+	xmlns:schema="http://alphubel.unice.fr:8080/schema/"
+	xmlns:dbp-ont="http://dbpedia.org/ontology/"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:geo="http://sws.geonames.org/"
+	xmlns:dbpedia="http://dbpedia.org/resource/"
+	xmlns:g-ont="http://www.geonames.org/ontology#"
+	xmlns:wimo="http://wimmics.inria.fr/onto/">
+
+<rdf:Description rdf:about="http://dbpedia.org/resource/Washburn_Tunnel">
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/Place"/>
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/RouteOfTransportation"/>
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/RoadTunnel"/>
+	<rdf:type rdf:resource="http://dbpedia.org/ontology/Tunnel"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://sws.geonames.org/4699163/">
+	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
+	<g-ont:name>Houston Ship Channel</g-ont:name>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://sws.geonames.org/4680335/">
+	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
+	<g-ont:name>Chambers County</g-ont:name>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://sws.geonames.org/4736286/">
+	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
+	<g-ont:name>Texas</g-ont:name>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://sws.geonames.org/6252001/">
+	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
+	<g-ont:name>United States</g-ont:name>
+</rdf:Description>
+
+</rdf:RDF>

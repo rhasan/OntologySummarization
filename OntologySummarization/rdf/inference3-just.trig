@@ -1,0 +1,176 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix data: <http://alphubel.unice.fr:8080/lodutil/data/> .
+@prefix other: <http://alphubel.unice.fr:8080/lodutil/other/> .
+@prefix r4ta: <http://ns.inria.fr/ratio4ta/v2#> .
+@prefix just: <http://alphubel.unice.fr:8080/lodutil/justification/> .
+@prefix lodhost: <http://alphubel.unice.fr:8080/lodutil/> .
+@prefix : <http://www.example.org/exampleDocument#> .
+@prefix schema: <http://alphubel.unice.fr:8080/schema/> .
+@prefix dbpedia-owl: <http://dbpedia.org/ontology/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix geodata: <http://sws.geonames.org/> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix geo-ont: <http://www.geonames.org/ontology#> .
+@prefix wimo: <http://wimmics.inria.fr/onto/> .
+
+
+just:j1 {
+    data:d1 r4ta:justifiedBy just:j1 .
+
+    data:d1 r4ta:derivedFrom data:d2 .
+    data:d1 r4ta:derivedFrom data:d3 .
+    data:d1 r4ta:derivedFrom data:d4 .
+}
+data:d1 {
+	dbpedia:Nina_Simone rdf:type wimo:Artist_BornInUS_DiedInFrance .
+}
+data:d2 {
+    dbpedia:Nina_Simone rdf:type  dbpedia-owl:Artist .
+}
+data:d3 {
+    dbpedia:Nina_Simone dbpedia-owl:birthPlace dbpedia:UnitedStates .
+}
+data:d4 {
+    dbpedia:Nina_Simone dbpedia-owl:deathPlace dbpedia:France .
+}
+
+
+just:j2 {
+    data:d2 r4ta:justifiedBy just:j2 .
+
+    data:d2 r4ta:derivedFrom data:d5 .
+    data:d2 r4ta:derivedFrom data:d6 .
+}
+data:d5 {
+    dbpedia:Nina_Simone rdf:type dbpedia-owl:MusicalArtist .
+}
+
+data:d6 {
+    dbpedia-owl:MusicalArtist  owl:subClassOf  dbpedia-owl:Artist .
+}
+
+
+just:j3 {
+    data:d3 r4ta:justifiedBy just:j3 .
+
+    data:d3 r4ta:derivedFrom data:d7 .
+    data:d3 r4ta:derivedFrom data:d8 .
+}
+data:d7 {
+    dbpedia:Nina_Simone dbpedia-owl:birthPlace <http://dbpedia.org/resource/Collettsville,_North_Carolina> .
+}
+data:d8 {
+	<http://dbpedia.org/resource/Collettsville,_North_Carolina> geo-ont:parentFeature dbpedia:UnitedStates .
+}
+
+
+just:j4 {
+    data:d8 r4ta:justifiedBy just:j4 .
+
+    data:d8 r4ta:derivedFrom data:d9 .
+    data:d8 r4ta:derivedFrom data:d10 .
+}
+data:d9 {
+	<http://dbpedia.org/resource/Collettsville,_North_Carolina> owl:sameAs <http://sws.geonames.org/4482348/> .
+}
+data:d10 {
+	<http://sws.geonames.org/4482348/> geo-ont:parentFeature dbpedia:UnitedStates .
+}
+
+
+just:j5 {
+    data:d10 r4ta:justifiedBy just:j5 .
+
+    data:d10 r4ta:derivedFrom data:d11 .
+    data:d10 r4ta:derivedFrom data:d12 .
+}
+data:d11 {
+	<http://sws.geonames.org/4482348/> geo-ont:parentFeature <http://sws.geonames.org/6252001/> .
+}
+data:d12 {
+	<http://sws.geonames.org/6252001/> owl:sameAs dbpedia:UnitedStates .
+}
+
+
+
+just:j6 {
+    data:d4 r4ta:justifiedBy just:j6 .
+
+    data:d4 r4ta:derivedFrom data:d13 .
+    data:d4 r4ta:derivedFrom data:d14 .
+}
+data:d13 {
+    dbpedia:Nina_Simone dbpedia-owl:deathPlace dbpedia:Carry-le-Rouet .
+}
+data:d14 {
+	dbpedia:Carry-le-Rouet geo-ont:parentFeature dbpedia:France .
+}
+
+
+just:j7 {
+    data:d14 r4ta:justifiedBy just:j7 .
+
+    data:d14 r4ta:derivedFrom data:d15 .
+    data:d14 r4ta:derivedFrom data:d16 .
+}
+data:d15 {
+	dbpedia:Carry-le-Rouet owl:sameAs <http://sws.geonames.org/6447113/> .
+}
+data:d16 {
+	<http://sws.geonames.org/6447113/> geo-ont:parentFeature dbpedia:France .
+}
+
+
+just:j8 {
+    data:d16 r4ta:justifiedBy just:j8 .
+
+    data:d16 r4ta:derivedFrom data:d17 .
+    data:d16 r4ta:derivedFrom data:d18 .
+}
+data:d17 {
+	<http://sws.geonames.org/6447113/> geo-ont:parentFeature <http://sws.geonames.org/6457359/> .
+}
+data:d18 {
+	<http://sws.geonames.org/6457359/> geo-ont:parentFeature dbpedia:France .
+}
+
+
+just:j9 {
+    data:d18 r4ta:justifiedBy just:j9 .
+
+    data:d18 r4ta:derivedFrom data:d19 .
+    data:d18 r4ta:derivedFrom data:d20 .
+}
+data:d19 {
+	<http://sws.geonames.org/6457359/> geo-ont:parentFeature <http://sws.geonames.org/3031359/> .
+}
+data:d20 {
+	<http://sws.geonames.org/3031359/> geo-ont:parentFeature dbpedia:France .
+}
+
+just:j10 {
+    data:d20 r4ta:justifiedBy just:j10 .
+
+    data:d20 r4ta:derivedFrom data:d21 .
+    data:d20 r4ta:derivedFrom data:d22 .
+}
+data:d21 {
+	<http://sws.geonames.org/3031359/> geo-ont:parentFeature <http://sws.geonames.org/2985244/> .
+}
+data:d22 {
+	<http://sws.geonames.org/2985244/> geo-ont:parentFeature dbpedia:France .
+}
+
+just:j11 {
+    data:d22 r4ta:justifiedBy just:j11 .
+
+    data:d22 r4ta:derivedFrom data:d23 .
+    data:d22 r4ta:derivedFrom data:d24 .
+}
+data:d23 {
+	<http://sws.geonames.org/2985244/> geo-ont:parentFeature <http://sws.geonames.org/3017382/> .
+}
+data:d24 {
+	<http://sws.geonames.org/3017382/> owl:sameAs dbpedia:France .
+}

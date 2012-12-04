@@ -115,8 +115,25 @@ public class JSONTreeGenrator<Item> {
 		List<GenericTreeNode<Item>> list = tree.getAdjacent(parent);
 		
 		if(parent.getObject() instanceof Statement) {
+			
+			Statement st = (Statement) parent.getObject();
+			String subjectStr = getPreetyName(st.getSubject());
+			
+			String predicateStr = getPreetyName(st.getPredicate());
+			predicateStr = predicateStr.equals("rdf:type")?"a":predicateStr;
+			
+			String objectStr = getPreetyName(st.getObject());
+			
+			String  s = subjectStr +" "+ predicateStr +" "+predicateStr;			
 			String str = getStringValue(parent);
 			jObjParent.put("name", str);
+			jObjParent.put("subject", subjectStr);
+			jObjParent.put("predicate", predicateStr);
+			jObjParent.put("object", objectStr);
+			
+			
+			
+			
 			//System.out.println(":):)");
 		}
 		else {

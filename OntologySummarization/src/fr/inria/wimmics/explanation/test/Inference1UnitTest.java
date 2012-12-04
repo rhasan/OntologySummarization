@@ -1,5 +1,6 @@
 package fr.inria.wimmics.explanation.test;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,10 @@ public class Inference1UnitTest {
 		//jp.loadResourceLabelFromOntology("rdf/ontology/geonames_ontology_v3.1.rdf", GeoNames.base);
 		jp.loadResourceLabelFromOntology("rdf/inference1-instance.rdf", GeoNames.base);
 //		/jp.loadResourceLabelFromOntology("rdf/ontology/dbpedia_3.8.owl", "http://www.example.com/");
-		jp.summarizedProofTree("http://alphubel.unice.fr:8080/lodutil/data/d21");
+		String jsonStr = jp.summarizedProofTree("http://alphubel.unice.fr:8080/lodutil/data/d21");
+        FileOutputStream file=new FileOutputStream("visualization/tree/inference1.json");
+        file.write(jsonStr.getBytes());
+        file.close();			
 	}
 	@Test
 	public void topStatementSummaryTest() throws Exception {

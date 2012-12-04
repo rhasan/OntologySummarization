@@ -1,0 +1,58 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix data: <http://alphubel.unice.fr:8080/lodutil/data/> .
+@prefix other: <http://alphubel.unice.fr:8080/lodutil/other/> .
+@prefix r4ta: <http://ns.inria.fr/ratio4ta/v2#> .
+@prefix just: <http://alphubel.unice.fr:8080/lodutil/justification/> .
+@prefix lodhost: <http://alphubel.unice.fr:8080/lodutil/> .
+@prefix : <http://www.example.org/exampleDocument#> .
+@prefix schema: <http://alphubel.unice.fr:8080/schema/> .
+@prefix dbpedia-owl: <http://dbpedia.org/ontology/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix geo: <http://sws.geonames.org/> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix g-ont: <http://www.geonames.org/ontology#> .
+@prefix wimo: <http://wimmics.inria.fr/onto/> .
+@prefix dbp-ont: <http://dbpedia.org/ontology/>.
+
+
+dbpedia:Nina_Simone rdf:type  dbpedia-owl:Artist .
+dbpedia:Nina_Simone rdf:type dbpedia-owl:MusicalArtist .
+
+<http://dbpedia.org/resource/Collettsville,_North_Carolina> rdf:type dbpedia-owl:Place .
+<http://dbpedia.org/resource/Collettsville,_North_Carolina> rdf:type dbpedia-owl:PopulatedPlace .
+<http://dbpedia.org/resource/Collettsville,_North_Carolina> rdf:type dbpedia-owl:Settlement .
+
+dbpedia:UnitedStates rdf:type dbpedia-owl:Place .
+dbpedia:UnitedStates rdf:type dbpedia-owl:PopulatedPlace .
+dbpedia:UnitedStates rdf:type dbpedia-owl:Country .
+
+dbpedia:Carry-le-Rouet rdf:type dbpedia-owl:Place .
+dbpedia:Carry-le-Rouet rdf:type dbpedia-owl:PopulatedPlace .
+dbpedia:Carry-le-Rouet rdf:type dbpedia-owl:Settlement .
+
+dbpedia:France rdf:type dbpedia-owl:Place .
+dbpedia:France rdf:type dbpedia-owl:PopulatedPlace .
+dbpedia:France rdf:type dbpedia-owl:Country .
+
+
+<http://sws.geonames.org/4482348/> a g-ont:Feature.
+<http://sws.geonames.org/4482348/> g-ont:name "North Carolina".
+
+<http://sws.geonames.org/6252001/> a g-ont:Feature.
+<http://sws.geonames.org/6252001/> g-ont:name "United States".
+
+<http://sws.geonames.org/6447113/> a g-ont:Feature.
+<http://sws.geonames.org/6447113/> g-ont:name "Carry-le-Rouet".
+
+<http://sws.geonames.org/6457359/> a g-ont:Feature.
+<http://sws.geonames.org/6457359/> g-ont:name "Arrondissement d'Istres".
+
+<http://sws.geonames.org/3031359/> a g-ont:Feature.
+<http://sws.geonames.org/3031359/> g-ont:name "Département des Bouches-du-Rhône" .
+
+<http://sws.geonames.org/2985244/> a g-ont:Feature.
+<http://sws.geonames.org/2985244/> g-ont:name "Région Provence-Alpes-Côte d'Azur".
+
+<http://sws.geonames.org/3017382/> a g-ont:Feature.
+<http://sws.geonames.org/3017382/> g-ont:name "France".
