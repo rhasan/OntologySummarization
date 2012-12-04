@@ -1,4 +1,4 @@
-package fr.inria.wimmics.openrdf.util;
+package fr.inria.wimmics.util;
 
 import java.util.ArrayList;
 import java.util.Collections;

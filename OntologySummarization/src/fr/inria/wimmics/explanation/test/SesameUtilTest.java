@@ -15,7 +15,7 @@ import org.openrdf.repository.util.RDFRemover;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
 
-import fr.inria.wimmics.openrdf.util.SesameUtil;
+import fr.inria.wimmics.util.SesameUtil;
 
 
 public class SesameUtilTest {

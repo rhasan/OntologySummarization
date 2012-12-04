@@ -11,44 +11,44 @@
 	xmlns:dbp-ont="http://dbpedia.org/ontology/"
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:geodata="http://sws.geonames.org/"
+	xmlns:geo="http://sws.geonames.org/"
 	xmlns:dbpedia="http://dbpedia.org/resource/"
-	xmlns:geo-ont="http://www.geonames.org/ontology#"
+	xmlns:g-ont="http://www.geonames.org/ontology#"
 	xmlns:wimo="http://wimmics.inria.fr/onto/">
 
 <rdf:Description rdf:about="http://sws.geonames.org/6255148/">
 	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
-	<geo-ont:name>Europe</geo-ont:name>
+	<g-ont:name>Europe</g-ont:name>
 </rdf:Description>
 
 <rdf:Description rdf:about="http://sws.geonames.org/3017382/">
 	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
-	<geo-ont:name>Republic of France</geo-ont:name>
+	<g-ont:name>Republic of France</g-ont:name>
 </rdf:Description>
 
 <rdf:Description rdf:about="http://sws.geonames.org/2983751/">
 	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
-	<geo-ont:name>Région Rhône-Alpes</geo-ont:name>
+	<g-ont:name>Région Rhône-Alpes</g-ont:name>
 </rdf:Description>
 
 <rdf:Description rdf:about="http://sws.geonames.org/3013736/">
 	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
-	<geo-ont:name>Département de la Haute-Savoie</geo-ont:name>
+	<g-ont:name>Département de la Haute-Savoie</g-ont:name>
 </rdf:Description>
 
 <rdf:Description rdf:about="http://sws.geonames.org/3031676/">
 	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
-	<geo-ont:name>Arrondissement de Bonneville</geo-ont:name>
+	<g-ont:name>Arrondissement de Bonneville</g-ont:name>
 </rdf:Description>
 
 <rdf:Description rdf:about="http://sws.geonames.org/6614739/">
 	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
-	<geo-ont:name>Chamonix-Mont-Blanc</geo-ont:name>
+	<g-ont:name>Chamonix-Mont-Blanc</g-ont:name>
 </rdf:Description>
 
 <rdf:Description rdf:about="http://sws.geonames.org/3027301/">
 	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
-	<geo-ont:name>Chamonix-Mont-Blanc</geo-ont:name>
+	<g-ont:name>Chamonix-Mont-Blanc</g-ont:name>
 </rdf:Description>
 
 <rdf:Description rdf:about="http://dbpedia.org/resource/Bobsleigh_at_the_1924_Winter_Olympics">

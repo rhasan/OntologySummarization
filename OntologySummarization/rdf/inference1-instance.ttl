@@ -9,37 +9,37 @@
 @prefix dbp-ont: <http://dbpedia.org/ontology/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix geodata: <http://sws.geonames.org/> .
+@prefix geo: <http://sws.geonames.org/> .
 @prefix dbpedia: <http://dbpedia.org/resource/> .
-@prefix geo-ont: <http://www.geonames.org/ontology#> .
+@prefix g-ont: <http://www.geonames.org/ontology#> .
 @prefix wimo: <http://wimmics.inria.fr/onto/> .
 @prefix dbp-ont: <http://dbpedia.org/ontology/>.
 
 
 
-<http://sws.geonames.org/6255148/> a geo-ont:Feature.
-<http://sws.geonames.org/6255148/> geo-ont:name "Europe".
+<http://sws.geonames.org/6255148/> a g-ont:Feature.
+<http://sws.geonames.org/6255148/> g-ont:name "Europe".
 
-<http://sws.geonames.org/3017382/> a geo-ont:Feature.
-<http://sws.geonames.org/3017382/> geo-ont:name "Republic of France".
+<http://sws.geonames.org/3017382/> a g-ont:Feature.
+<http://sws.geonames.org/3017382/> g-ont:name "Republic of France".
 
-<http://sws.geonames.org/2983751/> a geo-ont:Feature.
-<http://sws.geonames.org/2983751/> geo-ont:name "Région Rhône-Alpes" .
+<http://sws.geonames.org/2983751/> a g-ont:Feature.
+<http://sws.geonames.org/2983751/> g-ont:name "Région Rhône-Alpes" .
 
-<http://sws.geonames.org/3013736/> a geo-ont:Feature .
-<http://sws.geonames.org/3013736/> geo-ont:name "Département de la Haute-Savoie".
-
-
-<http://sws.geonames.org/3031676/> a geo-ont:Feature .
-<http://sws.geonames.org/3031676/> geo-ont:name "Arrondissement de Bonneville" .
+<http://sws.geonames.org/3013736/> a g-ont:Feature .
+<http://sws.geonames.org/3013736/> g-ont:name "Département de la Haute-Savoie".
 
 
-<http://sws.geonames.org/6614739/> a geo-ont:Feature .
-<http://sws.geonames.org/6614739/> geo-ont:name "Chamonix-Mont-Blanc".
+<http://sws.geonames.org/3031676/> a g-ont:Feature .
+<http://sws.geonames.org/3031676/> g-ont:name "Arrondissement de Bonneville" .
 
 
-<http://sws.geonames.org/3027301/> a geo-ont:Feature .
-<http://sws.geonames.org/3027301/> geo-ont:name "Chamonix-Mont-Blanc" .
+<http://sws.geonames.org/6614739/> a g-ont:Feature .
+<http://sws.geonames.org/6614739/> g-ont:name "Chamonix-Mont-Blanc".
+
+
+<http://sws.geonames.org/3027301/> a g-ont:Feature .
+<http://sws.geonames.org/3027301/> g-ont:name "Chamonix-Mont-Blanc" .
 
 dbpedia:Bobsleigh_at_the_1924_Winter_Olympics rdf:type dbp-ont:Olympics .
 dbpedia:Bobsleigh_at_the_1924_Winter_Olympics rdf:type dbp-ont:SportsEvent .

@@ -1,0 +1,177 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix data: <http://alphubel.unice.fr:8080/lodutil/data/> .
+@prefix other: <http://alphubel.unice.fr:8080/lodutil/other/> .
+@prefix r4ta: <http://ns.inria.fr/ratio4ta/v2#> .
+@prefix just: <http://alphubel.unice.fr:8080/lodutil/justification/> .
+@prefix lodhost: <http://alphubel.unice.fr:8080/lodutil/> .
+@prefix : <http://www.example.org/exampleDocument#> .
+@prefix schema: <http://alphubel.unice.fr:8080/schema/> .
+@prefix dbpedia-owl: <http://dbpedia.org/ontology/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix geodata: <http://sws.geonames.org/> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix g-ont: <http://www.geonames.org/ontology#> .
+@prefix wimo: <http://wimmics.inria.fr/onto/> .
+
+just:j1 {
+	data:d3 r4ta:justifiedBy just:j1 .
+
+	data:d3 r4ta:derivedFrom data:d1 .
+	data:d3 r4ta:derivedFrom data:d2 .
+}
+just:j2 {
+	data:d5 r4ta:justifiedBy just:j2 .
+
+	data:d5 r4ta:derivedFrom data:d3 .
+	data:d5 r4ta:derivedFrom data:d4 .
+}
+just:j3 {
+	data:d7 r4ta:justifiedBy just:j3 .
+
+	data:d7 r4ta:derivedFrom data:d5 .
+	data:d5 r4ta:derivedFrom data:d6 .
+}
+just:j4 {
+	data:d9 r4ta:justifiedBy just:j4 .
+
+	data:d9 r4ta:derivedFrom data:d7 .
+	data:d9 r4ta:derivedFrom data:d8 .
+}
+just:j5 {
+	data:d12 r4ta:justifiedBy just:j5 .
+
+	data:d12 r4ta:derivedFrom data:d10 .
+	data:d12 r4ta:derivedFrom data:d11 .
+}
+just:j6 {
+	data:d14 r4ta:justifiedBy just:j6 .
+
+	data:d14 r4ta:derivedFrom data:d12 .
+	data:d14 r4ta:derivedFrom data:d13 .
+}
+just:j7 {
+	data:d16 r4ta:justifiedBy just:j7 .
+
+	data:d16 r4ta:derivedFrom data:d14 .
+	data:d16 r4ta:derivedFrom data:d15 .
+}
+just:j8 {
+	data:d18 r4ta:justifiedBy just:j8 .
+
+	data:d18 r4ta:derivedFrom data:d16 .
+	data:d18 r4ta:derivedFrom data:d17 .
+}
+just:j9 {
+	data:d20 r4ta:justifiedBy just:j9 .
+
+	data:d20 r4ta:derivedFrom data:d18 .
+	data:d20 r4ta:derivedFrom data:d19 .
+}
+just:j10 {
+	data:d22 r4ta:justifiedBy just:j10 .
+
+	data:d22 r4ta:derivedFrom data:d20 .
+	data:d22 r4ta:derivedFrom data:d21 .
+}
+just:j11 {
+	data:d24 r4ta:justifiedBy just:j11 .
+
+	data:d24 r4ta:derivedFrom data:d9 .
+	data:d24 r4ta:derivedFrom data:d20 .
+	data:d24 r4ta:derivedFrom data:d23 .
+}
+
+data:d1 {
+dbpedia:Washburn_Tunnel  rdf:type  dbpedia-owl:Tunnel .
+}
+data:d2 {
+	dbpedia-owl:Tunnel  owl:subClassOf  dbpedia-owl:RouteOfTransportation .
+}
+
+data:d3 {
+	dbpedia:Washburn_Tunnel   rdf:type dbpedia-owl:RouteOfTransportation .
+}
+
+data:d4 { 
+	dbpedia-owl:RouteOfTransportation  owl:subClassOf  dbpedia-owl:Infrastructure .
+}
+
+data:d5 {
+	dbpedia:Washburn_Tunnel   rdf:type dbpedia-owl:Infrastructure .
+}
+
+data:d6 { 
+	dbpedia-owl:Infrastructure  owl:subClassOf  dbpedia-owl:ArchitecturalStructure .
+}
+data:d7 {
+	dbpedia:Washburn_Tunnel   rdf:type dbpedia-owl:ArchitecturalStructure .
+}
+
+data:d8 { 
+dbpedia-owl:ArchitecturalStructure  owl:subClassOf  dbpedia-owl:Place .
+}
+
+data:d9 {
+dbpedia:Washburn_Tunnel   rdf:type  dbpedia-owl:Place .
+}
+
+data:d10 {
+	dbpedia:Houston_Ship_Channel  owl:sameAs  <http://sws.geonames.org/4699163/> .
+}
+
+data:d11 { 
+ <http://sws.geonames.org/4699163/>  g-ont:parentFeature <http://sws.geonames.org/4680335/> .
+}
+
+data:d12 {
+dbpedia:Houston_Ship_Channel  g-ont:parentFeature <http://sws.geonames.org/4680335/> .
+}
+
+data:d13{ 
+	<http://sws.geonames.org/4680335/>  g-ont:parentFeature  <http://dbpedia.org/resource/Aldine,_Texas> .
+}
+
+data:d14 {
+dbpedia:Houston_Ship_Channel  g-ont:parentFeature  <http://dbpedia.org/resource/Aldine,_Texas> .
+}
+
+data:d15{ 
+<http://dbpedia.org/resource/Aldine,_Texas>  owl:sameAs  <http://sws.geonames.org/4736286/> .
+}
+
+data:d16 {
+dbpedia:Houston_Ship_Channel  g-ont:parentFeature <http://sws.geonames.org/4736286/> .
+}
+
+data:d17{ 
+<http://sws.geonames.org/4736286/>  g-ont:parentFeature  dbpedia:United_States .
+}
+
+data:d18 {
+dbpedia:Houston_Ship_Channel  g-ont:parentFeature  dbpedia:United_States .
+}
+
+data:d19{ 
+dbpedia:United_States  owl:sameAs  <http://sws.geonames.org/6252001/> .
+}
+
+data:d20 {
+dbpedia:Houston_Ship_Channel  g-ont:parentFeature  <http://sws.geonames.org/6252001/> .
+}
+
+data:d21{ 
+<http://sws.geonames.org/6252001/>  g-ont:parentFeature  dbpedia:North_America .
+}
+
+data:d22 {
+dbpedia:Houston_Ship_Channel  g-ont:parentFeature  dbpedia:North_America .
+}
+
+data:d23 {
+dbpedia:Washburn_Tunnel   dbpedia-owl:location   dbpedia:Houston_Ship_Channel .
+}
+
+data:d24 {
+dbpedia:Washburn_Tunnel  rdf:type  wimo:NorthAmericanPlace .
+}

@@ -13,7 +13,7 @@ import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
 
 import fr.inria.wimmics.explanation.DBPediaProcessor;
-import fr.inria.wimmics.openrdf.util.SesameUtil;
+import fr.inria.wimmics.util.SesameUtil;
 
 public class DBPediaProcessorUnitTest {
 

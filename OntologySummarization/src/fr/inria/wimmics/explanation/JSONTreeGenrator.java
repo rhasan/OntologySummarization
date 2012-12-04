@@ -16,13 +16,15 @@ public class JSONTreeGenrator<Item> {
 	GenericTreeNode<Item> root;
 	GenericTree<Item> tree;
 	Map<String,String> nameSpaces;
+	Map<String,String> resourceLabels;
 	
 	public JSONTreeGenrator() {
 
 	}	
 	
-	public JSONTreeGenrator(Map<String,String> nameSpaces) {
+	public JSONTreeGenrator(Map<String,String> nameSpaces, Map<String,String> resourceLabels) {
 		this.nameSpaces = nameSpaces;
+		this.resourceLabels = resourceLabels;
 	}
 
 	public String generateJASON(GenericTree<Item> g, GenericTreeNode<Item> root) {
@@ -35,7 +37,10 @@ public class JSONTreeGenrator<Item> {
 		return jObjRoot.toJSONString();
 	}
 	
-	private String getPreetyName(Resource r) {
+	private String getPreetyName(Value r) {
+		String label = getPreetyLabelName(r);
+		//System.out.println(r.stringValue()+"="+label);
+		if(label.isEmpty()==false) return label;
 		if(nameSpaces!=null) {
 			//System.out.println(":)");
 			for(Entry<String, String> en:nameSpaces.entrySet()) {
@@ -53,23 +58,56 @@ public class JSONTreeGenrator<Item> {
 		return r.stringValue();
 		
 	}
-	
-	private String getPreetyName(Value r) {
-		if(nameSpaces!=null) {
+	private String getPreetyLabelName(Value r) {
+		String rUri = r.stringValue();
+		String label = "";
+		if(resourceLabels.containsKey(rUri)==false)
+			return "";
+		if(nameSpaces!=null && resourceLabels!=null) {
+			String nsp = "";
 			for(Entry<String, String> en:nameSpaces.entrySet()) {
 				String key = en.getKey();
 				String val = en.getValue();
 				if(r.stringValue().contains(val)) {
-					return r.stringValue().replace(val, key+":");
-				}
+					//System.out.println(en.toString());
+					//System.out.println(r.stringValue());					
+					//return r.stringValue().replace(val, key+":");
+					nsp = key;
+					break;
+				}			
 			}
+	
+			
+			label = resourceLabels.get(rUri);
+			if(nsp.isEmpty()==false)
+				label = nsp+":"+label;
+			
 		}
-		return r.stringValue();
-		
-	}	
+		return label;
+
+	}
+	
+//	private String getPreetyName(Value r) {
+//		if(r instanceof Resource)
+//		
+////		if(nameSpaces!=null) {
+////			for(Entry<String, String> en:nameSpaces.entrySet()) {
+////				String key = en.getKey();
+////				String val = en.getValue();
+////				if(r.stringValue().contains(val)) {
+////					return r.stringValue().replace(val, key+":");
+////				}
+////			}
+////		}
+//		return r.stringValue();
+//		
+//	}	
 	private String getStringValue(GenericTreeNode<Item> parent) {
 		Statement st = (Statement) parent.getObject();
-		String  s = getPreetyName(st.getSubject())+" "+ getPreetyName(st.getPredicate())+" "+getPreetyName(st.getObject());
+		String predicateStr = getPreetyName(st.getPredicate());
+		predicateStr = predicateStr.equals("rdf:type")?"a":predicateStr;
+		
+		String  s = getPreetyName(st.getSubject())+" "+ predicateStr +" "+getPreetyName(st.getObject());
 		return s;
 	}
 	public void traverseTree(GenericTreeNode<Item> parent, JSONObject jObjParent) {

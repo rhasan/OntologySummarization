@@ -9,9 +9,9 @@
 @prefix dbp-ont: <http://dbpedia.org/ontology/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix geodata: <http://sws.geonames.org/> .
+@prefix geo: <http://sws.geonames.org/> .
 @prefix dbpedia: <http://dbpedia.org/resource/> .
-@prefix geo-ont: <http://www.geonames.org/ontology#> .
+@prefix g-ont: <http://www.geonames.org/ontology#> .
 @prefix wimo: <http://wimmics.inria.fr/onto/> .
 @prefix dbp-ont: <http://dbpedia.org/ontology/>.
 
@@ -115,7 +115,7 @@ data:d5 {
 # d6 derived from d7 d8
 
 data:d6 {
-	dbpedia:Chamonix geo-ont:parentFeature dbpedia:Europe .
+	dbpedia:Chamonix g-ont:parentFeature dbpedia:Europe .
 }
 
 data:d7 {
@@ -126,14 +126,14 @@ data:d7 {
 # d8 derived from d9 d10
 data:d8 {
 
-	<http://sws.geonames.org/3027301/> geo-ont:parentFeature dbpedia:Europe .
+	<http://sws.geonames.org/3027301/> g-ont:parentFeature dbpedia:Europe .
 }
 
 
 # d9 derived from d11 d12
 data:d9 {
 
-	<http://sws.geonames.org/3027301/> geo-ont:parentFeature <http://sws.geonames.org/6255148/> .
+	<http://sws.geonames.org/3027301/> g-ont:parentFeature <http://sws.geonames.org/6255148/> .
 }
 
 data:d10 {
@@ -141,30 +141,30 @@ data:d10 {
 }
 
 data:d11 {
-	<http://sws.geonames.org/3027301/> geo-ont:parentFeature <http://sws.geonames.org/6614739/> .
+	<http://sws.geonames.org/3027301/> g-ont:parentFeature <http://sws.geonames.org/6614739/> .
 }
 
 
 
 # d12 derived from d13 d14
 data:d12 {
-	<http://sws.geonames.org/6614739/> geo-ont:parentFeature <http://sws.geonames.org/6255148/> .
+	<http://sws.geonames.org/6614739/> g-ont:parentFeature <http://sws.geonames.org/6255148/> .
 }
 
 data:d13 {
-	<http://sws.geonames.org/6614739/> geo-ont:parentFeature <http://sws.geonames.org/3031676/> .
+	<http://sws.geonames.org/6614739/> g-ont:parentFeature <http://sws.geonames.org/3031676/> .
 }
 
 
 
 # d14 derived from d15 d16
 data:d14 {
-	<http://sws.geonames.org/3031676/> geo-ont:parentFeature <http://sws.geonames.org/6255148/> .
+	<http://sws.geonames.org/3031676/> g-ont:parentFeature <http://sws.geonames.org/6255148/> .
 }
 
 
 data:d15 {
-	<http://sws.geonames.org/3031676/> geo-ont:parentFeature <http://sws.geonames.org/3013736/> .
+	<http://sws.geonames.org/3031676/> g-ont:parentFeature <http://sws.geonames.org/3013736/> .
 }
 
 
@@ -172,27 +172,25 @@ data:d15 {
 
 # d16 derived from d17 d18
 data:d16 {
-	<http://sws.geonames.org/3013736/> geo-ont:parentFeature <http://sws.geonames.org/6255148/> .
+	<http://sws.geonames.org/3013736/> g-ont:parentFeature <http://sws.geonames.org/6255148/> .
 }
 
 data:d17 {
-	<http://sws.geonames.org/3013736/> geo-ont:parentFeature <http://sws.geonames.org/2983751/> .
+	<http://sws.geonames.org/3013736/> g-ont:parentFeature <http://sws.geonames.org/2983751/> .
 }
-
-
 
 
 # d18 derived from d19 d20
 data:d18 {
-	<http://sws.geonames.org/2983751/> geo-ont:parentFeature <http://sws.geonames.org/6255148/> .
+	<http://sws.geonames.org/2983751/> g-ont:parentFeature <http://sws.geonames.org/6255148/> .
 }
 
 data:d19 {
-	<http://sws.geonames.org/2983751/> geo-ont:parentFeature <http://sws.geonames.org/3017382/> .
+	<http://sws.geonames.org/2983751/> g-ont:parentFeature <http://sws.geonames.org/3017382/> .
 }
 
 data:d20 {
-	<http://sws.geonames.org/3017382/> geo-ont:parentFeature <http://sws.geonames.org/6255148/> .
+	<http://sws.geonames.org/3017382/> g-ont:parentFeature <http://sws.geonames.org/6255148/> .
 }
 # d21 derived from d5 d6 d22
 data:d21 {

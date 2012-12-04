@@ -23,7 +23,7 @@ import org.openrdf.rio.RDFParseException;
 import fr.inria.wimmics.explanation.RDFSentenceGraph;
 import fr.inria.wimmics.explanation.SentenceGraphSummarizer;
 import fr.inria.wimmics.explanation.GenericRDFSentence;
-import fr.inria.wimmics.openrdf.util.SesameUtil;
+import fr.inria.wimmics.util.SesameUtil;
 
 public class RDFSentenceGraphUnitTest {
 

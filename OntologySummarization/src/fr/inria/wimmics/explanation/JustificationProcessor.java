@@ -33,10 +33,13 @@ import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.helpers.StatementCollector;
+import org.openrdf.rio.rdfxml.RDFXMLParser;
 import org.openrdf.rio.trig.TriGParser;
 
-import fr.inria.wimmics.openrdf.util.MyMultiMap;
-import fr.inria.wimmics.openrdf.util.SesameUtil;
+import fr.inria.edelweiss.kgraph.logic.RDFS;
+import fr.inria.wimmics.util.GeoNames;
+import fr.inria.wimmics.util.MyMultiMap;
+import fr.inria.wimmics.util.SesameUtil;
 
 public class JustificationProcessor {
 	
@@ -44,6 +47,8 @@ public class JustificationProcessor {
 	//Map<String,ArrayList<Statement>> stmtMap = new HashMap<String,ArrayList<Statement>>();
 	
 	MyMultiMap<String,Statement> stmtMap = new MyMultiMap<String,Statement>();
+	
+	Map<String,String> resourceLabels = new HashMap<String,String>();
 	
 
 	Map<String,String> nameSpaces = null;
@@ -117,6 +122,32 @@ public class JustificationProcessor {
 			con.close();
 		}		
 	}
+	
+	public void loadResourceLabelFromOntology(String ontologyLocation,String baseURI) throws RDFParseException, RDFHandlerException, IOException {
+		
+		InputStream inputStream = new FileInputStream(ontologyLocation);
+		RDFParser rdfParser = new RDFXMLParser();
+		
+		ArrayList<Statement> myList = new ArrayList<Statement>();
+		StatementCollector collector = new StatementCollector(myList);
+		rdfParser.setRDFHandler(collector);
+		rdfParser.parse(inputStream, baseURI);
+		
+		for(Statement st:myList) {
+			//System.out.println(st.toString());
+			String predicateUri = st.getPredicate().stringValue().trim();
+			//System.out.println(predicateUri.equals(GeoNames.name));
+			//System.out.println("["+predicateUri+"]="+"["+GeoNames.name+"]");
+			if(predicateUri.equals(RDFS.LABEL)
+					|| predicateUri.equals(GeoNames.name)) {
+				String key = st.getSubject().stringValue();
+				String value = st.getObject().stringValue();
+				resourceLabels.put(key, value);
+				//System.out.println(key+":"+value);
+			}
+		}
+		
+	}
 		
 	/**
 	 * summarizes the parsed justification file and returns the result in JSON
@@ -131,7 +162,7 @@ public class JustificationProcessor {
 		Statement rootStmt = stmtMap.getFirst(rootURL);
 		
 		GenericTreeNode<Statement> root = g.getNodeByObject(rootStmt);
-		JSONTreeGenrator<Statement> json = new JSONTreeGenrator<Statement>(nameSpaces);
+		JSONTreeGenrator<Statement> json = new JSONTreeGenrator<Statement>(nameSpaces, resourceLabels);
 		String jsonString = json.generateJASON(g, root);
 		//to-do: file write/method return
 		System.out.println(jsonString);	

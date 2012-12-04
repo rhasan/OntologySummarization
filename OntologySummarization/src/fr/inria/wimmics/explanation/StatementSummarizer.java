@@ -23,8 +23,8 @@ import org.openrdf.rio.Rio;
 import org.openrdf.rio.helpers.StatementCollector;
 
 
-import fr.inria.wimmics.openrdf.util.SesameUtil;
-import fr.inria.wimmics.openrdf.util.SummarizationUtil;
+import fr.inria.wimmics.util.SesameUtil;
+import fr.inria.wimmics.util.SummarizationUtil;
 
 public class StatementSummarizer {
 	private List<KnowledgeStatement> statements;

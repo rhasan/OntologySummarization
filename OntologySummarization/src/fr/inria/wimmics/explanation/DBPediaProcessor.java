@@ -16,7 +16,7 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
 
-import fr.inria.wimmics.openrdf.util.SesameUtil;
+import fr.inria.wimmics.util.SesameUtil;
 
 public class DBPediaProcessor {
 	Repository myRepository = null;

@@ -1,4 +1,4 @@
-package fr.inria.wimmics.openrdf.util;
+package fr.inria.wimmics.util;
 
 import com.ibm.icu.text.DecimalFormat;
 

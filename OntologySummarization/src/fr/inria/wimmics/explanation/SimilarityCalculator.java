@@ -20,7 +20,7 @@ import fr.inria.edelweiss.kgraph.query.QueryProcess;
 import fr.inria.edelweiss.kgtool.load.Load;
 import fr.inria.edelweiss.kgtool.print.ResultFormat;
 import fr.inria.wimmics.exception.NoTypeFoundInTheOntology;
-import fr.inria.wimmics.openrdf.util.MyMultiMap;
+import fr.inria.wimmics.util.MyMultiMap;
 
 public class SimilarityCalculator {
 	List<String> prefs;

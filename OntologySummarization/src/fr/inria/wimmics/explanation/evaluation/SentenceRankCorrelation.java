@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import com.ibm.icu.text.DecimalFormat;
 
-import fr.inria.wimmics.openrdf.util.Util;
+import fr.inria.wimmics.util.Util;
 
 
 public class SentenceRankCorrelation {
