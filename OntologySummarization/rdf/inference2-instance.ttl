@@ -36,5 +36,7 @@ dbpedia:Washburn_Tunnel  rdf:type  dbp-ont:Tunnel .
 <http://sws.geonames.org/6252001/> a g-ont:Feature.
 <http://sws.geonames.org/6252001/> g-ont:name "United States".
 
+<http://sws.geonames.org/6255149/> a g-ont:Feature .
+<http://sws.geonames.org/6255149/> g-ont:name "North America" .
 
 
