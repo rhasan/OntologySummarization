@@ -46,6 +46,7 @@ d3.json("inference1.json", function(json) {
   //toggle(root.children[10].children[18].children[22]);
   root._expanded = true;
   update(root);
+  //console.log(root.name);
  
   threshold = 0.57;
 
@@ -55,12 +56,11 @@ d3.json("inference1.json", function(json) {
 });
 
 function expandChildren(d) {
-  
+	//console.log(d.name);
   if(d.children) {
     //toggle(root.children[2]);
     for (var i=0;i<d.children.length;i++) {
       if(d.children[i].subtree>0 && d.children[i].nScore>threshold && d.children[i]._expanded == false) {
-	
         toggle(d.children[i]);
 	d.children[i]._expanded = true;
         update(d.children[i]);
@@ -71,6 +71,7 @@ function expandChildren(d) {
 }
 
 function update(source) {
+	//console.log("triple");
   var duration = d3.event && d3.event.altKey ? 5000 : 500;
 
   // Compute the new tree layout.

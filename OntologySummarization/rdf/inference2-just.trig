@@ -30,7 +30,7 @@ just:j3 {
 	data:d7 r4ta:justifiedBy just:j3 .
 
 	data:d7 r4ta:derivedFrom data:d5 .
-	data:d5 r4ta:derivedFrom data:d6 .
+	data:d7 r4ta:derivedFrom data:d6 .
 }
 just:j4 {
 	data:d9 r4ta:justifiedBy just:j4 .

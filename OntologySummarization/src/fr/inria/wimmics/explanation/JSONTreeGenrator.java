@@ -134,7 +134,7 @@ public class JSONTreeGenrator<Item> {
 			
 			
 			
-			//System.out.println(":):)");
+			System.out.println(st.getContext().stringValue()+","+str);
 		}
 		else {
 			jObjParent.put("name", parent.getObject().toString());
