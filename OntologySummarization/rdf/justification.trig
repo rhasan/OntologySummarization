@@ -123,7 +123,7 @@ data:d4 {
 }
 
 data:d5 {
-	dbp-ont:Scientist rdfs:subClassOf dbp-ont:ComputerScientist .
+	dbp-ont:ComputerScientist rdfs:subClassOf dbp-ont:Scientist .
 }
 
 #inferred from d4 d5

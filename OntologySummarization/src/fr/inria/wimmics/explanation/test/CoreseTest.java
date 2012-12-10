@@ -33,16 +33,22 @@ public class CoreseTest {
 		
 		//users preference/interest class <http://dbpedia.org/ontology/Scientist>
 		QueryProcess exec = QueryProcess.create(graph);
-//		String query = "select ?class1 (kg:similarity(?class1, <http://dbpedia.org/ontology/Scientist>) as ?sim) " +
+//		String query = "select ?class1 (kg:similarity(<http://dbpedia.org/ontology/ComputerScientist>, <http://dbpedia.org/ontology/Scientist>) as ?sim) " +
 //				" where {" +
-//				"<http://www.example.org/exampleDocument#Bob> a ?class1 ." +
+//				//"<http://www.example.org/exampleDocument#Bob> a ?class1 ." +
 //				"}" +
 //				"ORDER BY DESC(?sim)";
-
-		String query = "select ?resource ?class1" +
+		String query = "select ?class1 ?class2 (kg:similarity(?class1, ?class2) as ?sim) " +
 		" where {" +
-		"?resource a ?class1 ." +
-		"}";
+		//"<http://www.example.org/exampleDocument#Bob> a ?class1 ." +
+		" ?class1 a owl:Class." +
+		"?class2 a owl:Class."+
+		"}" +
+		"ORDER BY DESC(?sim)";
+//		String query = "select ?resource ?class1" +
+//		" where {" +
+//		"?resource a ?class1 ." +
+//		"}";
 
 		Mappings map = exec.query(query);
 		ResultFormat f = ResultFormat.create(map);

@@ -3,7 +3,7 @@ package fr.inria.wimmics.explanation.evaluation;
 import java.util.Comparator;
 
 
-public class Entry {
+public class RankEntry {
 	int rank;
 	String name;
 	int otherRank;
@@ -28,10 +28,10 @@ public class Entry {
 	}
 	
 }
-class EntryCmp implements Comparator<Entry> {
+class EntryCmp implements Comparator<RankEntry> {
 
 	@Override
-	public int compare(Entry o1, Entry o2) {
+	public int compare(RankEntry o1, RankEntry o2) {
 		
 		return o1.getRank()-o2.getRank();
 	}

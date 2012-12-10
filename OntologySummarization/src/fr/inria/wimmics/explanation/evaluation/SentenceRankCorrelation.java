@@ -2,8 +2,14 @@ package fr.inria.wimmics.explanation.evaluation;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
 
 import com.ibm.icu.text.DecimalFormat;
 
@@ -13,8 +19,8 @@ import fr.inria.wimmics.util.Util;
 public class SentenceRankCorrelation {
 	
 	public static double sentenceRankCorrelation(String filePath1, String filePath2) throws Exception {
-		List<Entry> list1 = new ArrayList<Entry>();
-		List<Entry> list2 = new ArrayList<Entry>();
+		List<RankEntry> list1 = new ArrayList<RankEntry>();
+		List<RankEntry> list2 = new ArrayList<RankEntry>();
 		
 		Scanner in = new Scanner(new File(filePath1));
 //		while(in.hasNext()) {
@@ -31,7 +37,7 @@ public class SentenceRankCorrelation {
 				if(name.equals("0") && rankStr.equals("0")) {
 					break;
 				}
-				Entry e = new Entry();
+				RankEntry e = new RankEntry();
 				e.setName(name);
 				e.setRank(Integer.valueOf(rankStr));
 				list1.add(e);
@@ -50,7 +56,7 @@ public class SentenceRankCorrelation {
 				if(name.equals("0") && rankStr.equals("0")) {
 					break;
 				}
-				Entry e = new Entry();
+				RankEntry e = new RankEntry();
 				e.setName(name);
 				e.setRank(Integer.valueOf(rankStr));
 				list2.add(e);
@@ -68,15 +74,20 @@ public class SentenceRankCorrelation {
 	
 
 	public static void main(String[] args) throws Exception {
-		double tau = sentenceRankCorrelation("files/degree.txt","files/similarity.txt");
+//		double tau = sentenceRankCorrelation("files/degree.txt","files/similarity.txt");
+//		
+//		System.out.println("Degree vs Similarity: "+Util.round(tau));
+//		
+//		tau = sentenceRankCorrelation("files/similarity.txt","files/rerank.txt");
+//		System.out.println("Similarity vs Rerank: "+Util.round(tau));		
+//		
+//		tau = sentenceRankCorrelation("files/degree.txt","files/rerank.txt");
+//		System.out.println("Degree vs Rerank: "+Util.round(tau));
 		
-		System.out.println("Degree vs Similarity: "+Util.round(tau));
+
+//		
 		
-		tau = sentenceRankCorrelation("files/similarity.txt","files/rerank.txt");
-		System.out.println("Similarity vs Rerank: "+Util.round(tau));		
-		
-		tau = sentenceRankCorrelation("files/degree.txt","files/rerank.txt");
-		System.out.println("Degree vs Rerank: "+Util.round(tau));
+
 		
 	}
 }

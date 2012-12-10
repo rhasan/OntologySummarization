@@ -1,0 +1,22 @@
+http://alphubel.unice.fr:8080/lodutil/data/d5 1
+http://alphubel.unice.fr:8080/lodutil/data/d3 2
+http://alphubel.unice.fr:8080/lodutil/data/d1 3
+http://alphubel.unice.fr:8080/lodutil/data/d2 11
+http://alphubel.unice.fr:8080/lodutil/data/d4 12
+http://alphubel.unice.fr:8080/lodutil/data/d6 5
+http://alphubel.unice.fr:8080/lodutil/data/d7 19
+http://alphubel.unice.fr:8080/lodutil/data/d8 13
+http://alphubel.unice.fr:8080/lodutil/data/d9 17
+http://alphubel.unice.fr:8080/lodutil/data/d11 20
+http://alphubel.unice.fr:8080/lodutil/data/d12 16
+http://alphubel.unice.fr:8080/lodutil/data/d13 6
+http://alphubel.unice.fr:8080/lodutil/data/d14 18
+http://alphubel.unice.fr:8080/lodutil/data/d15 7
+http://alphubel.unice.fr:8080/lodutil/data/d16 14
+http://alphubel.unice.fr:8080/lodutil/data/d17 8
+http://alphubel.unice.fr:8080/lodutil/data/d18 15
+http://alphubel.unice.fr:8080/lodutil/data/d19 9
+http://alphubel.unice.fr:8080/lodutil/data/d20 10
+http://alphubel.unice.fr:8080/lodutil/data/d10 21
+http://alphubel.unice.fr:8080/lodutil/data/d22 4
+

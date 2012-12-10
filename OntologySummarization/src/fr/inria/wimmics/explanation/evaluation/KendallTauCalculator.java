@@ -7,9 +7,9 @@ import java.util.List;
 public class KendallTauCalculator {
 	
 
-	public static int find(String name, List<Entry> entryList) {
+	public static int find(String name, List<RankEntry> entryList) {
 		
-		for(Entry e:entryList) {
+		for(RankEntry e:entryList) {
 			if(e.getName().equals(name)) 
 				return e.getRank();
 		}
@@ -17,7 +17,7 @@ public class KendallTauCalculator {
 		
 	}
 	
-	public static double computeKendallTau(List<Entry> entryList1, List<Entry> entryList2) throws Exception {
+	public static double computeKendallTau(List<RankEntry> entryList1, List<RankEntry> entryList2) throws Exception {
 		int[] concordant = new int[entryList1.size()];
 		int[] disconcordant = new int[entryList1.size()];
 		
@@ -25,7 +25,7 @@ public class KendallTauCalculator {
 		Collections.sort(entryList1, cmp);
 		Collections.sort(entryList2, cmp);
 		
-		for(Entry entry:entryList2) {
+		for(RankEntry entry:entryList2) {
 			int oRank = find(entry.getName(),entryList1);
 			if(oRank<0) throw new Exception("Check whether both your datasets contains entries about the same entities");
 			entry.setOtherRank(oRank);
@@ -33,11 +33,11 @@ public class KendallTauCalculator {
 		}
 		
 		for(int i=0;i<entryList2.size();i++) {
-			Entry entry1 = entryList2.get(i);
+			RankEntry entry1 = entryList2.get(i);
 			int c = 0;
 			int d = 0;
 			for(int j=i+1;j<entryList2.size();j++) {
-				Entry entry2 = entryList2.get(j);
+				RankEntry entry2 = entryList2.get(j);
 				if(entry2.getOtherRank()>entry1.getOtherRank()) {
 					c++;
 				}

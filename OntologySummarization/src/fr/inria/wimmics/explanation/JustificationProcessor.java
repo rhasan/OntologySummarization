@@ -44,9 +44,11 @@ import fr.inria.wimmics.util.SesameUtil;
 public class JustificationProcessor {
 	
 	GenericTree<Statement> g = new GenericTree<Statement>();
+	GenericTree<KnowledgeStatement> gk = new GenericTree<KnowledgeStatement>();
 	//Map<String,ArrayList<Statement>> stmtMap = new HashMap<String,ArrayList<Statement>>();
 	
 	MyMultiMap<String,Statement> stmtMap = new MyMultiMap<String,Statement>();
+	MyMultiMap<String,KnowledgeStatement> kStmtMap = new MyMultiMap<String,KnowledgeStatement>();
 	
 	Map<String,String> resourceLabels = new HashMap<String,String>();
 	
@@ -56,6 +58,8 @@ public class JustificationProcessor {
 	private List<String> instanceLocations;
 	private Repository myRepository = null;
 	List<Statement> rdfStatements = null;
+	
+	ArrayList<KnowledgeStatement> knStatements = new ArrayList<KnowledgeStatement>();
 	
 	
 	
@@ -79,6 +83,7 @@ public class JustificationProcessor {
 			String stKey = st.getContext().stringValue();
 			stmtMap.put(stKey, st);
 
+
 		}
 		
 		for(Statement st:myList) {
@@ -89,8 +94,22 @@ public class JustificationProcessor {
 				
 				Statement a = stmtMap.getFirst(keyA);
 				Statement b = stmtMap.getFirst(keyB);
-				
 				g.insterEdge(a, b);
+
+				if(kStmtMap.containsKey(keyA)==false) {
+					KnowledgeStatement kst = new KnowledgeStatement(a);
+					kStmtMap.put(keyA, kst);
+					knStatements.add(kst);
+				}
+				if(kStmtMap.containsKey(keyB)==false) {
+					KnowledgeStatement kst = new KnowledgeStatement(b);
+					kStmtMap.put(keyB, kst);
+					knStatements.add(kst);
+				}
+
+				KnowledgeStatement kst1 = kStmtMap.getFirst(keyA);
+				KnowledgeStatement kst2 = kStmtMap.getFirst(keyB);
+				gk.insterEdge(kst1, kst2);				
 				
 			}
 						
@@ -170,6 +189,57 @@ public class JustificationProcessor {
 	}
 	
 	
+	public List<KnowledgeStatement> summarizeProofTreeKnowledgeStatements(double threshold, boolean initFlag, String statementURI, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
+		
+		if(initFlag) {
+			Set<Entry<String, ArrayList<KnowledgeStatement>>> entries = kStmtMap.entrySet();
+			Set<KnowledgeStatement> kstmts = new HashSet<KnowledgeStatement>();
+			//ArrayList<KnowledgeStatement> kstmts = new ArrayList<KnowledgeStatement>();
+
+			int totalStmts = 0;
+			for(Entry<String, ArrayList<KnowledgeStatement>> entry:entries) {
+				
+				ArrayList<KnowledgeStatement> entryStatements = entry.getValue();
+				for(KnowledgeStatement entryStmt:entryStatements) {
+					
+					//if(entryStmt.getStatement().getPredicate().toString().equals(Ratio4TA.derivedFrom)) {
+						//stmts.add(entryStmt);
+						String key1 = entryStmt.getStatement().getContext().toString();
+						KnowledgeStatement st1 = kStmtMap.getFirst(key1);
+						if(st1.getStatement().getContext().toString().equals(statementURI)==false) {
+							kstmts.add(st1);
+							//System.out.println(entryStmt.getStatement().toString());
+							totalStmts++;
+						}
+	
+	
+						
+	
+	
+					//}
+				}
+			}
+			System.out.println("Size:"+totalStmts);
+			
+			ArrayList<KnowledgeStatement> statements = new ArrayList<KnowledgeStatement>(kstmts);
+			StatementSummarizer summerizer = new StatementSummarizer(statements,true);
+			summerizer.summarize(prefs,ontologyLocations,instanceLocations);
+			
+			
+	//		for(KnowledgeStatement ks:knStatements) {
+	//			System.out.println(ks.getScore());
+	//		}
+			gk.countSubtrees();
+		}
+		KnowledgeStatement root = kStmtMap.getFirst(statementURI);
+		if(root==null) throw new Exception("Root statement not found");
+		GenericTreeNode<KnowledgeStatement> rootNode = gk.getNodeByObject(root);
+		List<KnowledgeStatement> kStatements = gk.traverseByScoreThreshold(rootNode,threshold);
+		
+		return kStatements;
+
+	}	
+	
 	public List<KnowledgeStatement> summarizeJustificationKnowledgeStatements(String statementURI, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
 		
 		Set<Entry<String, ArrayList<Statement>>> entries = stmtMap.entrySet();
@@ -185,10 +255,12 @@ public class JustificationProcessor {
 					String key2 = entryStmt.getObject().toString();
 					Statement st1 = stmtMap.getFirst(key1);
 					Statement st2 = stmtMap.getFirst(key2);
-					if(st1.getContext().toString().equals(statementURI)==false)
+					if(st1.getContext().toString().equals(statementURI)==false) {
 						stmts.add(st1);
-					if(st2.getContext().toString().equals(statementURI)==false)
+					}
+					if(st2.getContext().toString().equals(statementURI)==false) {
 						stmts.add(st2);
+					}
 				}
 			}
 		}
@@ -214,12 +286,12 @@ public class JustificationProcessor {
 			}
 		});
 		
-		System.out.println("After reRanking:");
-		for(KnowledgeStatement kst:kStatementsReRanked) {
-			System.out.println("Statement:"+kst.getStatement().toString());
-			System.out.println("ReRanked Score:"+kst.getReRankedScore());
-			//System.out.println(kst.getStatement().getContext().stringValue()+" "+index++);
-		}
+//		System.out.println("After reRanking:");
+//		for(KnowledgeStatement kst:kStatementsReRanked) {
+//			System.out.println("Statement:"+kst.getStatement().toString());
+//			System.out.println("ReRanked Score:"+kst.getReRankedScore());
+//			//System.out.println(kst.getStatement().getContext().stringValue()+" "+index++);
+//		}
 		return kStatementsReRanked;
 
 	}

@@ -118,9 +118,10 @@ public class StatementGraph {
 			outDegree.put(resUri, calculateOutdegree(resUri)) ;
 		}
 		
-		List<KnowledgeStatement> kStatements = new ArrayList<KnowledgeStatement>();
+		//List<KnowledgeStatement> kStatements = new ArrayList<KnowledgeStatement>();
 		
-		for(Statement st:rdfStatements) {
+		for(KnowledgeStatement kst:knowledgeStatements) {
+			Statement st = kst.getStatement();
 			double d = getInAndOutDegreeSum(st.getSubject().toString()); 
 			
 			
@@ -130,14 +131,15 @@ public class StatementGraph {
 			centrality.put(st, d);
 			//System.out.println(d+" : "+st.toString());
 			//KnowledgeStatement kStmt = new KnowledgeStatement(st,d);
-			KnowledgeStatement kStmt = stmtKstmtMap.get(st);
-			kStmt.setDegreeCentrality(d);
+			//KnowledgeStatement kStmt = stmtKstmtMap.get(st);
+			kst.setDegreeCentrality(d);
+			//System.out.println(kst.getDegreeCentrality()+" : "+st.toString());
 			//kStmt.setScore(d)
-			kStatements.add(kStmt);
+			//kStatements.add(kStmt);
 		}
 		
 		
-		return kStatements;
+		return knowledgeStatements;
 	}
 	
 	public List<KnowledgeStatement> computeSimilarity(List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws EngineException {
@@ -158,14 +160,23 @@ public class StatementGraph {
 		}		
 		return knowledgeStatements;
 	}
-	public  List<KnowledgeStatement> computeScore() {
+	public  List<KnowledgeStatement> computeScoreSim() {
 		for(KnowledgeStatement st:knowledgeStatements) {
-			st.setScore(st.getDegreeCentrality()+st.getSimilarityScore());
+			st.setScore(0.5 * st.getDegreeCentrality()+0.5 * st.getSimilarityScore());
 
 		}		
 		
 		return knowledgeStatements;
 	}
+	public  List<KnowledgeStatement> computeScoreDeg() {
+		for(KnowledgeStatement st:knowledgeStatements) {
+			st.setScore(st.getDegreeCentrality());
+
+		}		
+		
+		return knowledgeStatements;
+	}
+
 	
 	public int getInAndOutDegreeSum(String resUri) {
 		return getInDegree(resUri)+getOutDegree(resUri);

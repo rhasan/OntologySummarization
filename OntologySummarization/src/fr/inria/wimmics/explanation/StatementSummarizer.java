@@ -36,11 +36,12 @@ public class StatementSummarizer {
 	public StatementSummarizer() {
 		statements = null;
 	}
-//	public StatementSummarizer(List<KnowledgeStatement> knowledgeStatements) throws RepositoryException  {
-//		this.statements = knowledgeStatements;
-//		
-//		statementGraph = StatementGraph.getInstance(SummarizationUtil.getRDFStatementList(this.statements));
-//	}
+	public StatementSummarizer(ArrayList<KnowledgeStatement> knowledgeStatements, boolean dummy) throws RepositoryException  {
+		
+		this.statements = knowledgeStatements;
+		
+		statementGraph = StatementGraph.getInstance(this.statements);
+	}
 	
 	public StatementSummarizer(List<Statement> stmts) throws Exception {
 		statements = new ArrayList<KnowledgeStatement>();
@@ -112,7 +113,10 @@ public class StatementSummarizer {
 	
 	public List<KnowledgeStatement> summarize(  List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
 		List<KnowledgeStatement> kStatements = null;
+		
+	
 		kStatements = statementGraph.computeDegreeCentrality();
+			
 		SummarizationUtil.normalizeDegreeCentrality(kStatements);
 		
 		//SummarizationUtil.normalizeDegreeKnowledgeStatements(kStatements);
@@ -121,20 +125,24 @@ public class StatementSummarizer {
 		if(prefs!=null && ontologyLocations!=null && instanceLocations!=null) {
 			statementGraph.computeSimilarity(prefs, ontologyLocations, instanceLocations);
 			//it's already normalized.. value is between 0 to 1
+			statementGraph.computeScoreSim();
+		}
+		else {
+			statementGraph.computeScoreDeg();
 		}
 		
-		statementGraph.computeScore();
 		
 		
-		SummarizationUtil.normalizeScores(kStatements);
+		
+		//SummarizationUtil.normalizeScores(kStatements);
 		MyComparatorDescending myCmpD = new MyComparatorDescending();
 		Collections.sort(kStatements,myCmpD);		
 		
-		for(KnowledgeStatement st:kStatements) {
-			System.out.println("Statement: "+ st.getStatement().toString());
-			System.out.println("Score:"+st.getScore());
-		}
-		
+//		for(KnowledgeStatement st:statements) {
+//			System.out.println("Statement: "+ st.getStatement().toString());
+//			System.out.println("Score:"+st.getScore());
+//		}
+//		
 		return kStatements;
 	}
 	

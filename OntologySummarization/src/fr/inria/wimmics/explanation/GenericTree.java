@@ -1,5 +1,6 @@
 package fr.inria.wimmics.explanation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -162,7 +163,11 @@ public class GenericTree<Item> {
 		int sizeOfSubTree = countSubTreeSize(u);
 		u.setSize(sizeOfSubTree);
 		
-		
+		if(u.getObject() instanceof KnowledgeStatement) {
+			double dc = countScore(u);
+			u.setCombinedScore(dc);
+			
+		}
 	}
 	private void calculateScore() {
 		double uScore = 0.0;
@@ -205,6 +210,37 @@ public class GenericTree<Item> {
 		
 		
 	}
+	
+//	private double countScore(GenericTreeNode<Item> u) {
+//		//double sum = ((KnowledgeStatement)u.getObject()).getDegreeCentrality();
+//		List<GenericTreeNode<Item>> adjacents = getAdjacent(u);
+//		if(adjacents.size()==0) return ((KnowledgeStatement)u.getObject()).getScore();
+//		double max = Double.NEGATIVE_INFINITY;
+//		for(GenericTreeNode<Item> v:adjacents) {
+//			//double vc = ((KnowledgeStatement)v.getObject()).getScore();
+//			double vc = v.getCombinedScore();
+//			if(max<vc) {
+//				max = vc;
+//			}
+//		}
+//		//double res = sum / (adjacents.size()+1);
+//		//System.out.println("In tree centrality:"+max);
+//		return max;
+//	}
+	private double countScore(GenericTreeNode<Item> u) {
+	List<GenericTreeNode<Item>> adjacents = getAdjacent(u);
+	if(adjacents.size()==0) return ((KnowledgeStatement)u.getObject()).getScore();
+
+	double sum = ((KnowledgeStatement)u.getObject()).getScore();
+
+	for(GenericTreeNode<Item> v:adjacents) {
+		double vc = v.getCombinedScore();
+		sum += vc;
+	}
+	double res = sum / (adjacents.size()+1);
+	//System.out.println("In tree centrality:"+max);
+	return res;
+}	
 	
 	private int countSubTreeSize(GenericTreeNode<Item> u) {
 		int count = u.getSize();
@@ -251,6 +287,42 @@ public class GenericTree<Item> {
 			}
 			u.setColor(BLACK);
 		}
-	}	
+	}
+	
+	public List<KnowledgeStatement> traverseByScoreThreshold(GenericTreeNode<Item> s, double threshold) {
+		List<KnowledgeStatement> kList = new ArrayList<KnowledgeStatement>();
+		if((s.getObject() instanceof KnowledgeStatement)==false) return null;
+		for(GenericTreeNode<Item> u:nodes) {
+			u.setColor(WHITE);
+			u.setDistance(Integer.MAX_VALUE);
+			u.setPath(null);
+		}		
+		s.setColor(GRAY);
+		s.setDistance(0);
+		s.setPath(null);
+		Queue<GenericTreeNode<Item>> Q=new LinkedList<GenericTreeNode<Item>>();
+		Q.add(s);
+		while(Q.isEmpty()==false) {
+			GenericTreeNode<Item> u = Q.poll();
+			//System.out.println("In Tree:"+((KnowledgeStatement) u.getObject()).getStatement().toString());
+			//System.out.println("Combined Score:"+u.getCombinedScore());
+			//System.out.println("Statement Score:"+((KnowledgeStatement) u.getObject()).getScore());
+			kList.add((KnowledgeStatement)u.getObject());
+			List<GenericTreeNode<Item>> list = getAdjacent(u);
+			for(GenericTreeNode<Item> v:list) {
+				//KnowledgeStatement vkst = (KnowledgeStatement) v.getObject();
+				if(v.getCombinedScore()>=threshold && v.getColor() == WHITE) {
+				//if(v.getColor() == WHITE) {
+					v.setColor(GRAY);
+					v.setDistance(u.getDistance()+1);
+					v.setPath(u);
+					Q.add(v);
+				}
+			}
+			u.setColor(BLACK);
+		}
+		return kList;
+	}
+	
 
 }

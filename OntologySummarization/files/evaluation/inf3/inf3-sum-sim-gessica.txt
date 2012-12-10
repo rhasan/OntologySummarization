@@ -1,0 +1,9 @@
+http://alphubel.unice.fr:8080/lodutil/data/d7
+http://alphubel.unice.fr:8080/lodutil/data/d8
+http://alphubel.unice.fr:8080/lodutil/data/d9
+http://alphubel.unice.fr:8080/lodutil/data/d11
+http://alphubel.unice.fr:8080/lodutil/data/d13
+http://alphubel.unice.fr:8080/lodutil/data/d14
+http://alphubel.unice.fr:8080/lodutil/data/d17
+http://alphubel.unice.fr:8080/lodutil/data/d19
+http://alphubel.unice.fr:8080/lodutil/data/d21

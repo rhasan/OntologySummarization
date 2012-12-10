@@ -37,13 +37,36 @@ public class Inference1UnitTest {
 			//System.out.println("Statement:"+kst.getStatement().toString());
 			//System.out.println("ReRanked Score:"+kst.getReRankedScore());
 			System.out.println(kst.getStatement().getContext().stringValue()+" "+index++);
-		}		
+		}
+	}
+	
+	@Test
+	public void treeSummarizedStatements() throws Exception {
+		JustificationProcessor jp = new JustificationProcessor();
+		jp.parseJustificationFile("rdf/inference1.trig","http://www.example.com/" );
+		//List<KnowledgeStatement> kStmts = jp.summarizeJustificationKnowledgeStatements("http://alphubel.unice.fr:8080/lodutil/data/d21");
+		jp.summarizeProofTreeKnowledgeStatements(0.6,true,"http://alphubel.unice.fr:8080/lodutil/data/d21", null, null, null);
+		
+	}
+	
+	@Test
+	public void topStatementSummaryReRankTest() throws Exception {
+		JustificationProcessor jp = new JustificationProcessor();
+		jp.parseJustificationFile("rdf/inference1.trig","http://www.example.com/" );
+		//List<KnowledgeStatement> kStmts = jp.summarizeJustificationKnowledgeStatements("http://alphubel.unice.fr:8080/lodutil/data/d21");
+		List<KnowledgeStatement> kStmts = jp.summarizeJustificationKnowledgeStatementsRerank("http://alphubel.unice.fr:8080/lodutil/data/d21",null, null, null);
+		int index = 1;
+		for(KnowledgeStatement kst:kStmts) {
+			//System.out.println("Statement:"+kst.getStatement().toString());
+			//System.out.println("ReRanked Score:"+kst.getReRankedScore());
+			System.out.println(kst.getStatement().getContext().stringValue()+" "+index++);
+		}
 	}
 	@Test
 	public void topRelevantStatementSummaryTest() throws Exception {
 		JustificationProcessor jp = new JustificationProcessor();
 		List<String> prefs = new ArrayList<String>();
-		prefs.add("http://dbpedia.org/ontology/Place");
+		prefs.add("http://dbpedia.org/ontology/Event");
 		List<String> ontologyLocations = new ArrayList<String>();
 		List<String> instanceLocations = new ArrayList<String>();
 		ontologyLocations.add("rdf/ontology/dbpedia_3.8.owl");
@@ -52,9 +75,11 @@ public class Inference1UnitTest {
 		List<KnowledgeStatement> kStmts = jp.summarizeJustificationKnowledgeStatements("http://alphubel.unice.fr:8080/lodutil/data/d21",prefs,ontologyLocations,instanceLocations);
 		int index = 1;
 		for(KnowledgeStatement kst:kStmts) {
-			//System.out.println("Statement:"+kst.getStatement().toString());
-			//System.out.println("ReRanked Score:"+kst.getReRankedScore());
-			System.out.println(kst.getStatement().getContext().stringValue()+" "+index++);
+			System.out.println("Statement:"+kst.getStatement().toString());
+			System.out.println("Score:"+kst.getScore());
+			System.out.println("Similarity Score:"+kst.getSimilarityScore());
+			System.out.println("Centrality:"+kst.getDegreeCentrality());
+			//System.out.println(kst.getStatement().getContext().stringValue()+" "+index++);
 		}	
 	}
 	

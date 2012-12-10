@@ -7,6 +7,10 @@ public class GenericTreeNode<Item> {
 	private int size;
 	private double score;
 	private double normalizedScore;
+	private double degreeCentrality;
+	private double similarityScore;
+	private double reRankScore;
+	private double combinedScore;
 
 	private int color;
 	private GenericTreeNode<Item> path;
@@ -18,8 +22,20 @@ public class GenericTreeNode<Item> {
 		nSubTree = 0;
 		size = 0;
 		score = 0.0;
+		degreeCentrality = 0.0;
+		similarityScore = 0.0;
+		reRankScore = 0.0;
+		
 	}
 	
+	public double getCombinedScore() {
+		return combinedScore;
+	}
+
+	public void setCombinedScore(double combinedScore) {
+		this.combinedScore = combinedScore;
+	}
+
 	public double getNormalizedScore() {
 		return normalizedScore;
 	}
@@ -79,4 +95,29 @@ public class GenericTreeNode<Item> {
 	public void setScore(double score) {
 		this.score = score;
 	}
+
+	public double getDegreeCentrality() {
+		return degreeCentrality;
+	}
+
+	public void setDegreeCentrality(double degreeCentrality) {
+		this.degreeCentrality = degreeCentrality;
+	}
+
+	public double getSimilarityScore() {
+		return similarityScore;
+	}
+
+	public void setSimilarityScore(double similarityScore) {
+		this.similarityScore = similarityScore;
+	}
+
+	public double getReRankScore() {
+		return reRankScore;
+	}
+
+	public void setReRankScore(double reRankScore) {
+		this.reRankScore = reRankScore;
+	}
+	
 }
