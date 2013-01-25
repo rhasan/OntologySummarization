@@ -50,7 +50,7 @@ public class RankingCorrelationHumanVsHuman {
 				
 				if(i!=j) {
 				
-					double tau = SentenceRankCorrelation.sentenceRankCorrelation(humanDegreeEntriesInf1.get(i).getValue(),humanDegreeEntriesInf1.get(j).getValue());
+					double tau = SentenceRankCorrelation.sentenceRankCorrelationTau(humanDegreeEntriesInf1.get(i).getValue(),humanDegreeEntriesInf1.get(j).getValue());
 					humanDegreeCountSum += tau;
 					pSum += tau;
 					pCount++;
@@ -79,7 +79,7 @@ public class RankingCorrelationHumanVsHuman {
 	}
 	@AfterClass
 	public static void after() {
-		System.out.println("after");
+		System.out.println("after executing all the test cases");
 		List<Entry<String,Double>> list = new ArrayList<Entry<String,Double>>(pMapValues.entrySet());
 		Collections.sort(list,new Comparator<Entry<String,Double>>() {
 			@Override
@@ -116,7 +116,7 @@ public class RankingCorrelationHumanVsHuman {
 				
 				if(i!=j) {
 				
-					double tau = SentenceRankCorrelation.sentenceRankCorrelation(humanDegreeEntriesInf2.get(i).getValue(),humanDegreeEntriesInf2.get(j).getValue());
+					double tau = SentenceRankCorrelation.sentenceRankCorrelationTau(humanDegreeEntriesInf2.get(i).getValue(),humanDegreeEntriesInf2.get(j).getValue());
 					humanDegreeCountSumIn2 += tau;
 					pSum += tau;
 					pCount++;
@@ -168,7 +168,7 @@ public class RankingCorrelationHumanVsHuman {
 				
 				if(i!=j) {
 				
-					double tau = SentenceRankCorrelation.sentenceRankCorrelation(humanDegreeEntries.get(i).getValue(),humanDegreeEntries.get(j).getValue());
+					double tau = SentenceRankCorrelation.sentenceRankCorrelationTau(humanDegreeEntries.get(i).getValue(),humanDegreeEntries.get(j).getValue());
 					humanDegreeCountSumIn2 += tau;
 					pSum += tau;
 					pCount++;

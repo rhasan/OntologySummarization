@@ -46,7 +46,7 @@ public class SimiVsHumanSim {
 		for(int j=0;j<humanDegreeEntriesInf1.size();j++) {
 			
 			
-				double tau = SentenceRankCorrelation.sentenceRankCorrelation(degreeFile,humanDegreeEntriesInf1.get(j).getValue());
+				double tau = SentenceRankCorrelation.sentenceRankCorrelationTau(degreeFile,humanDegreeEntriesInf1.get(j).getValue());
 				humanDegreeCountSum += tau;
 
 				
@@ -107,7 +107,7 @@ public class SimiVsHumanSim {
 		for(int j=0;j<humanDegreeEntriesInf1.size();j++) {
 			
 			
-				double tau = SentenceRankCorrelation.sentenceRankCorrelation(degreeFile,humanDegreeEntriesInf1.get(j).getValue());
+				double tau = SentenceRankCorrelation.sentenceRankCorrelationTau(degreeFile,humanDegreeEntriesInf1.get(j).getValue());
 				humanDegreeCountSum += tau;
 
 				
@@ -149,7 +149,7 @@ public class SimiVsHumanSim {
 		for(int j=0;j<humanDegreeEntriesInf1.size();j++) {
 			
 			
-				double tau = SentenceRankCorrelation.sentenceRankCorrelation(degreeFile,humanDegreeEntriesInf1.get(j).getValue());
+				double tau = SentenceRankCorrelation.sentenceRankCorrelationTau(degreeFile,humanDegreeEntriesInf1.get(j).getValue());
 				humanDegreeCountSum += tau;
 
 				

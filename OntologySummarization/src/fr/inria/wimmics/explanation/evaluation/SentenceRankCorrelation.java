@@ -18,7 +18,40 @@ import fr.inria.wimmics.util.Util;
 
 public class SentenceRankCorrelation {
 	
-	public static double sentenceRankCorrelation(String filePath1, String filePath2) throws Exception {
+	/**
+	 * Reads sentence-rank entries from a file and returns them in a list
+	 * @param filePath
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<RankEntry> readSentenceRanks(String filePath) throws Exception {
+		List<RankEntry> list1 = new ArrayList<RankEntry>();
+	
+		Scanner in = new Scanner(new File(filePath));
+			
+		//start list1
+		while(in.hasNext()) {
+			String name = in.next();
+			
+			if(name.startsWith("#")) {
+				in.nextLine();
+				continue;
+			}
+			String rankStr = in.next();
+			if(name.equals("0") && rankStr.equals("0")) {
+				break;
+			}
+			RankEntry e = new RankEntry();
+			e.setName(name);
+			e.setRank(Integer.valueOf(rankStr));
+			list1.add(e);
+		}
+		in.close();
+		return list1;
+		
+	}
+	
+	public static double sentenceRankCorrelationTau(String filePath1, String filePath2) throws Exception {
 		List<RankEntry> list1 = new ArrayList<RankEntry>();
 		List<RankEntry> list2 = new ArrayList<RankEntry>();
 		

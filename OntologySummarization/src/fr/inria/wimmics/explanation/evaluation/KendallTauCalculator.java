@@ -21,7 +21,7 @@ public class KendallTauCalculator {
 		int[] concordant = new int[entryList1.size()];
 		int[] disconcordant = new int[entryList1.size()];
 		
-		EntryCmp cmp = new EntryCmp();
+		EntryRankCmp cmp = new EntryRankCmp();
 		Collections.sort(entryList1, cmp);
 		Collections.sort(entryList2, cmp);
 		
