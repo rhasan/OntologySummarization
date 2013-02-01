@@ -40,7 +40,7 @@ public class StatementSummarizer {
 		
 		this.statements = knowledgeStatements;
 		
-		statementGraph = StatementGraph.getInstance(this.statements);
+		statementGraph = new StatementGraph(this.statements);
 	}
 	
 	public StatementSummarizer(List<Statement> stmts) throws Exception {
@@ -49,7 +49,7 @@ public class StatementSummarizer {
 			KnowledgeStatement kStatement  = new KnowledgeStatement(stmt);
 			statements.add(kStatement);
 		}
-		statementGraph = StatementGraph.getInstance(statements);
+		statementGraph = new StatementGraph(statements);
 	}
 	
 	

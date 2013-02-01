@@ -117,6 +117,7 @@ public class JustificationProcessor {
 		
 		rdfStatements = myList;
 		loadStatementsInRepo();
+		//System.out.println("Loaded knowledge statements:"+kStmtMap.size());
 	}
 	
 	private void loadStatementsInRepo() throws RepositoryException {
@@ -219,16 +220,21 @@ public class JustificationProcessor {
 					//}
 				}
 			}
-			System.out.println("Size:"+totalStmts);
+			//System.out.println("JP total stmts Size:"+totalStmts);
 			
-			ArrayList<KnowledgeStatement> statements = new ArrayList<KnowledgeStatement>(kstmts);
+			ArrayList<KnowledgeStatement> statements = new ArrayList<KnowledgeStatement>();
+			for(KnowledgeStatement kst:kstmts) {
+				statements.add(kst);
+			}
 			StatementSummarizer summerizer = new StatementSummarizer(statements,true);
 			summerizer.summarize(prefs,ontologyLocations,instanceLocations);
 			
 			
-	//		for(KnowledgeStatement ks:knStatements) {
-	//			System.out.println(ks.getScore());
-	//		}
+//			for(KnowledgeStatement ks:statements) {
+//				System.out.println("Score:"+ks.getScore());
+//				System.out.println("Degree score:"+ks.getDegreeCentrality());
+//				System.out.println("Sim score:"+ks.getSimilarityScore());
+//			}
 			gk.countSubtrees();
 		}
 		KnowledgeStatement root = kStmtMap.getFirst(statementURI);

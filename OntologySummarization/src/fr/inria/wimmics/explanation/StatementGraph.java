@@ -57,19 +57,19 @@ public class StatementGraph {
 		
 	}
 	
-	private StatementGraph(List<KnowledgeStatement> kStatements) throws RepositoryException {
+	public StatementGraph(List<KnowledgeStatement> kStatements) throws RepositoryException {
 		knowledgeStatements = kStatements;
 		this.rdfStatements = SummarizationUtil.getRDFStatementList(kStatements);
 		init();
 		loadStatementsInRepo();
 	}
 	
-	public static StatementGraph getInstance(List<KnowledgeStatement> kStatements) throws RepositoryException {
-		if(instance==null) {
-			instance = new StatementGraph(kStatements);
-		}
-		return instance;
-	}
+//	public static StatementGraph getInstance(List<KnowledgeStatement> kStatements) throws RepositoryException {
+//		//if(instance==null) {
+//			instance = new StatementGraph(kStatements);
+//		//}
+//		return instance;
+//	}
 
 
 	public List<Statement> getRdfStatements() {
@@ -171,6 +171,7 @@ public class StatementGraph {
 	public  List<KnowledgeStatement> computeScoreDeg() {
 		for(KnowledgeStatement st:knowledgeStatements) {
 			st.setScore(st.getDegreeCentrality());
+			//System.out.println("Setting degree:"+st.getDegreeCentrality());
 
 		}		
 		
@@ -210,7 +211,7 @@ public class StatementGraph {
 			BindingSet bindingSet = result.next();
 			Literal val = (Literal)bindingSet.getValue("count");
 			res = val.intValue();
-			//System.out.println(val.intValue());
+			//System.out.println("count:"+val.intValue());
 		} finally {
 			result.close();
 			con.close();

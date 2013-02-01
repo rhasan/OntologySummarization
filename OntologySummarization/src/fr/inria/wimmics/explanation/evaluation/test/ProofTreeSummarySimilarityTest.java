@@ -17,6 +17,11 @@ import fr.inria.wimmics.explanation.KnowledgeStatement;
 import fr.inria.wimmics.explanation.evaluation.PrecisionRecall;
 import fr.inria.wimmics.explanation.evaluation.PrecisionRecallCalculator;
 
+/**
+ * run test cases for inferences separately
+ * @author hrakebul
+ *
+ */
 public class ProofTreeSummarySimilarityTest {
 
 	static Map<String, String> humanInf1 = new HashMap<String,String>();
@@ -165,6 +170,7 @@ public class ProofTreeSummarySimilarityTest {
 		System.out.println("\nend");		
 	}	
 	public Map<Double,Measures> computeMeasures(String justificationFile, String rootStmtId, List< Entry<String, String> > entries, int fullSize, List<String> instanceLocations, List<String> prefs) throws Exception {
+		
 		JustificationProcessor jp = new JustificationProcessor();
 		jp.parseJustificationFile( justificationFile,"http://www.example.com/");
 		//List<KnowledgeStatement> kStmts = jp.summarizeJustificationKnowledgeStatements("http://alphubel.unice.fr:8080/lodutil/data/d21");
@@ -174,11 +180,12 @@ public class ProofTreeSummarySimilarityTest {
 		for(int i=0;i<threshordValues.length;i++) {
 			double th=threshordValues[i];
 			boolean initFlag = false;
-			
+			//System.out.println("###################### Threshold:"+th+" ###################### ");
 			if(i==0) {
 				initFlag = true;
 			}
 			//i++;
+
 			List<KnowledgeStatement> kStmts = jp.summarizeProofTreeKnowledgeStatements(th,initFlag,rootStmtId, prefs, ontologyLocations,instanceLocations);
 			
 			List<String> S = new ArrayList<String>();
@@ -186,7 +193,9 @@ public class ProofTreeSummarySimilarityTest {
 				String stmtId = kst.getStatement().getContext().stringValue();
 				if(stmtId.equals(rootStmtId)) continue;
 				S.add(stmtId);
+				//System.out.println(kst.getStatement().toString());
 			}
+			//System.out.println("Summarized statement size:"+S.size());
 			
 			//if(S.size()==0) continue;
 			

@@ -186,7 +186,7 @@ public class GenericTree<Item> {
 				
 				uScore = ((double)u.getnSubTree()/ (double)parentOfu.getnSubTree()) + (SUBTREE_SIZE_IMPORTANCE * (1.0/(double)parentOfu.getSize()));
 						
-				//firs tpart: percentage of explanation this sub-branch will cover if expanded with respect to total subtrees this branch has
+				//first part: percentage of explanation this sub-branch will cover if expanded with respect to total subtrees this branch has
 						
 				//second part: keep the proof tree size smaller (second).. 
 				//the calculated value is the inverse of the maximum number of nodes this branch will have if this node is expanded, assuming all 
@@ -227,6 +227,13 @@ public class GenericTree<Item> {
 //		//System.out.println("In tree centrality:"+max);
 //		return max;
 //	}
+	/**
+	 * computes the weight of a branch in a proof tree by summing the score of
+	 * all the nodes in that branch and dividing the sum by the number of nodes 
+	 * in that branch.
+	 * @param u
+	 * @return
+	 */
 	private double countScore(GenericTreeNode<Item> u) {
 	List<GenericTreeNode<Item>> adjacents = getAdjacent(u);
 	if(adjacents.size()==0) return ((KnowledgeStatement)u.getObject()).getScore();
