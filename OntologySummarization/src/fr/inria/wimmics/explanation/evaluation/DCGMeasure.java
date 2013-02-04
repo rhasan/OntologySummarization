@@ -16,7 +16,7 @@ public class DCGMeasure {
 
 	/**
 	 * reads dcg judgment scores 
-	 * format in the file: name judgement_score
+	 * format in the file: entry_name judgement_score
 	 * @param filePath
 	 * @return
 	 * @throws Exception
@@ -48,9 +48,37 @@ public class DCGMeasure {
 		return list1;
 		
 	}
-	
 	/**
-	 * computes DCG measure up to position p
+	 * reads a list of ranked entries 
+	 * format in the file: entry_name
+	 * @param filePath
+	 * @return
+	 * @throws Exception
+	 */
+	
+	public static List<RankEntry> readSentenceRank(String filePath) throws Exception {
+		List<RankEntry> list1 = new ArrayList<RankEntry>();
+		
+		Scanner in = new Scanner(new File(filePath));
+			
+		//start list1
+		while(in.hasNext()) {
+			String name = in.next();
+			
+			if(name.startsWith("#")) {
+				in.nextLine();
+				continue;
+			}
+			RankEntry e = new RankEntry();
+			e.setName(name);
+			list1.add(e);
+		}
+		in.close();
+		return list1;		
+	}
+	/**
+	 * computes DCG measure up to position p.
+	 * works with a list of entries with judgment scores
 	 * http://en.wikipedia.org/wiki/Discounted_cumulative_gain#Example
 	 * @param list
 	 * @param p
@@ -73,13 +101,14 @@ public class DCGMeasure {
 	}
 	
 	/**
-	 * the maximum possible DCG till position , also called Ideal DCG (IDCG) till that position
-	 * @param list
+	 * the maximum possible DCG till position , also called Ideal DCG (IDCG) till that position.
+	 * works with a list of entries with judgment scores
+	 * @param a list of entries with judgment scores
 	 * @param p
 	 * @return
 	 */
 	public static double computeIDCG(List<RankEntry> list, int p) {
-		List<RankEntry> nList = new ArrayList<RankEntry>(list);
+		List<RankEntry> nList = new ArrayList<RankEntry>(list); //to avoid sorting the original array
 		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
 		Collections.sort(nList, cmp);
 		
@@ -89,7 +118,7 @@ public class DCGMeasure {
 	}
 	
 	/**
-	 * computes Normalized DCG
+	 * computes Normalized DCG for a list of entries with judgment scores
 	 * @param list
 	 * @param p
 	 * @return
@@ -103,11 +132,48 @@ public class DCGMeasure {
 		
 		return ndcg;
 	}
+	/**
+	 * computes Normalized DCG for a list of ranked entries taking into account the judgment scores by humans
+	 * @param rakedListByHuman List of entries with judgment score assigned to each entry
+	 * @param rakedListByAlgorithm List of ranked entries (without judgment scores)
+	 * @param p rank position (i.e. NDCG will be computed for top p entries in rakedListByAlgorithm)
+	 * @return normalized discounted cumulative gain (nDCG) value
+	 */
+	public static double computeNDCG(List<RankEntry> rakedListByHuman, List<RankEntry> rakedListByAlgorithm, int p) {
+		
+		for(RankEntry reH:rakedListByHuman) {
+			for(RankEntry reA:rakedListByAlgorithm) {
+				if(reH.getName().equals(reA.getName())) {
+					reA.setJudgmentScore(reH.getJudgmentScore());
+				}
+			}
+		}
+		return computeNDCG(rakedListByAlgorithm, p);
+	}
+	
+	/**
+	 * computes Normalized DCG for a list of ranked entries described in a file
+	 * taking into account the judgment scores by humans described in another file
+	 * @param humanEntriesFile file path of the list of entries with judgment score assigned to each entry
+	 * @param algorithmEntriesFile file path of the list of ranked entries (without judgment scores)
+	 * @param p rakedListByAlgorithm
+	 * @return normalized discounted cumulative gain (nDCG) value
+	 * @throws Exception
+	 */
+	public static double computeNDCG(String humanEntriesFile, String algorithmEntriesFile, int p) throws Exception {
+		List<RankEntry> list = readSentenceDCGJudgments(humanEntriesFile);
+		List<RankEntry> list1 = readSentenceRank(algorithmEntriesFile);
+		return computeNDCG(list, list1, p);
+	}
 	
 	public static void main(String[] args) throws Exception {
 		
+		/*
 		List<RankEntry> list = readSentenceDCGJudgments("files/evaluation/dcg/dcg-test.in");
 		double o = computeNDCG(list, 6);
+		System.out.println("nDCG₆:"+o);
+		*/
+		double o = computeNDCG("files/evaluation/dcg/dcg-test.in", "files/evaluation/dcg/dcg-algo-test.in", 6);
 		System.out.println("nDCG₆:"+o);
 	}
 }
