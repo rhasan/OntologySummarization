@@ -36,12 +36,12 @@ public class DCGMeasure {
 				continue;
 			}
 			String judgementScoreStr = in.next();
-			if(name.equals("0") && judgementScoreStr.equals("0")) {
+			if(name.equals("0") && judgementScoreStr.equals("0.0")) {
 				break;
 			}
 			RankEntry e = new RankEntry();
 			e.setName(name);
-			e.setJudgmentScore(Integer.valueOf(judgementScoreStr));
+			e.setJudgmentScore(Double.valueOf(judgementScoreStr));
 			list1.add(e);
 		}
 		in.close();

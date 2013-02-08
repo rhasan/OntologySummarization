@@ -7,12 +7,12 @@ public class RankEntry {
 	int rank;
 	String name;
 	int otherRank;
-	int judgmentScore; //relavence score
+	double judgmentScore; //relavence score
 	
-	public void setJudgmentScore(int judgementScore) {
+	public void setJudgmentScore(double judgementScore) {
 		this.judgmentScore = judgementScore;
 	}
-	public int getJudgmentScore() {
+	public double getJudgmentScore() {
 		return judgmentScore;
 	}
 	
@@ -51,7 +51,9 @@ class EntryJudgmentDscCmp implements Comparator<RankEntry> {
 	@Override
 	public int compare(RankEntry o1, RankEntry o2) {
 		
-		return o2.getJudgmentScore()-o1.getJudgmentScore();
+		if(o2.getJudgmentScore()>o1.getJudgmentScore()) return 1;
+		if(o2.getJudgmentScore()<o1.getJudgmentScore()) return -1;
+		return 0;
 	}
 	
 }
