@@ -141,14 +141,34 @@ public class DCGMeasure {
 	 */
 	public static double computeNDCG(List<RankEntry> rakedListByHuman, List<RankEntry> rakedListByAlgorithm, int p) {
 		
-		for(RankEntry reH:rakedListByHuman) {
-			for(RankEntry reA:rakedListByAlgorithm) {
+		
+		List<RankEntry> rakedListByHuman1 = copyRankEntryList(rakedListByHuman);
+		List<RankEntry> rakedListByAlgorithm1 = copyRankEntryList(rakedListByAlgorithm);
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(rakedListByHuman1,cmp);
+		
+		for(RankEntry reH:rakedListByHuman1) {
+			for(RankEntry reA:rakedListByAlgorithm1) {
 				if(reH.getName().equals(reA.getName())) {
 					reA.setJudgmentScore(reH.getJudgmentScore());
 				}
 			}
 		}
-		return computeNDCG(rakedListByAlgorithm, p);
+		return computeNDCG(rakedListByAlgorithm1, p);
+	}
+
+	/**
+	 * copies a list of RankEntry without referencing
+	 * @param reList
+	 * @return
+	 */
+	public static List<RankEntry> copyRankEntryList(List<RankEntry> reList) {
+		List<RankEntry> res = new ArrayList<RankEntry>();
+		for(RankEntry re:reList) {
+			RankEntry ren = new RankEntry(re);
+			res.add(ren);
+		}
+		return res;
 	}
 	
 	/**

@@ -9,6 +9,17 @@ public class RankEntry {
 	int otherRank;
 	double judgmentScore; //relavence score
 	
+	public RankEntry() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public RankEntry(RankEntry re) {
+		this.rank=re.rank;
+		this.name=re.name;
+		this.otherRank=re.otherRank;
+		this.judgmentScore=re.judgmentScore;
+	}
+	
 	public void setJudgmentScore(double judgementScore) {
 		this.judgmentScore = judgementScore;
 	}
