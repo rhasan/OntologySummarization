@@ -190,6 +190,18 @@ public class JustificationProcessor {
 	}
 	
 	
+	/**
+	 * expands a branch of the proof tree based on the collective score of that branch (computed from the subtrees in that branch)
+	 * this could be an interesting way to visualise proof trees
+	 * @param threshold
+	 * @param initFlag
+	 * @param statementURI
+	 * @param prefs
+	 * @param ontologyLocations
+	 * @param instanceLocations
+	 * @return
+	 * @throws Exception
+	 */
 	public List<KnowledgeStatement> summarizeProofTreeKnowledgeStatements(double threshold, boolean initFlag, String statementURI, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
 		
 		if(initFlag) {
@@ -278,6 +290,19 @@ public class JustificationProcessor {
 
 	}
 	
+	
+	/**
+	 * ranks based on the coherence of the statements with respect to their proof tree positions.
+	 * if S is the set of summarised statements
+	 * 	for a statement i, if we take i in the set S, we reward i if it has a one step link in 
+	 *  the proof tree with any of the statements currently in S
+	 * @param statementURI
+	 * @param prefs
+	 * @param ontologyLocations
+	 * @param instanceLocations
+	 * @return
+	 * @throws Exception
+	 */
 	public List<KnowledgeStatement> summarizeJustificationKnowledgeStatementsRerank(String statementURI, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
 
 		List<KnowledgeStatement> kStatements = summarizeJustificationKnowledgeStatements(statementURI, prefs, ontologyLocations, instanceLocations);

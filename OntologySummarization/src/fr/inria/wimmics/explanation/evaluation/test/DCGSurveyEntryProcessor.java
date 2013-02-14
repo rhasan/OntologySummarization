@@ -215,7 +215,7 @@ public class DCGSurveyEntryProcessor {
 		
 	}
 	
-	public List<List<RankEntry>> getRankEntries(String questionName) {
+	public List<List<RankEntry>> getAllRankEntries(String questionName) {
 		List<List<RankEntry>> allRankedEntries = new ArrayList<List<RankEntry>>();
 		
 		for(DCGSurveyEntry se: surveyEntries) {
@@ -226,7 +226,20 @@ public class DCGSurveyEntryProcessor {
 	}
 	
 	
-	
+	public List<RankEntry> getAvgRankEntities(String questionName) {
+		List<RankEntry> reList = new ArrayList<RankEntry>();
+		
+		Map<String, Double> entities = avgRatings.get(questionName);
+		
+		for(Entry<String,Double> en:entities.entrySet()) {
+			RankEntry re = new RankEntry();
+			re.setName(en.getKey());
+			re.setJudgmentScore(en.getValue());
+			reList.add(re);
+		}
+		
+		return reList;
+	}
 	
 	private String getSpecialisationValeu(String[] entries, int qSpecialisationIndex, int qSpecialisationOtherIndex) {
 		String specialisationStr = entries[qSpecialisationIndex];

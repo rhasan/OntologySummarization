@@ -144,8 +144,8 @@ public class DCGMeasure {
 		
 		List<RankEntry> rakedListByHuman1 = copyRankEntryList(rakedListByHuman);
 		List<RankEntry> rakedListByAlgorithm1 = copyRankEntryList(rakedListByAlgorithm);
-		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
-		Collections.sort(rakedListByHuman1,cmp);
+		//EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		//Collections.sort(rakedListByHuman1,cmp);
 		
 		for(RankEntry reH:rakedListByHuman1) {
 			for(RankEntry reA:rakedListByAlgorithm1) {
