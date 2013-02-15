@@ -105,8 +105,9 @@ public class DCGSurveyInference1Test {
 		
 		// Add the series to your data set
 		XYSeriesCollection fMeasureCRdataset = new XYSeriesCollection();
-		fMeasureCRdataset.addSeries(soloReRankFMeasureCR);
 		fMeasureCRdataset.addSeries(soloCentralityFMeasureCR);
+		fMeasureCRdataset.addSeries(soloReRankFMeasureCR);
+		
 		
 		
 		// Generate the ndcg vs cr graph
@@ -322,11 +323,16 @@ public class DCGSurveyInference1Test {
 			PrecisionRecall pr = PrecisionRecallCalculator.calculatePrecisionRecall(S,H);
 			double precision = pr.getPrecision();
 			double recall = pr.getRecall();
-			double f_measure = (2*precision*recall)/(precision+recall);
+			Double f_measure = (2*precision*recall)/(precision+recall);
+			if(f_measure.isNaN()) {
+				f_measure = 0.0;
+				//System.out.println("*********************************");
+			}
 			double cr = (double) p / (double) reList1.size();
 			//System.out.println("Precision:"+precision);
 			//System.out.println("Recall:"+recall);
 			System.out.println("F:"+f_measure+" CR:"+cr+" p:"+p);
+			System.out.println("Precision:"+precision+" Recall:"+recall);
 			series.add(cr, f_measure);
 			res.put(cr, f_measure);
 		}
