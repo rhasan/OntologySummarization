@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
@@ -22,9 +24,15 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openrdf.model.Statement;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.rio.RDFHandlerException;
+import org.openrdf.rio.RDFParseException;
 
 import fr.inria.wimmics.explanation.JustificationProcessor;
 import fr.inria.wimmics.explanation.KnowledgeStatement;
+import fr.inria.wimmics.explanation.RDFSentenceGraph;
+import fr.inria.wimmics.explanation.SentenceGraphSummarizer;
 import fr.inria.wimmics.explanation.evaluation.CosineSimilarity;
 import fr.inria.wimmics.explanation.evaluation.DCGMeasure;
 import fr.inria.wimmics.explanation.evaluation.PrecisionRecall;
@@ -45,8 +53,13 @@ public class DCGSurveyInference1Test {
 	
 	static XYSeries soloCentralityNdcgCR = new XYSeries("Centrality");
 	static XYSeries soloReRankNdcgCR = new XYSeries("Re-Ranking");
+	static XYSeries sentenceGraphNdcgCR = new XYSeries("Sentence Graph");
+	
+	
 	static XYSeries soloReRankFMeasureCR = new XYSeries("Re-Ranking");
 	static XYSeries soloCentralityFMeasureCR = new XYSeries("Centrality");
+	static XYSeries sentenceGraphFMeasureCR = new XYSeries("Sentence Graph");
+
 	//static XYSeries humansNdcgCR = new XYSeries("Human average");
 	static DefaultCategoryDataset cosineDataset = new DefaultCategoryDataset();
 
@@ -61,6 +74,7 @@ public class DCGSurveyInference1Test {
 		XYSeriesCollection dataset = new XYSeriesCollection();
 		dataset.addSeries(soloCentralityNdcgCR);
 		dataset.addSeries(soloReRankNdcgCR);
+		dataset.addSeries(sentenceGraphNdcgCR);
 		//dataset.addSeries(humansNdcgCR);
 		
 		// Generate the ndcg vs cr graph
@@ -107,6 +121,8 @@ public class DCGSurveyInference1Test {
 		XYSeriesCollection fMeasureCRdataset = new XYSeriesCollection();
 		fMeasureCRdataset.addSeries(soloCentralityFMeasureCR);
 		fMeasureCRdataset.addSeries(soloReRankFMeasureCR);
+		fMeasureCRdataset.addSeries(sentenceGraphFMeasureCR);
+		
 		
 		
 		
@@ -219,7 +235,7 @@ public class DCGSurveyInference1Test {
 		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
 		List<KnowledgeStatement> kstmts = summarySoloCentrality(FILE_JUSTIFICATION_INF1, ROOT_INF1);
 		List<RankEntry> sList = new ArrayList<RankEntry>();
-		System.out.println("Centrality");
+		System.out.println("NCG Centrality");
 		System.out.println("#####################################");
 		
 		//System.out.println(reList.size()+":"+kstmts.size());
@@ -230,12 +246,7 @@ public class DCGSurveyInference1Test {
 			sList.add(re);
 		}
 		
-		for(int p=2;p<=reList.size();p++) {
-			double d = DCGMeasure.computeNDCG(reList, sList, p);
-			double cr = (double) p / (double) reList.size();
-			System.out.println("NCG["+p+"]:"+d+ " CR:"+cr);
-			soloCentralityNdcgCR.add(cr,d);
-		}
+		computeNDCGMeasure(reList, sList, soloCentralityNdcgCR);
 	}
 	
 	
@@ -244,7 +255,7 @@ public class DCGSurveyInference1Test {
 		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
 		List<KnowledgeStatement> kstmts = summarySoloReRank(FILE_JUSTIFICATION_INF1, ROOT_INF1);
 		List<RankEntry> sList = new ArrayList<RankEntry>();
-		System.out.println("ReRank");
+		System.out.println("NCG ReRank");
 		System.out.println("#####################################");		
 		//System.out.println(reList.size()+":"+kstmts.size());
 		for(KnowledgeStatement kst:kstmts) {
@@ -254,12 +265,8 @@ public class DCGSurveyInference1Test {
 			sList.add(re);
 		}
 		
-		for(int p=2;p<=reList.size();p++) {
-			double d = DCGMeasure.computeNDCG(reList, sList, p);
-			double cr = (double) p / (double) reList.size();
-			System.out.println("NCG["+p+"]:"+d+ " CR:"+cr);
-			soloReRankNdcgCR.add(cr,d);
-		}
+		
+		computeNDCGMeasure(reList, sList, soloReRankNdcgCR);
 	}
 	@Test
 	public void testFMeasureSoloReRank() throws Exception {
@@ -314,6 +321,77 @@ public class DCGSurveyInference1Test {
 		computeFmeasure(reList1, reList2, soloCentralityFMeasureCR);
 		
 
+	}	
+	
+	@Test
+	public void testtFMeasureSentenceGraph() throws RDFParseException, RDFHandlerException, RepositoryException, IOException {
+		
+		System.out.println("F-Measure Sentence Graph");
+		System.out.println("#####################################");
+		
+		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+		
+		List<RankEntry> reList2 = summarySentenceGraph(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+		
+		computeFmeasure(reList1, reList2, sentenceGraphFMeasureCR);
+		
+	}
+	
+	
+	@Test
+	public void testSentenceGraph() throws Exception {
+		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+		List<RankEntry> sList = summarySentenceGraph(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+		System.out.println("NCG Sentence Graph");
+		System.out.println("#####################################");
+		computeNDCGMeasure(reList, sList, sentenceGraphNdcgCR);
+		
+
+	}
+	
+	public void computeNDCGMeasure(List<RankEntry> reList, List<RankEntry> sList, XYSeries series) {
+		
+		for(int p=2;p<=reList.size();p++) {
+			double d = DCGMeasure.computeNDCG(reList, sList, p);
+			double cr = (double) p / (double) reList.size();
+			System.out.println("NCG["+p+"]:"+d+ " CR:"+cr);
+			series.add(cr,d);
+			
+		}		
+	}
+	
+	public List<RankEntry> summarySentenceGraph(String justificationFile, String rootStmtId) throws RDFParseException, RDFHandlerException, RepositoryException, IOException {
+		//List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
+		JustificationProcessor jp = new JustificationProcessor();
+		jp.parseJustificationFile(justificationFile,"http://www.example.com/" );
+		List<KnowledgeStatement> originalKStatements = jp.getKnStatements();
+		
+		Set<Statement> statementSet = new HashSet<Statement>();
+		
+		for(KnowledgeStatement kn:originalKStatements) {
+			
+			Statement st = kn.getStatement();
+			statementSet.add(st);
+		}
+		
+		RDFSentenceGraph rdfSentenceGraph = new RDFSentenceGraph(statementSet, 0.5);
+		
+
+		SentenceGraphSummarizer summmarizer = new SentenceGraphSummarizer(rdfSentenceGraph);
+		
+		List<Statement> summary = summmarizer.getAllreRankedStatements();
+		List<RankEntry> res = new ArrayList<RankEntry>();
+		for(Statement st:summary) {
+			String statementId = st.getContext().stringValue();
+			if(statementId.equals(rootStmtId)) continue;
+			
+			RankEntry re = new RankEntry();
+			String name = getStatementName(statementId);
+			re.setName(name);
+			res.add(re);
+		}
+		return res;
+		
 	}	
 	public Map<Double, Double> computeFmeasure(List<RankEntry> reList1, List<RankEntry> reList2, XYSeries series) {
 		Map<Double, Double> res = new HashMap<Double, Double>();
@@ -409,7 +487,9 @@ public class DCGSurveyInference1Test {
 		}
 
 		return stmts;
-	}	
+	}
+	
+
 	
 
 	class EntryJudgmentDscCmp implements Comparator<RankEntry> {

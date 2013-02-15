@@ -61,7 +61,9 @@ public class JustificationProcessor {
 	
 	ArrayList<KnowledgeStatement> knStatements = new ArrayList<KnowledgeStatement>();
 	
-	
+	public ArrayList<KnowledgeStatement> getKnStatements() {
+		return knStatements;
+	}
 	
 	public void parseJustificationFile(String filePath,String baseURI) throws RDFParseException, RDFHandlerException, IOException, RepositoryException {
 		

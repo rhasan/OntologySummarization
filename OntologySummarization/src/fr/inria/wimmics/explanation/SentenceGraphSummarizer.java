@@ -2,6 +2,7 @@ package fr.inria.wimmics.explanation;
 
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -194,6 +195,21 @@ public class SentenceGraphSummarizer {
 	    
 		return statements;
 		
+	}
+	public List<Statement> getAllreRankedStatements() {
+		List<Statement> statements = new ArrayList<Statement>();
+		List<RDFSentenceWithRank> reRanked = reRank();
+
+		for(RDFSentenceWithRank sent:reRanked) {
+
+	    	statements.addAll(sent.getSentence().getStatements());
+
+	    	//System.out.println(sent.getSentence().getStatements().toString());
+			//System.out.println("score:"+sent.getReRankScore());
+	    
+	    }
+		
+		return statements;
 	}
 	
 	private double reward(RDFSentenceWithRank i, Set<RDFSentenceWithRank> S) {
