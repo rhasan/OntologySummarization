@@ -45,6 +45,8 @@ public class DCGSurveyInference1Test {
 	
 	static XYSeries soloCentralityNdcgCR = new XYSeries("Centrality");
 	static XYSeries soloReRankNdcgCR = new XYSeries("Re-Ranking");
+	static XYSeries soloReRankFMeasureCR = new XYSeries("Re-Ranking");
+	static XYSeries soloCentralityFMeasureCR = new XYSeries("Centrality");
 	//static XYSeries humansNdcgCR = new XYSeries("Human average");
 	static DefaultCategoryDataset cosineDataset = new DefaultCategoryDataset();
 
@@ -86,16 +88,51 @@ public class DCGSurveyInference1Test {
 		}	
 		
 		
-		//generate cosine barchart
-		JFreeChart cosineChart = ChartFactory.createBarChart("Consine similarity between human ratings",
-				null, "Cosine similarity", cosineDataset, PlotOrientation.VERTICAL,
+		// generate cosine barchart
+		JFreeChart cosineChart = ChartFactory.createBarChart(
+				"Consine similarity between human ratings", null,
+				"Cosine similarity", cosineDataset, PlotOrientation.VERTICAL,
 				false, true, false);
-				try {
-				ChartUtilities.saveChartAsJPEG(new File("files/evaluation/dcg/survey/inf1/cosine_similarity.jpg"), cosineChart, 500, 300);
-				} catch (IOException e) {
-				System.err.println("Problem occurred creating chart.");
-				}		
+		try {
+			ChartUtilities.saveChartAsJPEG(new File(
+					"files/evaluation/dcg/survey/inf1/cosine_similarity.jpg"),
+					cosineChart, 500, 300);
+		} catch (IOException e) {
+			System.err.println("Problem occurred creating chart.");
+		}
 		
+		
+		
+		// Add the series to your data set
+		XYSeriesCollection fMeasureCRdataset = new XYSeriesCollection();
+		fMeasureCRdataset.addSeries(soloReRankFMeasureCR);
+		fMeasureCRdataset.addSeries(soloCentralityFMeasureCR);
+		
+		
+		// Generate the ndcg vs cr graph
+		JFreeChart fMeasureCRchart = ChartFactory.createXYLineChart("F-Measure vs CR",
+				// Title
+				"CR",
+				// x-axis Label
+				"F-Measure",
+				// y-axis Label
+				fMeasureCRdataset,
+				// Dataset
+				PlotOrientation.VERTICAL, // Plot Orientation
+				true,
+				// Show Legend
+				true,
+				// Use tooltips
+				false
+		// Configure chart to generate URLs?
+				);
+		try {
+			ChartUtilities.saveChartAsJPEG(new File("files/evaluation/dcg/survey/inf1/fmeasure_v_cr.jpg"), fMeasureCRchart,
+					500, 300);
+		} catch (IOException e) {
+			System.err.println("Problem occurred creating fmeasure v cr chart.");
+		}	
+				
 	}
 	
 	@Test
@@ -222,6 +259,87 @@ public class DCGSurveyInference1Test {
 			System.out.println("NCG["+p+"]:"+d+ " CR:"+cr);
 			soloReRankNdcgCR.add(cr,d);
 		}
+	}
+	@Test
+	public void testFMeasureSoloReRank() throws Exception {
+		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList1,cmp);
+		//printRankEntryList(reList1);
+		
+		List<KnowledgeStatement> kstmts = summarySoloReRank(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+		List<RankEntry> reList2 = new ArrayList<RankEntry>();
+		
+		System.out.println("F-Measure ReRank");
+		System.out.println("#####################################");
+		
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			reList2.add(re);
+		}
+		
+		//printRankEntryList(reList2);
+		computeFmeasure(reList1, reList2, soloReRankFMeasureCR);
+		
+
+	}
+	
+	
+	@Test
+	public void testFMeasureSoloCentrality() throws Exception {
+		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList1,cmp);
+		//printRankEntryList(reList1);
+		
+		List<KnowledgeStatement> kstmts = summarySoloCentrality(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+		List<RankEntry> reList2 = new ArrayList<RankEntry>();
+		
+		System.out.println("F-Measure Centrality");
+		System.out.println("#####################################");
+		
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			reList2.add(re);
+		}
+		
+		//printRankEntryList(reList2);
+		computeFmeasure(reList1, reList2, soloCentralityFMeasureCR);
+		
+
+	}	
+	public Map<Double, Double> computeFmeasure(List<RankEntry> reList1, List<RankEntry> reList2, XYSeries series) {
+		Map<Double, Double> res = new HashMap<Double, Double>();
+		for(int p=2;p<=reList1.size();p++) {
+			List<String> S = getSummaryOfSizeP(reList1, p);
+			List<String> H = getSummaryOfSizeP(reList2, p);
+			PrecisionRecall pr = PrecisionRecallCalculator.calculatePrecisionRecall(S,H);
+			double precision = pr.getPrecision();
+			double recall = pr.getRecall();
+			double f_measure = (2*precision*recall)/(precision+recall);
+			double cr = (double) p / (double) reList1.size();
+			//System.out.println("Precision:"+precision);
+			//System.out.println("Recall:"+recall);
+			System.out.println("F:"+f_measure+" CR:"+cr+" p:"+p);
+			series.add(cr, f_measure);
+			res.put(cr, f_measure);
+		}
+		return res;
+	}
+	
+	public List<String> getSummaryOfSizeP(List<RankEntry> reList, int p) {
+		List<String> res = new ArrayList<String>();
+		for(int i=0;i<p;i++) {
+			RankEntry re = reList.get(i);
+			res.add(re.getName());
+		}
+		return res;
 	}
 	
 	public String getStatementName(String statementURI) {
