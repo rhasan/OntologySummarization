@@ -7,7 +7,24 @@ public class KnowledgeStatement {
 	private double degreeCentrality;
 	private double similarityScore;
 	private double score;
-	private double reRankedScore;
+	private double reRankedScore; //this one also includes centrality score
+	private double proofTreeLevelScore;
+	private double subTreeWeight;
+	
+	public void setSubTreeWeight(double subTreeWeight) {
+		this.subTreeWeight = subTreeWeight;
+	}
+	public double getSubTreeWeight() {
+		return subTreeWeight;
+	}
+	
+	public void setProofTreeLevelScore(double proofTreeLevelScore) {
+		this.proofTreeLevelScore = proofTreeLevelScore;
+	}
+	
+	public double getProofTreeLevelScore() {
+		return proofTreeLevelScore;
+	}
 	
 	
 	public double getReRankedScore() {

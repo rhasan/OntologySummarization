@@ -259,7 +259,193 @@ public class JustificationProcessor {
 		return kStatements;
 
 	}	
+	/**
+	 * ranks statements taking into consideration centrality and proof tree abstraction level.
+	 * higher a statement is in the proof tree, more abstract it is and higher the rank.
+	 * score = 0.5 * degree centrality + 0.5 * proof-tree-level-score
+	 * proof-tree-level-score = 1.0/ proof-tree-level //root starts with level 1
+	 * @param initFlag
+	 * @param statementURI
+	 * @param prefs
+	 * @param ontologyLocations
+	 * @param instanceLocations
+	 * @return
+	 * @throws Exception
+	 */
 	
+	public List<KnowledgeStatement> summarizeByProofTreeAbstraction(boolean initFlag, String statementURI, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
+
+		Set<KnowledgeStatement> kstmts = new HashSet<KnowledgeStatement>();	
+		if(initFlag) {
+			Set<Entry<String, ArrayList<KnowledgeStatement>>> entries = kStmtMap.entrySet();
+
+			//ArrayList<KnowledgeStatement> kstmts = new ArrayList<KnowledgeStatement>();
+
+			int totalStmts = 0;
+			for(Entry<String, ArrayList<KnowledgeStatement>> entry:entries) {
+				
+				ArrayList<KnowledgeStatement> entryStatements = entry.getValue();
+				for(KnowledgeStatement entryStmt:entryStatements) {
+					
+					//if(entryStmt.getStatement().getPredicate().toString().equals(Ratio4TA.derivedFrom)) {
+						//stmts.add(entryStmt);
+						String key1 = entryStmt.getStatement().getContext().toString();
+						KnowledgeStatement st1 = kStmtMap.getFirst(key1);
+						if(st1.getStatement().getContext().toString().equals(statementURI)==false) {
+							kstmts.add(st1);
+							//System.out.println(entryStmt.getStatement().toString());
+							totalStmts++;
+						}
+
+					//}
+				}
+			}
+			//System.out.println("JP total stmts Size:"+totalStmts);
+			
+			ArrayList<KnowledgeStatement> statements = new ArrayList<KnowledgeStatement>();
+			for(KnowledgeStatement kst:kstmts) {
+				statements.add(kst);
+			}
+			StatementSummarizer summerizer = new StatementSummarizer(statements,true);
+			summerizer.summarize(prefs,ontologyLocations,instanceLocations);
+			
+			
+//			for(KnowledgeStatement ks:statements) {
+//				System.out.println("Score:"+ks.getScore());
+//				System.out.println("Degree score:"+ks.getDegreeCentrality());
+//				System.out.println("Sim score:"+ks.getSimilarityScore());
+//			}
+			gk.countSubtrees();
+		}
+		KnowledgeStatement root = kStmtMap.getFirst(statementURI);
+		if(root==null) throw new Exception("Root statement not found");
+		GenericTreeNode<KnowledgeStatement> rootNode = gk.getNodeByObject(root);
+		gk.traverseByScoreThreshold(rootNode,0.0);
+
+		List<KnowledgeStatement> kStatements = computeSortProofTreeAbstractionScore(kstmts);
+	
+		return kStatements;
+
+	}	
+	
+	/**
+	 * assigns score = 0.5 * degree centrality + 0.5 * proof-tree-level-score
+	 * and returns a sorted list by score
+	 * @param kstmts
+	 * @return
+	 */
+	private List<KnowledgeStatement> computeSortProofTreeAbstractionScore(Set<KnowledgeStatement> kstmts) {
+		List<KnowledgeStatement> kStatements = new ArrayList<KnowledgeStatement>();
+		for(KnowledgeStatement kst:kstmts) {
+			//System.out.println("Statement:"+kst.getStatement().toString());
+			//System.out.println("Degree Centrality:"+kst.getDegreeCentrality() + " Level Score: "+kst.getProofTreeLevelScore());
+			double score = (kst.getDegreeCentrality() + kst.getProofTreeLevelScore())/2.0;
+			kst.setScore(score);
+			
+			kStatements.add(kst);
+		}
+		Collections.sort(kStatements,new Comparator<KnowledgeStatement>() {
+
+			@Override
+			public int compare(KnowledgeStatement o1, KnowledgeStatement o2) {
+				if(o1.getScore()>o2.getScore()) return -1;
+				if(o1.getScore()<o2.getScore()) return 1;
+				return 0;
+			}
+			
+		});
+		return kStatements;	
+
+	}
+	
+	public List<KnowledgeStatement> summarizeByProofTreeSubtreeWeight(boolean initFlag, String statementURI, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
+
+		Set<KnowledgeStatement> kstmts = new HashSet<KnowledgeStatement>();	
+		if(initFlag) {
+			Set<Entry<String, ArrayList<KnowledgeStatement>>> entries = kStmtMap.entrySet();
+
+			//ArrayList<KnowledgeStatement> kstmts = new ArrayList<KnowledgeStatement>();
+
+			int totalStmts = 0;
+			for(Entry<String, ArrayList<KnowledgeStatement>> entry:entries) {
+				
+				ArrayList<KnowledgeStatement> entryStatements = entry.getValue();
+				for(KnowledgeStatement entryStmt:entryStatements) {
+					
+					//if(entryStmt.getStatement().getPredicate().toString().equals(Ratio4TA.derivedFrom)) {
+						//stmts.add(entryStmt);
+						String key1 = entryStmt.getStatement().getContext().toString();
+						KnowledgeStatement st1 = kStmtMap.getFirst(key1);
+						if(st1.getStatement().getContext().toString().equals(statementURI)==false) {
+							kstmts.add(st1);
+							//System.out.println(entryStmt.getStatement().toString());
+							totalStmts++;
+						}
+
+					//}
+				}
+			}
+			//System.out.println("JP total stmts Size:"+totalStmts);
+			
+			ArrayList<KnowledgeStatement> statements = new ArrayList<KnowledgeStatement>();
+			for(KnowledgeStatement kst:kstmts) {
+				statements.add(kst);
+			}
+			StatementSummarizer summerizer = new StatementSummarizer(statements,true);
+			summerizer.summarize(prefs,ontologyLocations,instanceLocations);
+			
+			
+//			for(KnowledgeStatement ks:statements) {
+//				System.out.println("Score:"+ks.getScore());
+//				System.out.println("Degree score:"+ks.getDegreeCentrality());
+//				System.out.println("Sim score:"+ks.getSimilarityScore());
+//			}
+			gk.countSubtrees();
+		}
+		//KnowledgeStatement root = kStmtMap.getFirst(statementURI);
+		//if(root==null) throw new Exception("Root statement not found");
+		//GenericTreeNode<KnowledgeStatement> rootNode = gk.getNodeByObject(root);
+		//gk.traverseByScoreThreshold(rootNode,0.0);
+
+		List<KnowledgeStatement> kStatements = computeSortProofTreeSubtreeWeightScore(statementURI);
+	
+		return kStatements;
+
+	}	
+	
+	private List<KnowledgeStatement> computeSortProofTreeSubtreeWeightScore(String rootStatementUri) {
+		 List<KnowledgeStatement> res = new ArrayList<KnowledgeStatement>();
+		
+		for(GenericTreeNode<KnowledgeStatement> gkn: gk.getNodes()) {
+			
+			KnowledgeStatement kst = (KnowledgeStatement) gkn.getObject();
+			
+			
+			double subtreeWeight = gkn.getCombinedScore();
+			kst.setSubTreeWeight(subtreeWeight);
+			//double score = (kst.getDegreeCentrality() + subtreeWeight)/2.0;
+			if(rootStatementUri.equals(kst.getStatement().getContext().stringValue())) continue;
+			res.add(kst);
+
+			//System.out.println(kst.getStatement().toString());
+			//System.out.println("Sub tree weight:"+ subtreeWeight);
+		
+		}
+		
+		Collections.sort(res, new Comparator<KnowledgeStatement>() {
+
+			@Override
+			public int compare(KnowledgeStatement o1, KnowledgeStatement o2) {
+				if(o1.getSubTreeWeight()>o2.getSubTreeWeight()) return -1;
+				if(o1.getSubTreeWeight()<o2.getSubTreeWeight()) return 1;
+				return 0;
+			}
+			
+		});
+		
+		return res;
+	}
+
 	public List<KnowledgeStatement> summarizeJustificationKnowledgeStatements(String statementURI, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
 		
 		Set<Entry<String, ArrayList<Statement>>> entries = stmtMap.entrySet();
@@ -430,7 +616,8 @@ public class JustificationProcessor {
 				if(S.contains(kstmt)==false) {
 					double sc = kstmt.getScore();
 					double rsc = reward(kstmt, S);
-					double rScore = (.6 * sc+ .4 * rsc);
+					//double rScore = (.6 * sc+ .4 * rsc);
+					double rScore = (sc+ rsc)/2.0;
 					//double rScore = sc;
 					if(maxScore<rScore) {
 						iMax = index;

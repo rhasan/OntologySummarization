@@ -228,7 +228,7 @@ public class GenericTree<Item> {
 //		return max;
 //	}
 	/**
-	 * computes the weight of a branch in a proof tree by summing the score of
+	 * computes the weight of a branch in a proof tree by summing the rdf-statement score of
 	 * all the nodes in that branch and dividing the sum by the number of nodes 
 	 * in that branch.
 	 * @param u
@@ -310,12 +310,22 @@ public class GenericTree<Item> {
 		Queue<GenericTreeNode<Item>> Q=new LinkedList<GenericTreeNode<Item>>();
 		Q.add(s);
 		while(Q.isEmpty()==false) {
+
 			GenericTreeNode<Item> u = Q.poll();
-			//System.out.println("In Tree:"+((KnowledgeStatement) u.getObject()).getStatement().toString());
+			KnowledgeStatement kst = (KnowledgeStatement)u.getObject();
+			
+			double levelScore = 1.0/(u.getDistance()+1);
+			
+			kst.setProofTreeLevelScore(levelScore);
+			kList.add(kst);
+			List<GenericTreeNode<Item>> list = getAdjacent(u);
+
+			//System.out.println("In Tree:"+((KnowledgeStatement) u.getObject()).getStatement().toString() +" LevelScore:"+levelScore);
 			//System.out.println("Combined Score:"+u.getCombinedScore());
 			//System.out.println("Statement Score:"+((KnowledgeStatement) u.getObject()).getScore());
-			kList.add((KnowledgeStatement)u.getObject());
-			List<GenericTreeNode<Item>> list = getAdjacent(u);
+			
+			
+			
 			for(GenericTreeNode<Item> v:list) {
 				//KnowledgeStatement vkst = (KnowledgeStatement) v.getObject();
 				if(v.getCombinedScore()>=threshold && v.getColor() == WHITE) {

@@ -54,13 +54,17 @@ public class DCGSurveyInference1Test {
 	static XYSeries soloCentralityNdcgCR = new XYSeries("Centrality");
 	static XYSeries soloReRankNdcgCR = new XYSeries("Re-Ranking");
 	static XYSeries sentenceGraphNdcgCR = new XYSeries("Sentence Graph");
+	static XYSeries soloAbstractionNdcgCR = new XYSeries("Abstraction");
+	static XYSeries soloProofTreeSubtreeWeightNdcgCR = new XYSeries("Sub Tree Weight");
 	
 	
 	static XYSeries soloReRankFMeasureCR = new XYSeries("Re-Ranking");
 	static XYSeries soloCentralityFMeasureCR = new XYSeries("Centrality");
 	static XYSeries sentenceGraphFMeasureCR = new XYSeries("Sentence Graph");
+	static XYSeries soloAbstractionFMeasureCR = new XYSeries("Abstraction");
+	static XYSeries soloProofTreeSubtreeWeightFMeasureCR = new XYSeries("Sub Tree Weight");
 
-	//static XYSeries humansNdcgCR = new XYSeries("Human average");
+	static XYSeries humansNdcgCR = new XYSeries("Human agreement (Avg)");
 	static DefaultCategoryDataset cosineDataset = new DefaultCategoryDataset();
 
 	@BeforeClass
@@ -75,7 +79,10 @@ public class DCGSurveyInference1Test {
 		dataset.addSeries(soloCentralityNdcgCR);
 		dataset.addSeries(soloReRankNdcgCR);
 		dataset.addSeries(sentenceGraphNdcgCR);
-		//dataset.addSeries(humansNdcgCR);
+		dataset.addSeries(soloAbstractionNdcgCR);
+		dataset.addSeries(soloProofTreeSubtreeWeightNdcgCR);
+		
+		//dataset.addSeries(humansNdcgCR); // nDCG vs CR is a comparison against avg human opinions (avg ratings)
 		
 		// Generate the ndcg vs cr graph
 		JFreeChart chart = ChartFactory.createXYLineChart("nDCG vs CR",
@@ -122,7 +129,8 @@ public class DCGSurveyInference1Test {
 		fMeasureCRdataset.addSeries(soloCentralityFMeasureCR);
 		fMeasureCRdataset.addSeries(soloReRankFMeasureCR);
 		fMeasureCRdataset.addSeries(sentenceGraphFMeasureCR);
-		
+		fMeasureCRdataset.addSeries(soloAbstractionFMeasureCR);
+		fMeasureCRdataset.addSeries(soloProofTreeSubtreeWeightFMeasureCR);
 		
 		
 		
@@ -193,10 +201,7 @@ public class DCGSurveyInference1Test {
 				System.out.println("Cosine similarity: "+cosineSim);
 				totalCosine += cosineSim;
 				
-				//double d = DCGMeasure.computeNDCG(reList.get(firstIndex), reList.get(secondIndex), reList.get(firstIndex).size());
-				//System.out.println("nDCG: "+d);
-				
-				
+			
 				//printRankEntryList(reList.get(firstIndex));
 				//printRankEntryList(reList.get(secondIndex));	
 				//System.out.println();
@@ -210,7 +215,47 @@ public class DCGSurveyInference1Test {
 		System.out.println("Avg cosine similarity:"+avgCosine);
 
 	}
-	
+	@Test
+	public void testHumanAgreementNDCG() {
+		List<List<RankEntry>> reList = processorInf1.getAllRankEntries(QUESTION1_NAME);
+		
+		int n = reList.get(0).size();
+		for(int p=2;p<=n;p++) {
+			//int p = n;
+			double nDCGSum = 0.0;
+			int pairCount=0;
+			for(int i=0;i<reList.size();i++) {
+				int firstIndex = i;
+				List<RankEntry> list1 = DCGMeasure.copyRankEntryList(reList.get(firstIndex));
+				EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+				Collections.sort(list1,cmp);
+				for(int j=0;j<reList.size();j++) {
+					if(i!=j) {
+						pairCount++;
+						//System.out.println("Pair:"+i+","+j);
+
+						int secondIndex = j;
+						List<RankEntry> list2 = DCGMeasure.copyRankEntryList(reList.get(secondIndex));
+						
+						
+						Collections.sort(list2,cmp);
+						
+						//printRankEntryList(list1);
+						//printRankEntryList(list2);
+						double d = DCGMeasure.computeNDCG(list1, list2, p);
+						//System.out.println("nDCG: "+d);	
+						nDCGSum+=d;
+					}
+				}
+			}
+			double avgNDCG = nDCGSum/pairCount;
+			double cr = (double) p / (double) n;
+			System.out.println("Average nDCG["+p+"]:"+avgNDCG + " CR:"+cr);
+			humansNdcgCR.add(cr, avgNDCG);
+			
+		}
+		
+	}
 	
 //	@Test
 //	public void humanRankingByRatings() {
@@ -371,6 +416,10 @@ public class DCGSurveyInference1Test {
 		for(KnowledgeStatement kn:originalKStatements) {
 			
 			Statement st = kn.getStatement();
+			
+			String statementId = st.getContext().stringValue();
+			if(statementId.equals(rootStmtId)) continue;
+			
 			statementSet.add(st);
 		}
 		
@@ -383,7 +432,7 @@ public class DCGSurveyInference1Test {
 		List<RankEntry> res = new ArrayList<RankEntry>();
 		for(Statement st:summary) {
 			String statementId = st.getContext().stringValue();
-			if(statementId.equals(rootStmtId)) continue;
+			//if(statementId.equals(rootStmtId)) continue;
 			
 			RankEntry re = new RankEntry();
 			String name = getStatementName(statementId);
@@ -486,6 +535,150 @@ public class DCGSurveyInference1Test {
 			stmts.add(kst);
 		}
 
+		return stmts;
+	}
+	
+	
+	@Test
+	public void testSoloProofTreeAbstraction() throws Exception {
+		
+		
+		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+		List<KnowledgeStatement> kstmts = summaryByProofTreeAbstraction(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+		System.out.println("NCG Proof Tree Abrstraction");
+		System.out.println("#####################################");		
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		computeNDCGMeasure(reList, sList, soloAbstractionNdcgCR);		
+	}
+	
+	@Test
+	public void testFMeasureSoloProofTreeAbstraction() throws Exception {
+		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList1,cmp);
+		//printRankEntryList(reList1);
+		
+		List<KnowledgeStatement> kstmts = summaryByProofTreeAbstraction(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+		List<RankEntry> reList2 = new ArrayList<RankEntry>();
+		
+		System.out.println("F-Measure Proof Tree Abrstraction");
+		System.out.println("#####################################");
+		
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			reList2.add(re);
+		}
+		
+		//printRankEntryList(reList2);
+		computeFmeasure(reList1, reList2, soloAbstractionFMeasureCR);
+		
+
+	}	
+
+
+	
+	@Test
+	public void testSoloProofTreeSubtreeWeight() throws Exception {
+		
+		
+		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+		List<KnowledgeStatement> kstmts = summaryByProofTreeSubtreeWeight(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+		System.out.println("NCG Proof Tree sub tree weight");
+		System.out.println("#####################################");		
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		computeNDCGMeasure(reList, sList, soloProofTreeSubtreeWeightNdcgCR);		
+	}
+	
+	@Test
+	public void testFMeasureSoloProofTreeSubtreeWeight() throws Exception {
+		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList1,cmp);
+		//printRankEntryList(reList1);
+		
+		List<KnowledgeStatement> kstmts = summaryByProofTreeSubtreeWeight(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+		List<RankEntry> reList2 = new ArrayList<RankEntry>();
+		
+		System.out.println("F-Measure Proof Tree sub tree weight");
+		System.out.println("#####################################");
+		
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			reList2.add(re);
+		}
+		
+		//printRankEntryList(reList2);
+		computeFmeasure(reList1, reList2, soloProofTreeSubtreeWeightFMeasureCR);
+		
+
+	}		
+	
+	public List<KnowledgeStatement> summaryByProofTreeSubtreeWeight(String justificationFile, String rootStmtId) throws Exception {
+		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
+		JustificationProcessor jp = new JustificationProcessor();
+		jp.parseJustificationFile(justificationFile,"http://www.example.com/" );
+		List<KnowledgeStatement> kStmts = jp.summarizeByProofTreeSubtreeWeight(true, rootStmtId, null, null, null);
+		
+		for(int i=0;i<kStmts.size();i++) {
+			
+			KnowledgeStatement kst = kStmts.get(i);
+			String stmtId = kst.getStatement().getContext().stringValue();
+			if(stmtId.equals(rootStmtId)) continue;
+			
+			//System.out.println("Statement:"+kst.getStatement().toString());
+			//System.out.println("Score:"+kst.getScore());
+			//System.out.println(kst.getStatement().getContext().stringValue()+" "+i);
+			
+			
+			stmts.add(kst);
+		}	
+		return stmts;
+	}
+		
+	
+	public List<KnowledgeStatement> summaryByProofTreeAbstraction(String justificationFile, String rootStmtId) throws Exception {
+		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
+		JustificationProcessor jp = new JustificationProcessor();
+		jp.parseJustificationFile(justificationFile,"http://www.example.com/" );
+		List<KnowledgeStatement> kStmts = jp.summarizeByProofTreeAbstraction(true, rootStmtId, null, null, null);
+		
+		for(int i=0;i<kStmts.size();i++) {
+			
+			KnowledgeStatement kst = kStmts.get(i);
+			String stmtId = kst.getStatement().getContext().stringValue();
+			if(stmtId.equals(rootStmtId)) continue;
+			
+			//System.out.println("Statement:"+kst.getStatement().toString());
+			//System.out.println("Score:"+kst.getScore());
+			//System.out.println(kst.getStatement().getContext().stringValue()+" "+i);
+			
+			
+			stmts.add(kst);
+		}	
 		return stmts;
 	}
 	
