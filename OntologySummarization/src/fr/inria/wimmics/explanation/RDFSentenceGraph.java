@@ -15,7 +15,7 @@ import fr.inria.wimmics.explanation.GenericRDFSentence;
 
 public class RDFSentenceGraph {
 	
-	private Set<Statement> T = null;//set of original statements
+	private List<Statement> T = null;//set of original statements
 	private HashMap<Statement,Set<Statement>> bConnected = null;
 	private Set<GenericRDFSentence> graphSentences = null;
 	private double navigProp;
@@ -27,7 +27,7 @@ public class RDFSentenceGraph {
 	
 
 	
-	public RDFSentenceGraph(Set<Statement> statements, double p) {
+	public RDFSentenceGraph(List<Statement> statements, double p) {
 		navigProp = p;
 		T = statements;
 		graphSentences = new HashSet<GenericRDFSentence>();
@@ -40,7 +40,7 @@ public class RDFSentenceGraph {
 		constructRDFSentenceLinks();
 	}
 	
-	public Set<Statement> getStatements() {
+	public List<Statement> getStatements() {
 		return T;
 	}
 	

@@ -63,7 +63,8 @@ public class RDFSentenceGraphUnitTest {
 		Set<Statement> statementsSet = new HashSet<Statement>(stmts);
 		//Set<Statement> statementsSet = SesameUtil.evaluateConstructQueryReturnSet(myRepository, "CONSTRUCT {?s ?p ?o} where {?s ?p ?o.}");
 		
-		RDFSentenceGraph rdfSentenceGraph = new RDFSentenceGraph(statementsSet, 0.5);
+		//RDFSentenceGraph rdfSentenceGraph = new RDFSentenceGraph(statementsSet, 0.5);
+		RDFSentenceGraph rdfSentenceGraph = new RDFSentenceGraph(stmts, 0.5);
 		
 
 		SentenceGraphSummarizer summmarizer = new SentenceGraphSummarizer(rdfSentenceGraph);

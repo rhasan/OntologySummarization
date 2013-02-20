@@ -204,8 +204,8 @@ public class SentenceGraphSummarizer {
 
 	    	statements.addAll(sent.getSentence().getStatements());
 
-	    	//System.out.println(sent.getSentence().getStatements().toString());
-			//System.out.println("score:"+sent.getReRankScore());
+	    	System.out.println(sent.getSentence().getStatements().toString());
+			System.out.println("Re-rank score:"+sent.getReRankScore());
 	    
 	    }
 		
@@ -301,13 +301,29 @@ public class SentenceGraphSummarizer {
 
 	        public int compare(RDFSentenceWithRank o1, RDFSentenceWithRank o2) {
 	        	
-	        	if(o2.getNormalizedCi()>o1.getNormalizedCi()) return 1;
-	        	if(o2.getNormalizedCi()<o1.getNormalizedCi()) return -1;
-	        	return 0;
+	        	if(o2.getCi()>o1.getCi()) return 1;
+	        	if(o2.getCi()<o1.getCi()) return -1;
+	        	if(o1.getSentence().statements.size() > o2.getSentence().statements.size()) return 1;
+	        	if(o1.getSentence().statements.size() < o2.getSentence().statements.size()) return -1;
+	        	//return o1.getSentence().getMainStmt().toString().compareTo( o2.getSentence().getMainStmt().toString());
+	        	//return o1.getSentence().getStatements().toString().compareTo(o2.getSentence().getStatements().toString());
+	        	return o1.getSentence().getStatements().toString().length() - o2.getSentence().getStatements().toString().length();
+	        	//return 0;
+	        	
+	        	//return o1.getSentence().statements.size()-o2.getSentence().statements.size();
+	        	//return 0;
 	        }
 	    });		
+//		for(RDFSentenceWithRank st:ranked) {
+//			System.out.println(st.getSentence().getStatements().toString());
+//			System.out.println("Ci:"+st.getCi());
+//		}
+		RDFSentenceWithRank firstSentence = ranked.get(0);
 		
-		for(int iii=0;iii<ranked.size();iii++) {
+		double maxOfAll = Double.NEGATIVE_INFINITY;
+		S.add(firstSentence);
+		
+		for(int iii=1;iii<ranked.size();iii++) {
 
 			//System.out.println("iii:"+iii);
 			RDFSentenceWithRank iMax=null;
@@ -336,7 +352,19 @@ public class SentenceGraphSummarizer {
 			assert iMax!=null;
 			iMax.setReRankScore(maxScore);
 			S.add(iMax);
+			
+//			System.out.println("max stmt:"+iMax.getSentence().getStatements());
+//			System.out.println("re-rank score:"+iMax.getReRankScore());
+			if(maxScore>maxOfAll) {
+				maxOfAll = maxScore;
+			}
 		}
+		
+//		for(RDFSentenceWithRank st:S) {
+//			
+//		}
+		
+		firstSentence.setReRankScore(maxOfAll+1);
 		
 		List<RDFSentenceWithRank> list = new LinkedList<RDFSentenceWithRank>(S);
 	    
@@ -346,7 +374,10 @@ public class SentenceGraphSummarizer {
 	        	
 	        	if(o2.getReRankScore()>o1.getReRankScore()) return 1;
 	        	if(o2.getReRankScore()<o1.getReRankScore()) return -1;
-	        	return 0;
+	        	if(o1.getSentence().statements.size() > o2.getSentence().statements.size()) return 1;
+	        	if(o1.getSentence().statements.size() < o2.getSentence().statements.size()) return -1;
+	        	//return o1.getSentence().getMainStmt().toString().compareTo( o2.getSentence().getMainStmt().toString());
+	        	return o1.getSentence().getStatements().toString().length() - o2.getSentence().getStatements().toString().length();
 	        }
 	    });
 		

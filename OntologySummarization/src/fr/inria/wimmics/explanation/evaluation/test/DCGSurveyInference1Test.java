@@ -44,6 +44,8 @@ import fr.inria.wimmics.explanation.evaluation.RankEntry;
 public class DCGSurveyInference1Test {
 	//files/evaluation/dcg/survey/inf1/results-survey31573.csv
 	
+	static int P_START_VALUE = 2;
+	
 	static String QUESTION1_NAME = "q1";
 	static String QUESTION2_NAME = "q2";//context question
 	static DCGSurveyEntryProcessor processorInf1 = new DCGSurveyEntryProcessor();
@@ -52,13 +54,13 @@ public class DCGSurveyInference1Test {
 	static String FILE_JUSTIFICATION_INF1 = "rdf/inference1.trig";
 	
 	static XYSeries soloCentralityNdcgCR = new XYSeries("Centrality");
-	static XYSeries soloReRankNdcgCR = new XYSeries("Re-Ranking");
+	static XYSeries soloReRankNdcgCR = new XYSeries("Coherence");
 	static XYSeries sentenceGraphNdcgCR = new XYSeries("Sentence Graph");
 	static XYSeries soloAbstractionNdcgCR = new XYSeries("Abstraction");
 	static XYSeries soloProofTreeSubtreeWeightNdcgCR = new XYSeries("Sub Tree Weight");
 	
 	
-	static XYSeries soloReRankFMeasureCR = new XYSeries("Re-Ranking");
+	static XYSeries soloReRankFMeasureCR = new XYSeries("Coherence");
 	static XYSeries soloCentralityFMeasureCR = new XYSeries("Centrality");
 	static XYSeries sentenceGraphFMeasureCR = new XYSeries("Sentence Graph");
 	static XYSeries soloAbstractionFMeasureCR = new XYSeries("Abstraction");
@@ -71,6 +73,10 @@ public class DCGSurveyInference1Test {
 	public static void init() throws IOException {
 		processorInf1.setValues(filePath);
 	}
+	
+	/**
+	 * draws the charts after executing all the test cases
+	 */
 	
 	@AfterClass
 	public static void drawChars() {
@@ -160,6 +166,10 @@ public class DCGSurveyInference1Test {
 				
 	}
 	
+	/**
+	 * A simple test case for testing purpose
+	 * @throws IOException
+	 */
 	@Test
 	public void testCSVInput() throws IOException {
 		System.out.println("Hello there!");
@@ -167,6 +177,11 @@ public class DCGSurveyInference1Test {
 		//en.setValues("files/evaluation/dcg/survey/inf1/results-survey31573.csv");
 		//en.printValues();
 	}
+	
+	/**
+	 * prints a {@link List} of {@link RankEntry}
+	 * @param rl
+	 */
 	
 	public void printRankEntryList(List<RankEntry> rl) {
 		for(RankEntry re:rl) {
@@ -178,6 +193,10 @@ public class DCGSurveyInference1Test {
 		}
 		System.out.println();
 	}
+	
+	/**
+	 * computes cosine similarities between the rating vectors of each evaluators 
+	 */
 	@Test
 	public void testHumanAgreementQuestion1() {
 		List<List<RankEntry>> reList = processorInf1.getAllRankEntries(QUESTION1_NAME);
@@ -215,12 +234,19 @@ public class DCGSurveyInference1Test {
 		System.out.println("Avg cosine similarity:"+avgCosine);
 
 	}
+	
+	/**
+	 * computes nDCG between each pairs of evaluators for different p values
+	 * then computes average nDCG value for each p value
+	 * 
+	 * NOTE: currently not plotting, intention was to plot avarage human agreement
+	 */
 	@Test
 	public void testHumanAgreementNDCG() {
 		List<List<RankEntry>> reList = processorInf1.getAllRankEntries(QUESTION1_NAME);
 		
 		int n = reList.get(0).size();
-		for(int p=2;p<=n;p++) {
+		for(int p=P_START_VALUE;p<=n;p++) {
 			//int p = n;
 			double nDCGSum = 0.0;
 			int pairCount=0;
@@ -257,23 +283,6 @@ public class DCGSurveyInference1Test {
 		
 	}
 	
-//	@Test
-//	public void humanRankingByRatings() {
-//		
-//		System.out.println("Humans");
-//		System.out.println("#####################################");
-//		
-//		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
-//		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
-//		Collections.sort(reList,cmp);
-//		
-//		for(int p=2;p<=reList.size();p++) {
-//			double d = DCGMeasure.computeNDCG(reList, p);
-//			double cr = (double) p / (double) reList.size();
-//			System.out.println("NCG["+p+"]:"+d+ " CR:"+cr);
-//			humansNdcgCR.add(cr, d);
-//		}
-//	}
 	
 	@Test
 	public void testSoloCentrality() throws Exception {
@@ -282,6 +291,8 @@ public class DCGSurveyInference1Test {
 		List<RankEntry> sList = new ArrayList<RankEntry>();
 		System.out.println("NCG Centrality");
 		System.out.println("#####################################");
+		System.out.println("F-Measure Centrality");
+		System.out.println("#####################################");		
 		
 		//System.out.println(reList.size()+":"+kstmts.size());
 		for(KnowledgeStatement kst:kstmts) {
@@ -292,16 +303,54 @@ public class DCGSurveyInference1Test {
 		}
 		
 		computeNDCGMeasure(reList, sList, soloCentralityNdcgCR);
+		
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		computeFmeasure(reList, sList, soloCentralityFMeasureCR);
 	}
 	
-	
+//	@Test
+//	public void testFMeasureSoloCentrality() throws Exception {
+//		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+//		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+//		Collections.sort(reList1,cmp);
+//		//printRankEntryList(reList1);
+//		
+//		List<KnowledgeStatement> kstmts = summarySoloCentrality(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+//		List<RankEntry> reList2 = new ArrayList<RankEntry>();
+//		
+//		System.out.println("F-Measure Centrality");
+//		System.out.println("#####################################");
+//		
+//		//System.out.println(reList.size()+":"+kstmts.size());
+//		for(KnowledgeStatement kst:kstmts) {
+//			String name = getStatementName(kst.getStatement().getContext().stringValue());
+//			RankEntry re = new RankEntry();
+//			re.setName(name);
+//			reList2.add(re);
+//		}
+//		
+//		//printRankEntryList(reList2);
+//		computeFmeasure(reList1, reList2, soloCentralityFMeasureCR);
+//		
+//
+//	}		
 	@Test
 	public void testSoloReRank() throws Exception {
 		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);
+		
 		List<KnowledgeStatement> kstmts = summarySoloReRank(FILE_JUSTIFICATION_INF1, ROOT_INF1);
 		List<RankEntry> sList = new ArrayList<RankEntry>();
+		
+		
 		System.out.println("NCG ReRank");
 		System.out.println("#####################################");		
+		System.out.println("F-Measure ReRank");
+		System.out.println("#####################################");
+
 		//System.out.println(reList.size()+":"+kstmts.size());
 		for(KnowledgeStatement kst:kstmts) {
 			String name = getStatementName(kst.getStatement().getContext().stringValue());
@@ -312,91 +361,79 @@ public class DCGSurveyInference1Test {
 		
 		
 		computeNDCGMeasure(reList, sList, soloReRankNdcgCR);
-	}
-	@Test
-	public void testFMeasureSoloReRank() throws Exception {
-		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
-		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
-		Collections.sort(reList1,cmp);
-		//printRankEntryList(reList1);
 		
-		List<KnowledgeStatement> kstmts = summarySoloReRank(FILE_JUSTIFICATION_INF1, ROOT_INF1);
-		List<RankEntry> reList2 = new ArrayList<RankEntry>();
-		
-		System.out.println("F-Measure ReRank");
-		System.out.println("#####################################");
-		
-		//System.out.println(reList.size()+":"+kstmts.size());
-		for(KnowledgeStatement kst:kstmts) {
-			String name = getStatementName(kst.getStatement().getContext().stringValue());
-			RankEntry re = new RankEntry();
-			re.setName(name);
-			reList2.add(re);
-		}
-		
-		//printRankEntryList(reList2);
-		computeFmeasure(reList1, reList2, soloReRankFMeasureCR);
-		
-
+		computeFmeasure(reList, sList, soloReRankFMeasureCR);
 	}
 	
+//	@Test
+//	public void testFMeasureSoloReRank() throws Exception {
+//		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+//		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+//		Collections.sort(reList1,cmp);
+//		//printRankEntryList(reList1);
+//		
+//		List<KnowledgeStatement> kstmts = summarySoloReRank(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+//		List<RankEntry> reList2 = new ArrayList<RankEntry>();
+//		
+//		System.out.println("F-Measure ReRank");
+//		System.out.println("#####################################");
+//		
+//		//System.out.println(reList.size()+":"+kstmts.size());
+//		for(KnowledgeStatement kst:kstmts) {
+//			String name = getStatementName(kst.getStatement().getContext().stringValue());
+//			RankEntry re = new RankEntry();
+//			re.setName(name);
+//			reList2.add(re);
+//		}
+//		
+//		//printRankEntryList(reList2);
+//		computeFmeasure(reList1, reList2, soloReRankFMeasureCR);
+//		
+//
+//	}
+//	
 	
-	@Test
-	public void testFMeasureSoloCentrality() throws Exception {
-		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
-		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
-		Collections.sort(reList1,cmp);
-		//printRankEntryList(reList1);
-		
-		List<KnowledgeStatement> kstmts = summarySoloCentrality(FILE_JUSTIFICATION_INF1, ROOT_INF1);
-		List<RankEntry> reList2 = new ArrayList<RankEntry>();
-		
-		System.out.println("F-Measure Centrality");
-		System.out.println("#####################################");
-		
-		//System.out.println(reList.size()+":"+kstmts.size());
-		for(KnowledgeStatement kst:kstmts) {
-			String name = getStatementName(kst.getStatement().getContext().stringValue());
-			RankEntry re = new RankEntry();
-			re.setName(name);
-			reList2.add(re);
-		}
-		
-		//printRankEntryList(reList2);
-		computeFmeasure(reList1, reList2, soloCentralityFMeasureCR);
-		
 
-	}	
 	
 	@Test
-	public void testtFMeasureSentenceGraph() throws RDFParseException, RDFHandlerException, RepositoryException, IOException {
+	public void testSentenceGraph() throws RDFParseException, RDFHandlerException, RepositoryException, IOException {
 		
 		System.out.println("F-Measure Sentence Graph");
+		System.out.println("#####################################");
+		System.out.println("NCG Sentence Graph");
 		System.out.println("#####################################");
 		
 		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
 		
 		List<RankEntry> reList2 = summarySentenceGraph(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+
+		computeNDCGMeasure(reList1, reList2, sentenceGraphNdcgCR);	
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList1,cmp);
+		
 		
 		computeFmeasure(reList1, reList2, sentenceGraphFMeasureCR);
 		
-	}
 	
-	
-	@Test
-	public void testSentenceGraph() throws Exception {
-		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
-		List<RankEntry> sList = summarySentenceGraph(FILE_JUSTIFICATION_INF1, ROOT_INF1);
-		System.out.println("NCG Sentence Graph");
-		System.out.println("#####################################");
-		computeNDCGMeasure(reList, sList, sentenceGraphNdcgCR);
 		
-
 	}
+	
+	
+//	@Test
+//	public void testSentenceGraph() throws Exception {
+//		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+//		List<RankEntry> sList = summarySentenceGraph(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+//		System.out.println("NCG Sentence Graph");
+//		System.out.println("#####################################");
+//		computeNDCGMeasure(reList, sList, sentenceGraphNdcgCR);
+//		
+//
+//	}
 	
 	public void computeNDCGMeasure(List<RankEntry> reList, List<RankEntry> sList, XYSeries series) {
 		
-		for(int p=2;p<=reList.size();p++) {
+		for(int p=P_START_VALUE;p<=reList.size();p++) {
 			double d = DCGMeasure.computeNDCG(reList, sList, p);
 			double cr = (double) p / (double) reList.size();
 			System.out.println("NCG["+p+"]:"+d+ " CR:"+cr);
@@ -411,7 +448,8 @@ public class DCGSurveyInference1Test {
 		jp.parseJustificationFile(justificationFile,"http://www.example.com/" );
 		List<KnowledgeStatement> originalKStatements = jp.getKnStatements();
 		
-		Set<Statement> statementSet = new HashSet<Statement>();
+		//Set<Statement> statementSet = new HashSet<Statement>();
+		List<Statement> statementSet = new  ArrayList<Statement>();
 		
 		for(KnowledgeStatement kn:originalKStatements) {
 			
@@ -442,12 +480,14 @@ public class DCGSurveyInference1Test {
 		return res;
 		
 	}	
-	public Map<Double, Double> computeFmeasure(List<RankEntry> reList1, List<RankEntry> reList2, XYSeries series) {
+	public Map<Double, Double> computeFmeasure(List<RankEntry> groundTruthList, List<RankEntry> summaryToCompareList, XYSeries series) {
 		Map<Double, Double> res = new HashMap<Double, Double>();
-		for(int p=2;p<=reList1.size();p++) {
-			List<String> S = getSummaryOfSizeP(reList1, p);
-			List<String> H = getSummaryOfSizeP(reList2, p);
-			PrecisionRecall pr = PrecisionRecallCalculator.calculatePrecisionRecall(S,H);
+		for(int p=P_START_VALUE;p<=groundTruthList.size();p++) {
+			//System.out.println("Ground truth");
+			List<String> groundTruth = getSummaryOfSizeP(groundTruthList, p);
+			//System.out.println("Summary");
+			List<String> summaryToCompare = getSummaryOfSizeP(summaryToCompareList, p);
+			PrecisionRecall pr = PrecisionRecallCalculator.calculatePrecisionRecall(groundTruth,summaryToCompare);
 			double precision = pr.getPrecision();
 			double recall = pr.getRecall();
 			Double f_measure = (2*precision*recall)/(precision+recall);
@@ -455,7 +495,7 @@ public class DCGSurveyInference1Test {
 				f_measure = 0.0;
 				//System.out.println("*********************************");
 			}
-			double cr = (double) p / (double) reList1.size();
+			double cr = (double) p / (double) groundTruthList.size();
 			//System.out.println("Precision:"+precision);
 			//System.out.println("Recall:"+recall);
 			System.out.println("F:"+f_measure+" CR:"+cr+" p:"+p);
@@ -471,6 +511,7 @@ public class DCGSurveyInference1Test {
 		for(int i=0;i<p;i++) {
 			RankEntry re = reList.get(i);
 			res.add(re.getName());
+			//System.out.println(re.getName());
 		}
 		return res;
 	}
@@ -522,7 +563,6 @@ public class DCGSurveyInference1Test {
 		for(int i=0;i<kStmts.size();i++) {
 			
 
-			
 			KnowledgeStatement kst = kStmts.get(i);
 			String stmtId = kst.getStatement().getContext().stringValue();
 			if(stmtId.equals(rootStmtId)) continue;
@@ -542,12 +582,14 @@ public class DCGSurveyInference1Test {
 	@Test
 	public void testSoloProofTreeAbstraction() throws Exception {
 		
-		
+		System.out.println("NCG Proof Tree Abrstraction");
+		System.out.println("#####################################");			
+		System.out.println("F-Measure Proof Tree Abrstraction");
+		System.out.println("#####################################");		
 		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
 		List<KnowledgeStatement> kstmts = summaryByProofTreeAbstraction(FILE_JUSTIFICATION_INF1, ROOT_INF1);
 		List<RankEntry> sList = new ArrayList<RankEntry>();
-		System.out.println("NCG Proof Tree Abrstraction");
-		System.out.println("#####################################");		
+	
 		//System.out.println(reList.size()+":"+kstmts.size());
 		for(KnowledgeStatement kst:kstmts) {
 			String name = getStatementName(kst.getStatement().getContext().stringValue());
@@ -557,47 +599,55 @@ public class DCGSurveyInference1Test {
 		}
 		
 		
-		computeNDCGMeasure(reList, sList, soloAbstractionNdcgCR);		
+		computeNDCGMeasure(reList, sList, soloAbstractionNdcgCR);	
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		
+		computeFmeasure(reList, sList, soloAbstractionFMeasureCR);
 	}
 	
-	@Test
-	public void testFMeasureSoloProofTreeAbstraction() throws Exception {
-		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
-		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
-		Collections.sort(reList1,cmp);
-		//printRankEntryList(reList1);
-		
-		List<KnowledgeStatement> kstmts = summaryByProofTreeAbstraction(FILE_JUSTIFICATION_INF1, ROOT_INF1);
-		List<RankEntry> reList2 = new ArrayList<RankEntry>();
-		
-		System.out.println("F-Measure Proof Tree Abrstraction");
-		System.out.println("#####################################");
-		
-		//System.out.println(reList.size()+":"+kstmts.size());
-		for(KnowledgeStatement kst:kstmts) {
-			String name = getStatementName(kst.getStatement().getContext().stringValue());
-			RankEntry re = new RankEntry();
-			re.setName(name);
-			reList2.add(re);
-		}
-		
-		//printRankEntryList(reList2);
-		computeFmeasure(reList1, reList2, soloAbstractionFMeasureCR);
-		
-
-	}	
-
+//	@Test
+//	public void testFMeasureSoloProofTreeAbstraction() throws Exception {
+//		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+//		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+//		Collections.sort(reList1,cmp);
+//		//printRankEntryList(reList1);
+//		
+//		List<KnowledgeStatement> kstmts = summaryByProofTreeAbstraction(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+//		List<RankEntry> reList2 = new ArrayList<RankEntry>();
+//		
+//		System.out.println("F-Measure Proof Tree Abrstraction");
+//		System.out.println("#####################################");
+//		
+//		//System.out.println(reList.size()+":"+kstmts.size());
+//		for(KnowledgeStatement kst:kstmts) {
+//			String name = getStatementName(kst.getStatement().getContext().stringValue());
+//			RankEntry re = new RankEntry();
+//			re.setName(name);
+//			reList2.add(re);
+//		}
+//		
+//		//printRankEntryList(reList2);
+//		computeFmeasure(reList1, reList2, soloAbstractionFMeasureCR);
+//		
+//
+//	}	
+//
 
 	
 	@Test
 	public void testSoloProofTreeSubtreeWeight() throws Exception {
 		
+		System.out.println("NCG Proof Tree sub tree weight");
+		System.out.println("#####################################");		
+		
+		System.out.println("F-Measure Proof Tree sub tree weight");
+		System.out.println("#####################################");		
 		
 		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
 		List<KnowledgeStatement> kstmts = summaryByProofTreeSubtreeWeight(FILE_JUSTIFICATION_INF1, ROOT_INF1);
 		List<RankEntry> sList = new ArrayList<RankEntry>();
-		System.out.println("NCG Proof Tree sub tree weight");
-		System.out.println("#####################################");		
 		//System.out.println(reList.size()+":"+kstmts.size());
 		for(KnowledgeStatement kst:kstmts) {
 			String name = getStatementName(kst.getStatement().getContext().stringValue());
@@ -608,34 +658,38 @@ public class DCGSurveyInference1Test {
 		
 		
 		computeNDCGMeasure(reList, sList, soloProofTreeSubtreeWeightNdcgCR);		
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);
+		computeFmeasure(reList, sList, soloProofTreeSubtreeWeightFMeasureCR);
 	}
 	
-	@Test
-	public void testFMeasureSoloProofTreeSubtreeWeight() throws Exception {
-		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
-		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
-		Collections.sort(reList1,cmp);
-		//printRankEntryList(reList1);
-		
-		List<KnowledgeStatement> kstmts = summaryByProofTreeSubtreeWeight(FILE_JUSTIFICATION_INF1, ROOT_INF1);
-		List<RankEntry> reList2 = new ArrayList<RankEntry>();
-		
-		System.out.println("F-Measure Proof Tree sub tree weight");
-		System.out.println("#####################################");
-		
-		//System.out.println(reList.size()+":"+kstmts.size());
-		for(KnowledgeStatement kst:kstmts) {
-			String name = getStatementName(kst.getStatement().getContext().stringValue());
-			RankEntry re = new RankEntry();
-			re.setName(name);
-			reList2.add(re);
-		}
-		
-		//printRankEntryList(reList2);
-		computeFmeasure(reList1, reList2, soloProofTreeSubtreeWeightFMeasureCR);
-		
-
-	}		
+//	@Test
+//	public void testFMeasureSoloProofTreeSubtreeWeight() throws Exception {
+//		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+//		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+//		Collections.sort(reList1,cmp);
+//		//printRankEntryList(reList1);
+//		
+//		List<KnowledgeStatement> kstmts = summaryByProofTreeSubtreeWeight(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+//		List<RankEntry> reList2 = new ArrayList<RankEntry>();
+//		
+//		System.out.println("F-Measure Proof Tree sub tree weight");
+//		System.out.println("#####################################");
+//		
+//		//System.out.println(reList.size()+":"+kstmts.size());
+//		for(KnowledgeStatement kst:kstmts) {
+//			String name = getStatementName(kst.getStatement().getContext().stringValue());
+//			RankEntry re = new RankEntry();
+//			re.setName(name);
+//			reList2.add(re);
+//		}
+//		
+//		//printRankEntryList(reList2);
+//		computeFmeasure(reList1, reList2, soloProofTreeSubtreeWeightFMeasureCR);
+//		
+//
+//	}		
 	
 	public List<KnowledgeStatement> summaryByProofTreeSubtreeWeight(String justificationFile, String rootStmtId) throws Exception {
 		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
