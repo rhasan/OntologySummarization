@@ -44,7 +44,7 @@ import fr.inria.wimmics.explanation.evaluation.RankEntry;
 public class DCGSurveyInference1Test {
 	//files/evaluation/dcg/survey/inf1/results-survey31573.csv
 	
-	static int P_START_VALUE = 2;
+	static int P_START_VALUE = 1;
 	
 	static String QUESTION1_NAME = "q1";
 	static String QUESTION2_NAME = "q2";//context question
