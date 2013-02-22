@@ -48,10 +48,16 @@ public class DCGSurveyInference1Test {
 	
 	static String QUESTION1_NAME = "q1";
 	static String QUESTION2_NAME = "q2";//context question
-	static DCGSurveyEntryProcessor processorInf1 = new DCGSurveyEntryProcessor();
+	static DCGSurveyEntryProcessor surveyProcessor = new DCGSurveyEntryProcessor();
 	static String filePath = "files/evaluation/dcg/survey/inf1/results-survey31573.csv";
-	static String ROOT_INF1 = "http://alphubel.unice.fr:8080/lodutil/data/d21";
-	static String FILE_JUSTIFICATION_INF1 = "rdf/inference1.trig";
+	static String ROOT_STATEMENT = "http://alphubel.unice.fr:8080/lodutil/data/d21";
+	
+	static String FILE_JUSTIFICATION_INF = "rdf/inference1.trig";
+	static String FILE_JUSTIFICATION_INSTANCE = "rdf/inference1-instance.rdf";
+	static String SIMILARITY_CONCEPT = "http://dbpedia.org/ontology/Event";
+	static String DBPEDIA_SCHEMA_LOCATION = "rdf/ontology/dbpedia_3.8.owl";
+	static String GEONAMES_SCHEMA_LOCATION = "rdf/ontology/geonames_ontology_v3.1.rdf";
+	
 	
 	static XYSeries soloCentralityNdcgCR = new XYSeries("Centrality");
 	static XYSeries soloReRankNdcgCR = new XYSeries("Coherence");
@@ -59,19 +65,138 @@ public class DCGSurveyInference1Test {
 	static XYSeries soloAbstractionNdcgCR = new XYSeries("Abstraction");
 	static XYSeries soloProofTreeSubtreeWeightNdcgCR = new XYSeries("Sub Tree Weight");
 	
+	static XYSeries simCentralityNdcgCR = new XYSeries("Similarity+Centrality");
+	static XYSeries simReRankNdcgCR = new XYSeries("Similarity+Coherence");
+	static XYSeries simAbstractionNdcgCR = new XYSeries("Similarity+Abstraction");
+	static XYSeries simProofTreeSubtreeWeightNdcgCR = new XYSeries("Similarity+Sub Tree Weight");
+
 	
-	static XYSeries soloReRankFMeasureCR = new XYSeries("Coherence");
+
+	
+	
+	static XYSeries simCentralityFMeasureCR = new XYSeries("Similarity+Centrality");
+	static XYSeries simReRankFMeasureCR = new XYSeries("Similarity+Coherence");
+	static XYSeries simAbstractionFMeasureCR = new XYSeries("Similarity+Abstraction");
+	static XYSeries simProofTreeSubtreeWeightFMeasureCR = new XYSeries("Similarity+Sub Tree Weight");
+
+	
+
+	
+
+	
+
 	static XYSeries soloCentralityFMeasureCR = new XYSeries("Centrality");
+	static XYSeries soloReRankFMeasureCR = new XYSeries("Coherence");
 	static XYSeries sentenceGraphFMeasureCR = new XYSeries("Sentence Graph");
 	static XYSeries soloAbstractionFMeasureCR = new XYSeries("Abstraction");
 	static XYSeries soloProofTreeSubtreeWeightFMeasureCR = new XYSeries("Sub Tree Weight");
 
 	static XYSeries humansNdcgCR = new XYSeries("Human agreement (Avg)");
+	
 	static DefaultCategoryDataset cosineDataset = new DefaultCategoryDataset();
+	static DefaultCategoryDataset cosineConceptSimDataset = new DefaultCategoryDataset();
+	
+	
+	static double[] cr_values = {0.0, 0.05, 0.1, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 1.0};
+	
+	static List<String> instanceLocationList = new ArrayList<String>();
+	static List<String> similarityConceptList = new ArrayList<String>();
+	static List<String> ontologyLocationList = new ArrayList<String>();
 
+	
 	@BeforeClass
 	public static void init() throws IOException {
-		processorInf1.setValues(filePath);
+		surveyProcessor.setValues(filePath);
+		instanceLocationList.add(FILE_JUSTIFICATION_INSTANCE);
+		similarityConceptList.add(SIMILARITY_CONCEPT);
+		
+		
+		ontologyLocationList.add(DBPEDIA_SCHEMA_LOCATION);
+		ontologyLocationList.add(GEONAMES_SCHEMA_LOCATION);		
+	}
+	
+	@AfterClass
+	public static void drawSimilarityCharts() {
+		XYSeriesCollection dataset = new XYSeriesCollection();
+		dataset.addSeries(simCentralityNdcgCR);
+		dataset.addSeries(simReRankNdcgCR);
+		dataset.addSeries(simAbstractionNdcgCR);
+		dataset.addSeries(simProofTreeSubtreeWeightNdcgCR);
+		
+		// Generate the ndcg vs cr graph
+		JFreeChart chart = ChartFactory.createXYLineChart("nDCG vs CR",
+				// Title
+				"CR",
+				// x-axis Label
+				"nDCG",
+				// y-axis Label
+				dataset,
+				// Dataset
+				PlotOrientation.VERTICAL, // Plot Orientation
+				true,
+				// Show Legend
+				true,
+				// Use tooltips
+				false
+		// Configure chart to generate URLs?
+				);
+		
+		try {
+			ChartUtilities.saveChartAsJPEG(new File("files/evaluation/dcg/survey/inf1/sim_ndcg_v_cr.jpg"), chart,
+					500, 300);
+		} catch (IOException e) {
+			System.err.println("Problem occurred creating chart.");
+		}			
+		
+		
+		// Add the series to your data set
+		XYSeriesCollection fMeasureCRdataset = new XYSeriesCollection();
+		fMeasureCRdataset.addSeries(simCentralityFMeasureCR);
+		fMeasureCRdataset.addSeries(simReRankFMeasureCR);
+		fMeasureCRdataset.addSeries(simAbstractionFMeasureCR);
+		fMeasureCRdataset.addSeries(simProofTreeSubtreeWeightFMeasureCR);
+		
+		
+		
+		// Generate the ndcg vs cr graph
+		JFreeChart fMeasureCRchart = ChartFactory.createXYLineChart("F-Measure vs CR",
+				// Title
+				"CR",
+				// x-axis Label
+				"F-Measure",
+				// y-axis Label
+				fMeasureCRdataset,
+				// Dataset
+				PlotOrientation.VERTICAL, // Plot Orientation
+				true,
+				// Show Legend
+				true,
+				// Use tooltips
+				false
+		// Configure chart to generate URLs?
+				);
+		try {
+			ChartUtilities.saveChartAsJPEG(new File("files/evaluation/dcg/survey/inf1/sim_fmeasure_v_cr.jpg"), fMeasureCRchart,
+					500, 300);
+		} catch (IOException e) {
+			System.err.println("Problem occurred creating fmeasure v cr chart.");
+		}	
+		
+		
+		// generate cosine barchart
+		JFreeChart cosineChart = ChartFactory.createBarChart(
+				"Consine similarity between human ratings", null,
+				"Cosine similarity", cosineConceptSimDataset, PlotOrientation.VERTICAL,
+				false, true, false);
+		try {
+			ChartUtilities.saveChartAsJPEG(new File(
+					"files/evaluation/dcg/survey/inf1/sim_cosine_similarity.jpg"),
+					cosineChart, 500, 300);
+		} catch (IOException e) {
+			System.err.println("Problem occurred creating chart.");
+		}
+		
+		
 	}
 	
 	/**
@@ -84,9 +209,11 @@ public class DCGSurveyInference1Test {
 		XYSeriesCollection dataset = new XYSeriesCollection();
 		dataset.addSeries(soloCentralityNdcgCR);
 		dataset.addSeries(soloReRankNdcgCR);
-		dataset.addSeries(sentenceGraphNdcgCR);
 		dataset.addSeries(soloAbstractionNdcgCR);
 		dataset.addSeries(soloProofTreeSubtreeWeightNdcgCR);
+		dataset.addSeries(sentenceGraphNdcgCR);
+		
+		
 		
 		//dataset.addSeries(humansNdcgCR); // nDCG vs CR is a comparison against avg human opinions (avg ratings)
 		
@@ -134,10 +261,9 @@ public class DCGSurveyInference1Test {
 		XYSeriesCollection fMeasureCRdataset = new XYSeriesCollection();
 		fMeasureCRdataset.addSeries(soloCentralityFMeasureCR);
 		fMeasureCRdataset.addSeries(soloReRankFMeasureCR);
-		fMeasureCRdataset.addSeries(sentenceGraphFMeasureCR);
 		fMeasureCRdataset.addSeries(soloAbstractionFMeasureCR);
 		fMeasureCRdataset.addSeries(soloProofTreeSubtreeWeightFMeasureCR);
-		
+		fMeasureCRdataset.addSeries(sentenceGraphFMeasureCR);		
 		
 		
 		// Generate the ndcg vs cr graph
@@ -196,10 +322,11 @@ public class DCGSurveyInference1Test {
 	
 	/**
 	 * computes cosine similarities between the rating vectors of each evaluators 
+	 * (without similarity)
 	 */
 	@Test
 	public void testHumanAgreementQuestion1() {
-		List<List<RankEntry>> reList = processorInf1.getAllRankEntries(QUESTION1_NAME);
+		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION1_NAME);
 		//en.printValues();
 		
 		double totalCosine = 0.0;
@@ -236,18 +363,64 @@ public class DCGSurveyInference1Test {
 	}
 	
 	/**
+	 * computes cosine similarities between the rating vectors of each evaluators 
+	 * (with conecept similarity)
+	 */
+	@Test
+	public void testHumanAgreementQuestion2() {
+		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION2_NAME);
+		//en.printValues();
+		
+		double totalCosine = 0.0;
+		int pairCount = 0;
+		for(int i=0;i<reList.size();i++) {
+			for(int j=i+1;j<reList.size();j++) {
+				int firstIndex = i;
+				int secondIndex = j;
+				//EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+				//Collections.sort(reList.get(firstIndex),cmp);
+				
+				//Collections.sort(reList.get(secondIndex),cmp);
+				
+				//printRankEntryList(reList.get(firstIndex));
+				//printRankEntryList(reList.get(secondIndex));
+				
+				double cosineSim = CosineSimilarity.computeCosineSimilarity(reList.get(firstIndex), reList.get(secondIndex));
+				System.out.println("Cosine similarity: "+cosineSim);
+				totalCosine += cosineSim;
+				
+			
+				//printRankEntryList(reList.get(firstIndex));
+				//printRankEntryList(reList.get(secondIndex));	
+				//System.out.println();
+				pairCount++;
+				cosineConceptSimDataset.setValue(cosineSim, "Cosine similarity", String.valueOf(pairCount));
+			}
+		}
+		
+		double avgCosine = totalCosine/pairCount;
+		
+		System.out.println("Avg cosine similarity (with concept similarity):"+avgCosine);
+
+	}	
+	
+	/**
 	 * computes nDCG between each pairs of evaluators for different p values
 	 * then computes average nDCG value for each p value
 	 * 
+	 * (without similarity)
 	 * NOTE: currently not plotting, intention was to plot avarage human agreement
 	 */
 	@Test
 	public void testHumanAgreementNDCG() {
-		List<List<RankEntry>> reList = processorInf1.getAllRankEntries(QUESTION1_NAME);
+		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION1_NAME);
 		
 		int n = reList.get(0).size();
-		for(int p=P_START_VALUE;p<=n;p++) {
-			//int p = n;
+		for(int ci=0;ci<cr_values.length;ci++) {
+			
+			double cr = cr_values[ci];
+			int p = (int) (cr * n);
+			
 			double nDCGSum = 0.0;
 			int pairCount=0;
 			for(int i=0;i<reList.size();i++) {
@@ -275,7 +448,7 @@ public class DCGSurveyInference1Test {
 				}
 			}
 			double avgNDCG = nDCGSum/pairCount;
-			double cr = (double) p / (double) n;
+			//double cr = (double) p / (double) n;
 			System.out.println("Average nDCG["+p+"]:"+avgNDCG + " CR:"+cr);
 			humansNdcgCR.add(cr, avgNDCG);
 			
@@ -286,8 +459,8 @@ public class DCGSurveyInference1Test {
 	
 	@Test
 	public void testSoloCentrality() throws Exception {
-		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
-		List<KnowledgeStatement> kstmts = summarySoloCentrality(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(QUESTION1_NAME);
+		List<KnowledgeStatement> kstmts = summarySoloCentrality(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
 		List<RankEntry> sList = new ArrayList<RankEntry>();
 		System.out.println("NCG Centrality");
 		System.out.println("#####################################");
@@ -310,39 +483,46 @@ public class DCGSurveyInference1Test {
 		computeFmeasure(reList, sList, soloCentralityFMeasureCR);
 	}
 	
-//	@Test
-//	public void testFMeasureSoloCentrality() throws Exception {
-//		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
-//		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
-//		Collections.sort(reList1,cmp);
-//		//printRankEntryList(reList1);
-//		
-//		List<KnowledgeStatement> kstmts = summarySoloCentrality(FILE_JUSTIFICATION_INF1, ROOT_INF1);
-//		List<RankEntry> reList2 = new ArrayList<RankEntry>();
-//		
-//		System.out.println("F-Measure Centrality");
-//		System.out.println("#####################################");
-//		
-//		//System.out.println(reList.size()+":"+kstmts.size());
-//		for(KnowledgeStatement kst:kstmts) {
-//			String name = getStatementName(kst.getStatement().getContext().stringValue());
-//			RankEntry re = new RankEntry();
-//			re.setName(name);
-//			reList2.add(re);
-//		}
-//		
-//		//printRankEntryList(reList2);
-//		computeFmeasure(reList1, reList2, soloCentralityFMeasureCR);
-//		
-//
-//	}		
+	@Test
+	public void testSimCentrality() throws Exception {
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(QUESTION2_NAME);
+		
+		
+		//List<String> prefs = new ArrayList<String>();
+		
+		
+		List<KnowledgeStatement> kstmts = summarySimCentrality(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+		System.out.println("NCG Sim Centrality");
+		System.out.println("#####################################");
+		System.out.println("F-Measure Sim Centrality");
+		System.out.println("#####################################");		
+		
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		computeNDCGMeasure(reList, sList, simCentralityNdcgCR);
+		
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		computeFmeasure(reList, sList, simCentralityFMeasureCR);
+	}	
+
+	
+	
 	@Test
 	public void testSoloReRank() throws Exception {
-		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(QUESTION1_NAME);
 		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
 		Collections.sort(reList,cmp);
 		
-		List<KnowledgeStatement> kstmts = summarySoloReRank(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+		List<KnowledgeStatement> kstmts = summarySoloReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
 		List<RankEntry> sList = new ArrayList<RankEntry>();
 		
 		
@@ -365,33 +545,35 @@ public class DCGSurveyInference1Test {
 		computeFmeasure(reList, sList, soloReRankFMeasureCR);
 	}
 	
-//	@Test
-//	public void testFMeasureSoloReRank() throws Exception {
-//		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
-//		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
-//		Collections.sort(reList1,cmp);
-//		//printRankEntryList(reList1);
-//		
-//		List<KnowledgeStatement> kstmts = summarySoloReRank(FILE_JUSTIFICATION_INF1, ROOT_INF1);
-//		List<RankEntry> reList2 = new ArrayList<RankEntry>();
-//		
-//		System.out.println("F-Measure ReRank");
-//		System.out.println("#####################################");
-//		
-//		//System.out.println(reList.size()+":"+kstmts.size());
-//		for(KnowledgeStatement kst:kstmts) {
-//			String name = getStatementName(kst.getStatement().getContext().stringValue());
-//			RankEntry re = new RankEntry();
-//			re.setName(name);
-//			reList2.add(re);
-//		}
-//		
-//		//printRankEntryList(reList2);
-//		computeFmeasure(reList1, reList2, soloReRankFMeasureCR);
-//		
-//
-//	}
-//	
+	
+	@Test
+	public void testSimReRank() throws Exception {
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(QUESTION2_NAME);
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);
+		
+		List<KnowledgeStatement> kstmts = summarySimReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT,similarityConceptList,ontologyLocationList,instanceLocationList);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+		
+		
+		System.out.println("NCG Sim ReRank");
+		System.out.println("#####################################");		
+		System.out.println("F-Measure Sim ReRank");
+		System.out.println("#####################################");
+
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		computeNDCGMeasure(reList, sList, simReRankNdcgCR);
+		
+		computeFmeasure(reList, sList, simReRankFMeasureCR);
+	}	
 	
 
 	
@@ -403,9 +585,9 @@ public class DCGSurveyInference1Test {
 		System.out.println("NCG Sentence Graph");
 		System.out.println("#####################################");
 		
-		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
+		List<RankEntry> reList1 = surveyProcessor.getAvgRankEntities(QUESTION1_NAME);
 		
-		List<RankEntry> reList2 = summarySentenceGraph(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+		List<RankEntry> reList2 = summarySentenceGraph(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
 
 		computeNDCGMeasure(reList1, reList2, sentenceGraphNdcgCR);	
 		
@@ -420,22 +602,14 @@ public class DCGSurveyInference1Test {
 	}
 	
 	
-//	@Test
-//	public void testSentenceGraph() throws Exception {
-//		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
-//		List<RankEntry> sList = summarySentenceGraph(FILE_JUSTIFICATION_INF1, ROOT_INF1);
-//		System.out.println("NCG Sentence Graph");
-//		System.out.println("#####################################");
-//		computeNDCGMeasure(reList, sList, sentenceGraphNdcgCR);
-//		
-//
-//	}
-	
 	public void computeNDCGMeasure(List<RankEntry> reList, List<RankEntry> sList, XYSeries series) {
 		
-		for(int p=P_START_VALUE;p<=reList.size();p++) {
+		int n = reList.size();
+		for(int ci=0;ci<cr_values.length;ci++) {
+			double cr = cr_values[ci];
+			int p = (int) (cr * n);
 			double d = DCGMeasure.computeNDCG(reList, sList, p);
-			double cr = (double) p / (double) reList.size();
+			//double cr = (double) p / (double) reList.size();
 			System.out.println("NCG["+p+"]:"+d+ " CR:"+cr);
 			series.add(cr,d);
 			
@@ -482,7 +656,10 @@ public class DCGSurveyInference1Test {
 	}	
 	public Map<Double, Double> computeFmeasure(List<RankEntry> groundTruthList, List<RankEntry> summaryToCompareList, XYSeries series) {
 		Map<Double, Double> res = new HashMap<Double, Double>();
-		for(int p=P_START_VALUE;p<=groundTruthList.size();p++) {
+		int n = groundTruthList.size();
+		for(int ci=0;ci<cr_values.length;ci++) {
+			double cr = cr_values[ci];
+			int p = (int) (cr * n);
 			//System.out.println("Ground truth");
 			List<String> groundTruth = getSummaryOfSizeP(groundTruthList, p);
 			//System.out.println("Summary");
@@ -495,7 +672,7 @@ public class DCGSurveyInference1Test {
 				f_measure = 0.0;
 				//System.out.println("*********************************");
 			}
-			double cr = (double) p / (double) groundTruthList.size();
+			//double cr = (double) p / (double) groundTruthList.size();
 			//System.out.println("Precision:"+precision);
 			//System.out.println("Recall:"+recall);
 			System.out.println("F:"+f_measure+" CR:"+cr+" p:"+p);
@@ -551,6 +728,59 @@ public class DCGSurveyInference1Test {
 		return stmts;
 	}
 	
+	public List<KnowledgeStatement> summarySimCentrality(String justificationFile, String rootStmtId, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
+		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
+		JustificationProcessor jp = new JustificationProcessor();
+		jp.parseJustificationFile(justificationFile,"http://www.example.com/" );
+		//List<KnowledgeStatement> kStmts = jp.summarizeJustificationKnowledgeStatements("http://alphubel.unice.fr:8080/lodutil/data/d21");
+		List<KnowledgeStatement> kStmts = jp.summarizeJustificationKnowledgeStatements(rootStmtId,prefs, ontologyLocations, instanceLocations);
+		//int p = (int) (cr*kStmts.size());
+		
+		for(int i=0;i<kStmts.size();i++) {
+			
+
+			
+			KnowledgeStatement kst = kStmts.get(i);
+			String stmtId = kst.getStatement().getContext().stringValue();
+			if(stmtId.equals(rootStmtId)) continue;
+			
+			//System.out.println("Statement:"+kst.getStatement().toString());
+			//System.out.println("Score:"+kst.getScore());
+			//System.out.println(kst.getStatement().getContext().stringValue()+" "+i);
+			
+			
+			stmts.add(kst);
+		}
+
+		return stmts;
+	}
+	
+	public List<KnowledgeStatement> summarySimReRank(String justificationFile, String rootStmtId, List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
+		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
+		JustificationProcessor jp = new JustificationProcessor();
+		jp.parseJustificationFile(justificationFile,"http://www.example.com/" );
+		//List<KnowledgeStatement> kStmts = jp.summarizeJustificationKnowledgeStatements("http://alphubel.unice.fr:8080/lodutil/data/d21");
+		List<KnowledgeStatement> kStmts = jp.summarizeJustificationKnowledgeStatementsRerank(rootStmtId,prefs,ontologyLocations,instanceLocations);
+		//int p = (int) (cr*kStmts.size());
+		
+		for(int i=0;i<kStmts.size();i++) {
+			
+
+			KnowledgeStatement kst = kStmts.get(i);
+			String stmtId = kst.getStatement().getContext().stringValue();
+			if(stmtId.equals(rootStmtId)) continue;
+			
+			//System.out.println("Statement:"+kst.getStatement().toString());
+			//System.out.println("Score:"+kst.getScore());
+			//System.out.println(kst.getStatement().getContext().stringValue()+" "+i);
+			
+			
+			stmts.add(kst);
+		}
+
+		return stmts;
+	}	
+	
 	
 	public List<KnowledgeStatement> summarySoloReRank(String justificationFile, String rootStmtId) throws Exception {
 		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
@@ -586,8 +816,8 @@ public class DCGSurveyInference1Test {
 		System.out.println("#####################################");			
 		System.out.println("F-Measure Proof Tree Abrstraction");
 		System.out.println("#####################################");		
-		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
-		List<KnowledgeStatement> kstmts = summaryByProofTreeAbstraction(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(QUESTION1_NAME);
+		List<KnowledgeStatement> kstmts = summaryByProofTreeAbstraction(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
 		List<RankEntry> sList = new ArrayList<RankEntry>();
 	
 		//System.out.println(reList.size()+":"+kstmts.size());
@@ -607,33 +837,34 @@ public class DCGSurveyInference1Test {
 		computeFmeasure(reList, sList, soloAbstractionFMeasureCR);
 	}
 	
-//	@Test
-//	public void testFMeasureSoloProofTreeAbstraction() throws Exception {
-//		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
-//		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
-//		Collections.sort(reList1,cmp);
-//		//printRankEntryList(reList1);
-//		
-//		List<KnowledgeStatement> kstmts = summaryByProofTreeAbstraction(FILE_JUSTIFICATION_INF1, ROOT_INF1);
-//		List<RankEntry> reList2 = new ArrayList<RankEntry>();
-//		
-//		System.out.println("F-Measure Proof Tree Abrstraction");
-//		System.out.println("#####################################");
-//		
-//		//System.out.println(reList.size()+":"+kstmts.size());
-//		for(KnowledgeStatement kst:kstmts) {
-//			String name = getStatementName(kst.getStatement().getContext().stringValue());
-//			RankEntry re = new RankEntry();
-//			re.setName(name);
-//			reList2.add(re);
-//		}
-//		
-//		//printRankEntryList(reList2);
-//		computeFmeasure(reList1, reList2, soloAbstractionFMeasureCR);
-//		
-//
-//	}	
-//
+	@Test
+	public void testSimProofTreeAbstraction() throws Exception {
+		
+		System.out.println("NCG Proof Tree Abrstraction with concept similarity");
+		System.out.println("#####################################");			
+		System.out.println("F-Measure Proof Tree Abrstraction with concept similarity");
+		System.out.println("#####################################");		
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(QUESTION2_NAME);
+		List<KnowledgeStatement> kstmts = summaryByProofTreeAbstractionWithSimilarity(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+	
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		computeNDCGMeasure(reList, sList, simAbstractionNdcgCR);	
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		
+		computeFmeasure(reList, sList, simAbstractionFMeasureCR);
+	}
 
 	
 	@Test
@@ -645,8 +876,8 @@ public class DCGSurveyInference1Test {
 		System.out.println("F-Measure Proof Tree sub tree weight");
 		System.out.println("#####################################");		
 		
-		List<RankEntry> reList = processorInf1.getAvgRankEntities(QUESTION1_NAME);
-		List<KnowledgeStatement> kstmts = summaryByProofTreeSubtreeWeight(FILE_JUSTIFICATION_INF1, ROOT_INF1);
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(QUESTION1_NAME);
+		List<KnowledgeStatement> kstmts = summaryByProofTreeSubtreeWeight(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
 		List<RankEntry> sList = new ArrayList<RankEntry>();
 		//System.out.println(reList.size()+":"+kstmts.size());
 		for(KnowledgeStatement kst:kstmts) {
@@ -664,32 +895,35 @@ public class DCGSurveyInference1Test {
 		computeFmeasure(reList, sList, soloProofTreeSubtreeWeightFMeasureCR);
 	}
 	
-//	@Test
-//	public void testFMeasureSoloProofTreeSubtreeWeight() throws Exception {
-//		List<RankEntry> reList1 = processorInf1.getAvgRankEntities(QUESTION1_NAME);
-//		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
-//		Collections.sort(reList1,cmp);
-//		//printRankEntryList(reList1);
-//		
-//		List<KnowledgeStatement> kstmts = summaryByProofTreeSubtreeWeight(FILE_JUSTIFICATION_INF1, ROOT_INF1);
-//		List<RankEntry> reList2 = new ArrayList<RankEntry>();
-//		
-//		System.out.println("F-Measure Proof Tree sub tree weight");
-//		System.out.println("#####################################");
-//		
-//		//System.out.println(reList.size()+":"+kstmts.size());
-//		for(KnowledgeStatement kst:kstmts) {
-//			String name = getStatementName(kst.getStatement().getContext().stringValue());
-//			RankEntry re = new RankEntry();
-//			re.setName(name);
-//			reList2.add(re);
-//		}
-//		
-//		//printRankEntryList(reList2);
-//		computeFmeasure(reList1, reList2, soloProofTreeSubtreeWeightFMeasureCR);
-//		
-//
-//	}		
+	
+	@Test
+	public void testSimProofTreeSubtreeWeight() throws Exception {
+		
+		System.out.println("NCG Proof Tree sub tree weight with similarity");
+		System.out.println("#####################################");		
+		
+		System.out.println("F-Measure Proof Tree sub tree weight with similarity");
+		System.out.println("#####################################");		
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(QUESTION2_NAME);
+		List<KnowledgeStatement> kstmts = summaryByProofTreeSubtreeWeightWithSimilarity(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		computeNDCGMeasure(reList, sList, simProofTreeSubtreeWeightNdcgCR);		
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);
+		computeFmeasure(reList, sList, simProofTreeSubtreeWeightFMeasureCR);
+	}	
+	
 	
 	public List<KnowledgeStatement> summaryByProofTreeSubtreeWeight(String justificationFile, String rootStmtId) throws Exception {
 		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
@@ -712,6 +946,30 @@ public class DCGSurveyInference1Test {
 		}	
 		return stmts;
 	}
+	
+	public List<KnowledgeStatement> summaryByProofTreeSubtreeWeightWithSimilarity(String justificationFile, String rootStmtId,
+			List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
+		
+		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
+		JustificationProcessor jp = new JustificationProcessor();
+		jp.parseJustificationFile(justificationFile,"http://www.example.com/" );
+		List<KnowledgeStatement> kStmts = jp.summarizeByProofTreeSubtreeWeight(true, rootStmtId, prefs, ontologyLocations, instanceLocations);
+		
+		for(int i=0;i<kStmts.size();i++) {
+			
+			KnowledgeStatement kst = kStmts.get(i);
+			String stmtId = kst.getStatement().getContext().stringValue();
+			if(stmtId.equals(rootStmtId)) continue;
+			
+			//System.out.println("Statement:"+kst.getStatement().toString());
+			//System.out.println("Score:"+kst.getScore());
+			//System.out.println(kst.getStatement().getContext().stringValue()+" "+i);
+			
+			
+			stmts.add(kst);
+		}	
+		return stmts;
+	}	
 		
 	
 	public List<KnowledgeStatement> summaryByProofTreeAbstraction(String justificationFile, String rootStmtId) throws Exception {
@@ -736,7 +994,30 @@ public class DCGSurveyInference1Test {
 		return stmts;
 	}
 	
-
+	public List<KnowledgeStatement> summaryByProofTreeAbstractionWithSimilarity(String justificationFile, String rootStmtId,
+			List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
+		
+		
+		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
+		JustificationProcessor jp = new JustificationProcessor();
+		jp.parseJustificationFile(justificationFile,"http://www.example.com/" );
+		List<KnowledgeStatement> kStmts = jp.summarizeByProofTreeAbstraction(true, rootStmtId, prefs, ontologyLocations, instanceLocations);
+		
+		for(int i=0;i<kStmts.size();i++) {
+			
+			KnowledgeStatement kst = kStmts.get(i);
+			String stmtId = kst.getStatement().getContext().stringValue();
+			if(stmtId.equals(rootStmtId)) continue;
+			
+			//System.out.println("Statement:"+kst.getStatement().toString());
+			//System.out.println("Score:"+kst.getScore());
+			//System.out.println(kst.getStatement().getContext().stringValue()+" "+i);
+			
+			
+			stmts.add(kst);
+		}	
+		return stmts;
+	}
 	
 
 	class EntryJudgmentDscCmp implements Comparator<RankEntry> {

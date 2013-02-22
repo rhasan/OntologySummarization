@@ -85,7 +85,8 @@ public class DCGMeasure {
 	 * @return
 	 */
 	public static double computeDCG(List<RankEntry> list, int p) {
-		assert(p>=1);
+		if(p==0) return 0;
+		//assert(p>=1);
 		
 		double dcg = list.get(0).getJudgmentScore();
 		

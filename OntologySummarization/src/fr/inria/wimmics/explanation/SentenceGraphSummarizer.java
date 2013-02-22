@@ -307,8 +307,10 @@ public class SentenceGraphSummarizer {
 	        	if(o1.getSentence().statements.size() < o2.getSentence().statements.size()) return -1;
 	        	//return o1.getSentence().getMainStmt().toString().compareTo( o2.getSentence().getMainStmt().toString());
 	        	//return o1.getSentence().getStatements().toString().compareTo(o2.getSentence().getStatements().toString());
-	        	return o1.getSentence().getStatements().toString().length() - o2.getSentence().getStatements().toString().length();
-	        	//return 0;
+	        	//return o1.getSentence().getStatements().toString().length() - o2.getSentence().getStatements().toString().length();
+
+	        	
+	        	return o2.hashCode() - o1.hashCode();
 	        	
 	        	//return o1.getSentence().statements.size()-o2.getSentence().statements.size();
 	        	//return 0;
@@ -377,7 +379,8 @@ public class SentenceGraphSummarizer {
 	        	if(o1.getSentence().statements.size() > o2.getSentence().statements.size()) return 1;
 	        	if(o1.getSentence().statements.size() < o2.getSentence().statements.size()) return -1;
 	        	//return o1.getSentence().getMainStmt().toString().compareTo( o2.getSentence().getMainStmt().toString());
-	        	return o1.getSentence().getStatements().toString().length() - o2.getSentence().getStatements().toString().length();
+	        	//return o1.getSentence().getStatements().toString().length() - o2.getSentence().getStatements().toString().length();
+	        	return o2.hashCode() - o1.hashCode();
 	        }
 	    });
 		
