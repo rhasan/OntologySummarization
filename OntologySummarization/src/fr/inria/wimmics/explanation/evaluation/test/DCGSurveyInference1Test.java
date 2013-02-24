@@ -39,6 +39,7 @@ import fr.inria.wimmics.explanation.evaluation.PrecisionRecall;
 import fr.inria.wimmics.explanation.evaluation.PrecisionRecallCalculator;
 
 import fr.inria.wimmics.explanation.evaluation.RankEntry;
+import fr.inria.wimmics.util.Statistics;
 
 
 public class DCGSurveyInference1Test {
@@ -328,7 +329,7 @@ public class DCGSurveyInference1Test {
 	public void testHumanAgreementQuestion1() {
 		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION1_NAME);
 		//en.printValues();
-		
+		List<Double> cosineSimValues = new ArrayList<Double>();
 		double totalCosine = 0.0;
 		int pairCount = 0;
 		for(int i=0;i<reList.size();i++) {
@@ -344,9 +345,9 @@ public class DCGSurveyInference1Test {
 				//printRankEntryList(reList.get(secondIndex));
 				
 				double cosineSim = CosineSimilarity.computeCosineSimilarity(reList.get(firstIndex), reList.get(secondIndex));
-				System.out.println("Cosine similarity: "+cosineSim);
+				//System.out.println("Cosine similarity: "+cosineSim);
 				totalCosine += cosineSim;
-				
+				cosineSimValues.add(cosineSim);
 			
 				//printRankEntryList(reList.get(firstIndex));
 				//printRankEntryList(reList.get(secondIndex));	
@@ -358,7 +359,11 @@ public class DCGSurveyInference1Test {
 		
 		double avgCosine = totalCosine/pairCount;
 		
+		
+		double stdDev = Statistics.standardDeviation(avgCosine, cosineSimValues);
+		
 		System.out.println("Avg cosine similarity:"+avgCosine);
+		System.out.println("Std dev:"+stdDev);
 
 	}
 	
@@ -370,7 +375,7 @@ public class DCGSurveyInference1Test {
 	public void testHumanAgreementQuestion2() {
 		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION2_NAME);
 		//en.printValues();
-		
+		List<Double> cosineSimValues = new ArrayList<Double>();
 		double totalCosine = 0.0;
 		int pairCount = 0;
 		for(int i=0;i<reList.size();i++) {
@@ -386,8 +391,9 @@ public class DCGSurveyInference1Test {
 				//printRankEntryList(reList.get(secondIndex));
 				
 				double cosineSim = CosineSimilarity.computeCosineSimilarity(reList.get(firstIndex), reList.get(secondIndex));
-				System.out.println("Cosine similarity: "+cosineSim);
+				//System.out.println("Cosine similarity: "+cosineSim);
 				totalCosine += cosineSim;
+				cosineSimValues.add(cosineSim);
 				
 			
 				//printRankEntryList(reList.get(firstIndex));
@@ -399,8 +405,11 @@ public class DCGSurveyInference1Test {
 		}
 		
 		double avgCosine = totalCosine/pairCount;
+		double stdDev = Statistics.standardDeviation(avgCosine, cosineSimValues);
 		
 		System.out.println("Avg cosine similarity (with concept similarity):"+avgCosine);
+		System.out.println("Std dev (with concept similarity):"+stdDev);
+		
 
 	}	
 	

@@ -129,6 +129,8 @@ public class DCGMeasure {
 		double dcg = computeDCG(list, p);
 		double idcg = computeIDCG(list, p);
 		
+		if(idcg==0.0) return 0.0;
+		
 		double ndcg = dcg/idcg;
 		
 		return ndcg;
