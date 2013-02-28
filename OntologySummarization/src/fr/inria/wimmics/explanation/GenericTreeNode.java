@@ -25,6 +25,7 @@ public class GenericTreeNode<Item> {
 		degreeCentrality = 0.0;
 		similarityScore = 0.0;
 		reRankScore = 0.0;
+		combinedScore = 0.0;
 		
 	}
 	

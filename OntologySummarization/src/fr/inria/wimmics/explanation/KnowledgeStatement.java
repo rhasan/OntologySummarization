@@ -8,7 +8,7 @@ public class KnowledgeStatement {
 	private double similarityScore;
 	private double score;
 	private double reRankedScore; //this one also includes centrality score
-	private double proofTreeLevelScore;
+	private double proofTreeLevelScore; //abstraction score
 	private double subTreeWeight;
 	
 	public void setSubTreeWeight(double subTreeWeight) {
