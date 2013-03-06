@@ -40,6 +40,7 @@ import fr.inria.wimmics.explanation.evaluation.PrecisionRecallCalculator;
 
 import fr.inria.wimmics.explanation.evaluation.RankEntry;
 import fr.inria.wimmics.util.Statistics;
+import fr.inria.wimmics.util.Util;
 
 
 public class DCGSurveyInference1Test {
@@ -361,55 +362,91 @@ public class DCGSurveyInference1Test {
 	/**
 	 * computes cosine similarities between the rating vectors of each evaluators 
 	 * (without similarity)
+	 * @throws Exception 
 	 */
 	@Test
-	public void testHumanAgreementQuestion1() {
+	public void testHumanAgreementQuestion1() throws Exception {
 		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION1_NAME);
 		//en.printValues();
-		List<Double> cosineSimValues = new ArrayList<Double>();
-		double totalCosine = 0.0;
-		int pairCount = 0;
+		//List<Double> cosineSimValues = new ArrayList<Double>();
+		//double totalCosine = 0.0;
+		//int pairCount = 0;
+		
+		double cosSimSum = 0;
+		double totalValueCount = 0;
 		for(int i=0;i<reList.size();i++) {
-			for(int j=i+1;j<reList.size();j++) {
-				int firstIndex = i;
-				int secondIndex = j;
-				//EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
-				//Collections.sort(reList.get(firstIndex),cmp);
+			List<Double> iCosineSimValues = new ArrayList<Double>();
+			double iCosSimSum = 0;
+			int iPairCount = 0;
+			for(int j=0;j<reList.size();j++) {
 				
-				//Collections.sort(reList.get(secondIndex),cmp);
-				
-				//printRankEntryList(reList.get(firstIndex));
-				//printRankEntryList(reList.get(secondIndex));
-				
-				double cosineSim = CosineSimilarity.computeCosineSimilarity(reList.get(firstIndex), reList.get(secondIndex));
-				//System.out.println("Cosine similarity: "+cosineSim);
-				totalCosine += cosineSim;
-				cosineSimValues.add(cosineSim);
-			
-				//printRankEntryList(reList.get(firstIndex));
-				//printRankEntryList(reList.get(secondIndex));	
-				//System.out.println();
-				pairCount++;
-				cosineDataset.setValue(cosineSim, "Cosine similarity", String.valueOf(pairCount));
+				if(i!=j) {
+					double cosineSim = CosineSimilarity.computeCosineSimilarity(reList.get(i), reList.get(j));
+					iCosSimSum += cosineSim;
+					iPairCount++;
+					
+					cosSimSum += cosineSim;
+					totalValueCount++;
+					iCosineSimValues.add(cosineSim);
+				}
 			}
+			double iAvgAgreement = iCosSimSum/iPairCount;
+			System.out.println("P_{"+(i+1)+"} agv:"+Util.round(iAvgAgreement));
+			//double iStdDev = Statistics.standardDeviation(iAvgAgreement, iCosineSimValues);
+			//System.out.println("P_{"+(i+1)+"} agv:"+iAvgAgreement + " StdDev:"+iStdDev);
+			
+//			
+//			for(int j=i+1;j<reList.size();j++) {
+//				int firstIndex = i;
+//				int secondIndex = j;
+//				//EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+//				//Collections.sort(reList.get(firstIndex),cmp);
+//				
+//				//Collections.sort(reList.get(secondIndex),cmp);
+//				
+//				//printRankEntryList(reList.get(firstIndex));
+//				//printRankEntryList(reList.get(secondIndex));
+//				
+//				double cosineSim = CosineSimilarity.computeCosineSimilarity(reList.get(firstIndex), reList.get(secondIndex));
+//				//System.out.println("Cosine similarity: "+cosineSim);
+//				
+//				totalCosine += cosineSim;
+//				cosineSimValues.add(cosineSim);
+//			
+//				//printRankEntryList(reList.get(firstIndex));
+//				//printRankEntryList(reList.get(secondIndex));	
+//				//System.out.println();
+//				pairCount++;
+//				cosineDataset.setValue(cosineSim, "Cosine similarity", String.valueOf(pairCount));
+//			}
 		}
 		
-		double avgCosine = totalCosine/pairCount;
+//		double avgCosine = totalCosine/pairCount;
+//		
+//		
+//		double stdDev = Statistics.standardDeviation(avgCosine, cosineSimValues);
+//		
+//		System.out.println("Avg cosine similarity:"+avgCosine);
+//		System.out.println("Std dev:"+stdDev);
+		
+		double totalAvgCosine = cosSimSum/totalValueCount;
+				
+		//double stdDev = Statistics.standardDeviation(avgCosine, cosineSimValues);
+		
+		System.out.println("Avg cosine similarity (new):"+Util.round(totalAvgCosine));
+		//System.out.println("Std dev:"+stdDev);
 		
 		
-		double stdDev = Statistics.standardDeviation(avgCosine, cosineSimValues);
-		
-		System.out.println("Avg cosine similarity:"+avgCosine);
-		System.out.println("Std dev:"+stdDev);
 
 	}
 	
 	/**
 	 * computes cosine similarities between the rating vectors of each evaluators 
 	 * (with conecept similarity)
+	 * @throws Exception 
 	 */
 	@Test
-	public void testHumanAgreementQuestion2() {
+	public void testHumanAgreementQuestion2() throws Exception {
 		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION2_NAME);
 		//en.printValues();
 		List<Double> cosineSimValues = new ArrayList<Double>();

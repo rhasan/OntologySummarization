@@ -5,18 +5,24 @@ import java.util.List;
 public class CosineSimilarity {
 
 
-	public static double computeCosineSimilarity(List<RankEntry> a, List<RankEntry> b) {
+	public static double computeCosineSimilarity(List<RankEntry> a, List<RankEntry> b) throws Exception {
 		
 		double[] vecA = new double[a.size()];
 		double[] vecB = new double[b.size()];
 		
-		
+		//System.out.println("Vector A:");
 		for(int i=0;i<a.size();i++) {
+			if(a.get(i).getName().equals(b.get(i).getName())==false) {
+				throw new Exception("Vectors don't have same orders");
+			}
 			vecA[i] = a.get(i).getJudgmentScore();
+			//System.out.println(a.get(i).getName());
 		}
 		
+		//System.out.println("Vector B:");
 		for(int i=0;i<b.size();i++) {
 			vecB[i] = b.get(i).getJudgmentScore();
+			//System.out.println(b.get(i).getName());
 		}
 		
 		
