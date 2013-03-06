@@ -23,8 +23,20 @@ public class DCGSurveyEntryProcessor {
 	public static String RDF_KNOWLEDGE_HEADER = "q-rdf-knowledge";
 	public static String AGE_HEADER = "q-age";
 	public static String GENDER_HEADER = "q-gender";
+	List<String[]> allOriginalValues = null;
+	
+	int qSpecialisationIndex = -1;
+	int qSpecialisationOtherIndex = -1;
+	int rdfKnowledgeIndex = -1;
+	int genderHeaderIndex = -1;
+	int ageHeaderIndex = -1;
+	
 	
 	Map<String,Integer> specialisation = new HashMap<String,Integer>();
+	Map<String,Integer> rdfKnowledge = new HashMap<String,Integer>();
+	Map<String,Integer> gender = new HashMap<String,Integer>();
+	Map<String,Integer> age = new HashMap<String,Integer>();
+
 	Map<String, Map<String, Double> > avgRatings = new HashMap<String, Map<String, Double>>();
 	
 	List<DCGSurveyEntry> surveyEntries = new ArrayList<DCGSurveyEntry>();
@@ -56,9 +68,31 @@ public class DCGSurveyEntryProcessor {
 	
 	public void printValues() {
 		//print participant profile
+		System.out.println("Counts:");
+		System.out.println("Specialisation:");
+
+
 		for(Entry<String, Integer> en:specialisation.entrySet()) {
-			System.out.println(en.getKey()+":"+en.getValue());
+			System.out.println(en.getKey()+"\t"+en.getValue());
 		}
+		System.out.println("RDF Knowledge:");
+		for(Entry<String, Integer> en:rdfKnowledge.entrySet()) {
+			System.out.println(en.getKey()+"\t"+en.getValue());
+		}
+		System.out.println("Gender:");
+		for(Entry<String, Integer> en:gender.entrySet()) {
+			System.out.println(en.getKey()+"\t"+en.getValue());
+		}
+		System.out.println("Age:");
+		for(Entry<String, Integer> en:age.entrySet()) {
+			System.out.println(en.getKey()+"\t"+en.getValue());
+		}
+		System.out.println("All Age:");
+		List<String[]> valuesWoHeaders = allOriginalValues.subList(1, allOriginalValues.size());
+		for(String[] entries:valuesWoHeaders) {
+			System.out.println(entries[ageHeaderIndex]);
+		}		
+		
 	}
 	
 	public QuestionHeader getStatementName(String line) {
@@ -88,12 +122,12 @@ public class DCGSurveyEntryProcessor {
 	      }		
 	}
 	public void setValues(String filePath) throws IOException {
-		List<String[]> originalValues = readCSV(filePath);
+		allOriginalValues = readCSV(filePath);
 		
-		assert(originalValues.size()>1);
+		assert(allOriginalValues.size()>1);
 		
-		String[] headers = originalValues.get(0);
-		List<String[]> values = originalValues.subList(1, originalValues.size());
+		String[] headers = allOriginalValues.get(0);
+		List<String[]> values = allOriginalValues.subList(1, allOriginalValues.size());
 				
 		//header index
 		
@@ -104,8 +138,12 @@ public class DCGSurveyEntryProcessor {
 		}
 		
 		//set specialisation values
-		int qSpecialisationIndex = headerIndex.get(SPECIALISATION_HEADER);
-		int qSpecialisationOtherIndex = headerIndex.get(OTHER_SPECIALISATION_HEADER);
+		qSpecialisationIndex = headerIndex.get(SPECIALISATION_HEADER);
+		qSpecialisationOtherIndex = headerIndex.get(OTHER_SPECIALISATION_HEADER);
+		rdfKnowledgeIndex = headerIndex.get(RDF_KNOWLEDGE_HEADER);
+		genderHeaderIndex = headerIndex.get(GENDER_HEADER);
+		ageHeaderIndex = headerIndex.get(AGE_HEADER);
+		
 		
 		for(String[] entries:values) {
 
@@ -127,6 +165,14 @@ public class DCGSurveyEntryProcessor {
 			spCount++;
 			
 			specialisation.put(specialisationStr, spCount);
+			
+			
+		
+			putInCountHashMap(entries[rdfKnowledgeIndex], rdfKnowledge);
+			putInCountHashMap(entries[genderHeaderIndex], gender);
+			putInCountHashMap(entries[ageHeaderIndex], age);
+			
+			
 		}
 		
 		
@@ -264,5 +310,17 @@ public class DCGSurveyEntryProcessor {
 	}
 	private boolean isQuestionHeader(String header) {
 		return (header.matches(QUESTION_REGEX) && header.equals(EXCLUDE_HEADER)==false);
+	}
+	
+	private void putInCountHashMap(String key, Map<String,Integer> hashMap) {
+		int count = 0;
+
+		if(hashMap.containsKey(key)) {
+			count = hashMap.get(key);
+		}
+		count++;
+		
+		hashMap.put(key, count);
+		
 	}
 }

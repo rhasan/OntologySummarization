@@ -335,6 +335,13 @@ public class DCGSurveyInference1Test {
 		//en.printValues();
 	}
 	
+	@Test 
+	public void printParticipantProfiles() {
+		
+		System.out.println("Profile information:");
+		surveyProcessor.printValues();
+	}
+	
 	/**
 	 * prints a {@link List} of {@link RankEntry}
 	 * @param rl

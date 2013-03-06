@@ -204,8 +204,8 @@ public class SentenceGraphSummarizer {
 
 	    	statements.addAll(sent.getSentence().getStatements());
 
-	    	System.out.println(sent.getSentence().getStatements().toString());
-			System.out.println("Re-rank score:"+sent.getReRankScore());
+	    	//System.out.println(sent.getSentence().getStatements().toString());
+			//System.out.println("Re-rank score:"+sent.getReRankScore());
 	    
 	    }
 		
