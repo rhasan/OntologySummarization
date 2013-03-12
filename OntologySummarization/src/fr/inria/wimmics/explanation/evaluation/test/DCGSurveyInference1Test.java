@@ -106,8 +106,9 @@ public class DCGSurveyInference1Test {
 	static List<String> ontologyLocationList = new ArrayList<String>();
 	
 	
-	static double AVG_GROUND_TRUTH_RATING_Q1 = 0.0;
-	static double AVG_GROUND_TRUTH_RATING_Q2 = 0.0;
+	//uncomment initialization method calls in init() if the ground truth summary should be with the statements greater than avg rating 
+	static double AVG_GROUND_TRUTH_RATING_Q1 = 6.0;
+	static double AVG_GROUND_TRUTH_RATING_Q2 = 6.0;
 			
 	
 	@BeforeClass
@@ -120,8 +121,9 @@ public class DCGSurveyInference1Test {
 		ontologyLocationList.add(DBPEDIA_SCHEMA_LOCATION);
 		ontologyLocationList.add(GEONAMES_SCHEMA_LOCATION);		
 		
-		AVG_GROUND_TRUTH_RATING_Q1 = avgGroundTruthRating(QUESTION1_NAME);
-		AVG_GROUND_TRUTH_RATING_Q2 = avgGroundTruthRating(QUESTION2_NAME);
+		//uncomment these lines if the ground truth summary should be with the statements greater than avg rating 
+		//AVG_GROUND_TRUTH_RATING_Q1 = avgGroundTruthRating(QUESTION1_NAME);
+		//AVG_GROUND_TRUTH_RATING_Q2 = avgGroundTruthRating(QUESTION2_NAME);
 	}
 	
 	public static double getAvgGroundTruthRating(String questionName) {
@@ -191,11 +193,11 @@ public class DCGSurveyInference1Test {
 		
 		
 		// Generate the ndcg vs cr graph
-		JFreeChart fMeasureCRchart = ChartFactory.createXYLineChart("F-Measure vs CR",
+		JFreeChart fMeasureCRchart = ChartFactory.createXYLineChart("F-Score vs CR",
 				// Title
 				"CR",
 				// x-axis Label
-				"F-Measure",
+				"F-Score",
 				// y-axis Label
 				fMeasureCRdataset,
 				// Dataset
@@ -299,11 +301,11 @@ public class DCGSurveyInference1Test {
 		
 		
 		// Generate the ndcg vs cr graph
-		JFreeChart fMeasureCRchart = ChartFactory.createXYLineChart("F-Measure vs CR",
+		JFreeChart fMeasureCRchart = ChartFactory.createXYLineChart("F-Score vs CR",
 				// Title
 				"CR",
 				// x-axis Label
-				"F-Measure",
+				"F-Score",
 				// y-axis Label
 				fMeasureCRdataset,
 				// Dataset
@@ -448,44 +450,81 @@ public class DCGSurveyInference1Test {
 	@Test
 	public void testHumanAgreementQuestion2() throws Exception {
 		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION2_NAME);
-		//en.printValues();
-		List<Double> cosineSimValues = new ArrayList<Double>();
-		double totalCosine = 0.0;
-		int pairCount = 0;
+
+		
+		double cosSimSum = 0;
+		double totalValueCount = 0;
 		for(int i=0;i<reList.size();i++) {
-			for(int j=i+1;j<reList.size();j++) {
-				int firstIndex = i;
-				int secondIndex = j;
-				//EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
-				//Collections.sort(reList.get(firstIndex),cmp);
+			List<Double> iCosineSimValues = new ArrayList<Double>();
+			double iCosSimSum = 0;
+			int iPairCount = 0;
+			for(int j=0;j<reList.size();j++) {
 				
-				//Collections.sort(reList.get(secondIndex),cmp);
-				
-				//printRankEntryList(reList.get(firstIndex));
-				//printRankEntryList(reList.get(secondIndex));
-				
-				double cosineSim = CosineSimilarity.computeCosineSimilarity(reList.get(firstIndex), reList.get(secondIndex));
-				//System.out.println("Cosine similarity: "+cosineSim);
-				totalCosine += cosineSim;
-				cosineSimValues.add(cosineSim);
-				
-			
-				//printRankEntryList(reList.get(firstIndex));
-				//printRankEntryList(reList.get(secondIndex));	
-				//System.out.println();
-				pairCount++;
-				cosineConceptSimDataset.setValue(cosineSim, "Cosine similarity", String.valueOf(pairCount));
+				if(i!=j) {
+					double cosineSim = CosineSimilarity.computeCosineSimilarity(reList.get(i), reList.get(j));
+					iCosSimSum += cosineSim;
+					iPairCount++;
+					
+					cosSimSum += cosineSim;
+					totalValueCount++;
+					iCosineSimValues.add(cosineSim);
+				}
 			}
+			double iAvgAgreement = iCosSimSum/iPairCount;
+			System.out.println("P_{"+(i+1)+"} agv:"+Util.round(iAvgAgreement));
 		}
 		
-		double avgCosine = totalCosine/pairCount;
-		double stdDev = Statistics.standardDeviation(avgCosine, cosineSimValues);
+		double totalAvgCosine = cosSimSum/totalValueCount;
+				
+		//double stdDev = Statistics.standardDeviation(avgCosine, cosineSimValues);
 		
-		System.out.println("Avg cosine similarity (with concept similarity):"+avgCosine);
-		System.out.println("Std dev (with concept similarity):"+stdDev);
+		System.out.println("Avg cosine similarity  (with concept similarity)(new):"+Util.round(totalAvgCosine));
+		//System.out.println("Std dev:"+stdDev);
+		
 		
 
 	}	
+//	@Test
+//	public void testHumanAgreementQuestion2() throws Exception {
+//		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION2_NAME);
+//		//en.printValues();
+//		List<Double> cosineSimValues = new ArrayList<Double>();
+//		double totalCosine = 0.0;
+//		int pairCount = 0;
+//		for(int i=0;i<reList.size();i++) {
+//			for(int j=i+1;j<reList.size();j++) {
+//				int firstIndex = i;
+//				int secondIndex = j;
+//				//EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+//				//Collections.sort(reList.get(firstIndex),cmp);
+//				
+//				//Collections.sort(reList.get(secondIndex),cmp);
+//				
+//				//printRankEntryList(reList.get(firstIndex));
+//				//printRankEntryList(reList.get(secondIndex));
+//				
+//				double cosineSim = CosineSimilarity.computeCosineSimilarity(reList.get(firstIndex), reList.get(secondIndex));
+//				//System.out.println("Cosine similarity: "+cosineSim);
+//				totalCosine += cosineSim;
+//				cosineSimValues.add(cosineSim);
+//				
+//			
+//				//printRankEntryList(reList.get(firstIndex));
+//				//printRankEntryList(reList.get(secondIndex));	
+//				//System.out.println();
+//				pairCount++;
+//				cosineConceptSimDataset.setValue(cosineSim, "Cosine similarity", String.valueOf(pairCount));
+//			}
+//		}
+//		
+//		double avgCosine = totalCosine/pairCount;
+//		double stdDev = Statistics.standardDeviation(avgCosine, cosineSimValues);
+//		
+//		System.out.println("Avg cosine similarity (with concept similarity):"+avgCosine);
+//		System.out.println("Std dev (with concept similarity):"+stdDev);
+//		
+//
+//	}	
 	
 	/**
 	 * computes nDCG between each pairs of evaluators for different p values
@@ -503,15 +542,19 @@ public class DCGSurveyInference1Test {
 			
 			double cr = cr_values[ci];
 			int p = (int) (cr * n);
+			//System.out.println("###################");
+			//System.out.println("p:"+p);
 			
 			double nDCGSum = 0.0;
 			int pairCount=0;
 			for(int i=0;i<reList.size();i++) {
+			//int i = 0; {
 				int firstIndex = i;
 				List<RankEntry> list1 = DCGMeasure.copyRankEntryList(reList.get(firstIndex));
 				EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
 				Collections.sort(list1,cmp);
 				for(int j=0;j<reList.size();j++) {
+				//int j = 2; {
 					if(i!=j) {
 						pairCount++;
 						//System.out.println("Pair:"+i+","+j);
@@ -522,17 +565,20 @@ public class DCGSurveyInference1Test {
 						
 						Collections.sort(list2,cmp);
 						
-						//printRankEntryList(list1);
-						//printRankEntryList(list2);
+						//System.out.println("list1:"+firstIndex);
+						printRankEntryList(list1);
+						
+						//System.out.println("list1:"+secondIndex);
+						printRankEntryList(list2);
 						double d = DCGMeasure.computeNDCG(list1, list2, p);
+						
 						//System.out.println("nDCG: "+d);	
 						nDCGSum+=d;
 					}
 				}
 			}
 			double avgNDCG = nDCGSum/pairCount;
-			//double cr = (double) p / (double) n;
-			System.out.println("Average nDCG["+p+"]:"+avgNDCG + " CR:"+cr);
+			//System.out.println("Average nDCG["+p+"]:"+avgNDCG + " CR:"+cr);
 			humansNdcgCR.add(cr, avgNDCG);
 			
 		}
@@ -933,9 +979,12 @@ public class DCGSurveyInference1Test {
 		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
 		Collections.sort(reList1,cmp);
 		
+		double max = reList1.get(0).getJudgmentScore();
+		
 		List<String> res = new ArrayList<String>();
 		for(int i=0;i<reList1.size();i++) {
-			if(reList1.get(i).getJudgmentScore() >=th) {
+			double scaled = (reList1.get(i).getJudgmentScore() / max) * 10.0;
+			if( scaled >=th) {
 				RankEntry re = reList1.get(i);
 				res.add(re.getName());
 				System.out.println(re.getName());
