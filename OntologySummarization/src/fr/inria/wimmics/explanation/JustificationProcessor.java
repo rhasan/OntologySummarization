@@ -413,6 +413,20 @@ public class JustificationProcessor {
 
 	}	
 	
+	/**
+	 * Call it only after summarizing by some other measures
+	 * @param rootStatementUri
+	 * @return
+	 */
+	public List<KnowledgeStatement> summarizeByProofTreeSubtreeWeight(String rootStatementUri) {
+		gk.countSubtrees();
+		List<KnowledgeStatement> kStatements = computeSortProofTreeSubtreeWeightScore(rootStatementUri);
+		
+		return kStatements;
+	}
+	
+	
+	
 	private List<KnowledgeStatement> computeSortProofTreeSubtreeWeightScore(String rootStatementUri) {
 		 List<KnowledgeStatement> res = new ArrayList<KnowledgeStatement>();
 		
@@ -423,6 +437,7 @@ public class JustificationProcessor {
 			
 			double subtreeWeight = gkn.getCombinedScore();
 			kst.setSubTreeWeight(subtreeWeight);
+			kst.setScore(subtreeWeight);
 			//double score = (kst.getDegreeCentrality() + subtreeWeight)/2.0;
 			if(rootStatementUri.equals(kst.getStatement().getContext().stringValue())) continue;
 			res.add(kst);
@@ -514,7 +529,49 @@ public class JustificationProcessor {
 		return kStatementsReRanked;
 
 	}
+	
+	/**
+	 * Reranks a ranked list by coherence
+	 * @param statementURI
+	 * @param kStatements
+	 * @return
+	 * @throws RepositoryException
+	 * @throws MalformedQueryException
+	 * @throws QueryEvaluationException
+	 */
 
+	public List<KnowledgeStatement> reRankByCoherence(String statementURI,List<KnowledgeStatement> kStatements) throws RepositoryException, MalformedQueryException, QueryEvaluationException {
+		
+		
+		System.out.println("Before reRanking:");
+		for(KnowledgeStatement kst:kStatements) {
+			System.out.println("Statement:"+kst.getStatement().toString());
+			System.out.println("Score:"+kst.getScore());
+			System.out.println("ReRanked Score:"+kst.getReRankedScore());
+			//System.out.println(kst.getStatement().getContext().stringValue()+" "+index++);
+
+			kst.setScore(kst.getReRankedScore());
+		}		
+		List<KnowledgeStatement> kStatementsReRanked = reRank(statementURI, kStatements);
+		Collections.sort(kStatementsReRanked, new Comparator<KnowledgeStatement>() {
+
+			@Override
+			public int compare(KnowledgeStatement o1, KnowledgeStatement o2) {
+				if(o1.getReRankedScore()>o2.getReRankedScore()) return -1;
+				if(o1.getReRankedScore()<o2.getReRankedScore()) return 1;
+				return 0;
+			}
+		});
+		
+		System.out.println("After reRanking:");
+		for(KnowledgeStatement kst:kStatementsReRanked) {
+			System.out.println("Statement:"+kst.getStatement().toString());
+			System.out.println("Score:"+kst.getScore());
+			System.out.println("ReRanked Score:"+kst.getReRankedScore());
+			//System.out.println(kst.getStatement().getContext().stringValue()+" "+index++);
+		}
+		return kStatementsReRanked;		
+	}
 	
 	public int oneStepProofTreeLink(List<KnowledgeStatement> S) throws RepositoryException, MalformedQueryException, QueryEvaluationException {
 		RepositoryConnection con = myRepository.getConnection();

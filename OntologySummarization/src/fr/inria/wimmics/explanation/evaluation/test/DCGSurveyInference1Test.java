@@ -61,40 +61,55 @@ public class DCGSurveyInference1Test {
 	static String GEONAMES_SCHEMA_LOCATION = "rdf/ontology/geonames_ontology_v3.1.rdf";
 	
 	
-	static XYSeries soloCentralityNdcgCR = new XYSeries("salience");
-	static XYSeries soloReRankNdcgCR = new XYSeries("coherence");
+	static XYSeries soloCentralityNdcgCR = 								new XYSeries("salience");
+	static XYSeries soloReRankNdcgCR = 									new XYSeries("salience+coherence");
+	static XYSeries soloAbstractionNdcgCR = 							new XYSeries("salience+abstraction");
+	static XYSeries soloProofTreeSubtreeWeightNdcgCR = 					new XYSeries("salience+subtree weight");
+static XYSeries salienceAndAbstractAndSubtreeWeightNdcgCR = 			new XYSeries("salience+abstract+subtree weight");
+	static XYSeries salientAbstractionReRankNdcgCr = 					new XYSeries("salience+abstract+coherence");
+	static XYSeries salientAbstractionSubtreeReRankNdcgCr = 			new XYSeries("salience+abstract+subtree weight+coherence");
+	
+	
+	
+	
 	static XYSeries sentenceGraphNdcgCR = new XYSeries("sentence graph");
-	static XYSeries soloAbstractionNdcgCR = new XYSeries("salience+abstraction");
-	static XYSeries soloProofTreeSubtreeWeightNdcgCR = new XYSeries("subtree weight with salience");
-	static XYSeries salienceAndAbstractAndSubtreeWeightNdcgCR = new XYSeries("subtree weight with salience+abstract");
 	
-	static XYSeries simCentralityNdcgCR = new XYSeries("Similarity+Centrality");
-	static XYSeries simReRankNdcgCR = new XYSeries("Similarity+Coherence");
-	static XYSeries simAbstractionNdcgCR = new XYSeries("Similarity+Abstraction");
-	static XYSeries simProofTreeSubtreeWeightNdcgCR = new XYSeries("Similarity+Sub Tree Weight");
+	
+	static XYSeries simCentralityNdcgCR = new XYSeries("salience+similarity");
+	static XYSeries simReRankNdcgCR = new XYSeries("salience+similarity+coherence");
+	static XYSeries simAbstractionNdcgCR = new XYSeries("salience+abstraction+similarity");
+	static XYSeries simProofTreeSubtreeWeightNdcgCR = new XYSeries("salience+similarity+subtree weight");
+	static XYSeries salienceAbstractSimilaritySubtreeNdcgCr = new XYSeries("salience+abstraction+similarity+subtree weight");
 
 	
 
 	
 	
-	static XYSeries simCentralityFMeasureCR = new XYSeries("Similarity+Centrality");
-	static XYSeries simReRankFMeasureCR = new XYSeries("Similarity+Coherence");
-	static XYSeries simAbstractionFMeasureCR = new XYSeries("Similarity+Abstraction");
-	static XYSeries simProofTreeSubtreeWeightFMeasureCR = new XYSeries("Similarity+Sub Tree Weight");
-
+	static XYSeries simCentralityFMeasureCR = new XYSeries("salience+similarity+centrality");
+	static XYSeries simReRankFMeasureCR = new XYSeries("salience+similarity+coherence");
+	static XYSeries simAbstractionFMeasureCR = new XYSeries("salience+abstraction+similarity");
+	static XYSeries simProofTreeSubtreeWeightFMeasureCR = new XYSeries("salience+similarity+subtree weight");
+	static XYSeries salienceAbstractSimilaritySubtreeFMeasureCR = new XYSeries("salience+abstraction+similarity+subtree weight");
+	
 	
 
 	
 
 	
 
-	static XYSeries soloCentralityFMeasureCR = new XYSeries("salience");
-	static XYSeries soloReRankFMeasureCR = new XYSeries("coherence");
+	
+
+	static XYSeries soloCentralityFMeasureCR = 							new XYSeries("salience");
+	static XYSeries soloReRankFMeasureCR = 								new XYSeries("salience+coherence");
+	static XYSeries soloAbstractionFMeasureCR = 						new XYSeries("salience+abstraction");
+	static XYSeries soloProofTreeSubtreeWeightFMeasureCR = 				new XYSeries("salience+subtree weight");
+	static XYSeries salienceAndAbstractAndSubtreeWeightFMeasureCR = 	new XYSeries("salience+abstract+subtree weight");
+	static XYSeries salientAbstractionReRankFMeasureCR = 		new XYSeries("salience+abstraction+coherence");
+	static XYSeries salientAbstractionSubtreeReRankFMeasureCR = 		new XYSeries("salience+abstraction+subtree weight+coherence");
+	
+
 	static XYSeries sentenceGraphFMeasureCR = new XYSeries("sentence graph");
-	static XYSeries soloAbstractionFMeasureCR = new XYSeries("salience+abstraction");
-	static XYSeries soloProofTreeSubtreeWeightFMeasureCR = new XYSeries("subtree weight with salience");
-	static XYSeries salienceAndAbstractAndSubtreeWeightFMeasureCR = new XYSeries("subtree weight with salience+abstract");
-
+	
 	static XYSeries humansNdcgCR = new XYSeries("Human agreement (Avg)");
 	
 	static DefaultCategoryDataset cosineDataset = new DefaultCategoryDataset();
@@ -159,6 +174,8 @@ public class DCGSurveyInference1Test {
 		dataset.addSeries(simAbstractionNdcgCR);
 		dataset.addSeries(simProofTreeSubtreeWeightNdcgCR);
 		
+		dataset.addSeries(salienceAbstractSimilaritySubtreeNdcgCr);
+		
 		// Generate the ndcg vs cr graph
 		JFreeChart chart = ChartFactory.createXYLineChart("nDCG vs CR",
 				// Title
@@ -191,6 +208,8 @@ public class DCGSurveyInference1Test {
 		fMeasureCRdataset.addSeries(simReRankFMeasureCR);
 		fMeasureCRdataset.addSeries(simAbstractionFMeasureCR);
 		fMeasureCRdataset.addSeries(simProofTreeSubtreeWeightFMeasureCR);
+		
+		fMeasureCRdataset.addSeries(salienceAbstractSimilaritySubtreeFMeasureCR);
 		
 		
 		
@@ -247,10 +266,15 @@ public class DCGSurveyInference1Test {
 		dataset.addSeries(soloReRankNdcgCR);
 		dataset.addSeries(soloAbstractionNdcgCR);
 		dataset.addSeries(soloProofTreeSubtreeWeightNdcgCR);
-		dataset.addSeries(sentenceGraphNdcgCR);
+		
 		
 		dataset.addSeries(salienceAndAbstractAndSubtreeWeightNdcgCR);
+		dataset.addSeries(salientAbstractionReRankNdcgCr);
+		dataset.addSeries(salientAbstractionSubtreeReRankNdcgCr);
 		
+		
+		//last one 
+		dataset.addSeries(sentenceGraphNdcgCR);
 		
 		
 		//dataset.addSeries(humansNdcgCR); // nDCG vs CR is a comparison against avg human opinions (avg ratings)
@@ -301,9 +325,14 @@ public class DCGSurveyInference1Test {
 		fMeasureCRdataset.addSeries(soloReRankFMeasureCR);
 		fMeasureCRdataset.addSeries(soloAbstractionFMeasureCR);
 		fMeasureCRdataset.addSeries(soloProofTreeSubtreeWeightFMeasureCR);
-		fMeasureCRdataset.addSeries(sentenceGraphFMeasureCR);	
+		
 		
 		fMeasureCRdataset.addSeries(salienceAndAbstractAndSubtreeWeightFMeasureCR);
+		fMeasureCRdataset.addSeries(salientAbstractionReRankFMeasureCR);
+		fMeasureCRdataset.addSeries(salientAbstractionSubtreeReRankFMeasureCR);
+		
+		//last one
+		fMeasureCRdataset.addSeries(sentenceGraphFMeasureCR);	
 		
 		
 		// Generate the ndcg vs cr graph
@@ -1199,8 +1228,13 @@ public class DCGSurveyInference1Test {
 	}	
 	
 	public List<KnowledgeStatement> summaryBySalientAbstractSubtree(String justificationFile, String rootStmtId) throws Exception { 
-		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
 		JustificationProcessor jp = new JustificationProcessor();
+		return summaryBySalientAbstractSubtree(justificationFile,rootStmtId,jp);
+	}
+	
+	public List<KnowledgeStatement> summaryBySalientAbstractSubtree(String justificationFile, String rootStmtId, JustificationProcessor jp) throws Exception { 
+		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
+		
 		jp.parseJustificationFile(justificationFile,"http://www.example.com/" );
 		List<KnowledgeStatement> kStmts = jp.summarizeByProofTreeAbstraction(true, rootStmtId, null, null, null);
 		
@@ -1221,7 +1255,7 @@ public class DCGSurveyInference1Test {
 //			//stmts.add(kst);
 //		}		
 		
-		kStmts = jp.summarizeByProofTreeSubtreeWeight(true, rootStmtId, null, null, null);
+		kStmts = jp.summarizeByProofTreeSubtreeWeight(rootStmtId);
 		
 		for(int i=0;i<kStmts.size();i++) {
 			
@@ -1233,11 +1267,11 @@ public class DCGSurveyInference1Test {
 			//newKst.setStatement(kst.getStatement());
 			//newKst.setScore(kst.getScore());
 			
-			//double stn = 0.5 * scores.get(stmtId) + 0.5 * kst.getSubTreeWeight();
-			//System.out.println("Statement:"+kst.getStatement().toString());
-			//System.out.println("Score:"+kst.getScore());
-			//System.out.println("SubtreeWeight Score:"+kst.getSubTreeWeight());
-			//System.out.println("Recomp SubtreeWeight Score:"+stn);
+//			double stn = 0.5 * scores.get(stmtId) + 0.5 * kst.getSubTreeWeight();
+//			System.out.println("Statement:"+kst.getStatement().toString());
+//			System.out.println("Score:"+kst.getScore());
+//			System.out.println("SubtreeWeight Score:"+kst.getSubTreeWeight());
+//			System.out.println("Recomp SubtreeWeight Score:"+stn);
 			
 			//System.out.println(kst.getStatement().getContext().stringValue()+" "+i);
 			
@@ -1248,10 +1282,15 @@ public class DCGSurveyInference1Test {
 		return stmts;
 		
 	}
-	
 	public List<KnowledgeStatement> summaryBySalientProofTreeAbstraction(String justificationFile, String rootStmtId) throws Exception {
-		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
 		JustificationProcessor jp = new JustificationProcessor();
+		return summaryBySalientProofTreeAbstraction(justificationFile, rootStmtId,jp );
+		
+	}
+	
+	public List<KnowledgeStatement> summaryBySalientProofTreeAbstraction(String justificationFile, String rootStmtId,JustificationProcessor jp ) throws Exception {
+		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
+		
 		jp.parseJustificationFile(justificationFile,"http://www.example.com/" );
 		List<KnowledgeStatement> kStmts = jp.summarizeByProofTreeAbstraction(true, rootStmtId, null, null, null);
 		
@@ -1296,7 +1335,191 @@ public class DCGSurveyInference1Test {
 		return stmts;
 	}
 	
+	
+	public List<KnowledgeStatement> summaryBySalientAbstractionSimilaritySubtreeWeight(String justificationFile, String rootStmtId,
+			List<String> prefs, List<String> ontologyLocations, List<String> instanceLocations) throws Exception {
+		
+		
+		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
+		JustificationProcessor jp = new JustificationProcessor();
+		jp.parseJustificationFile(justificationFile,"http://www.example.com/" );
+		List<KnowledgeStatement> kStmts = jp.summarizeByProofTreeAbstraction(true, rootStmtId, prefs, ontologyLocations, instanceLocations);
+		
+		kStmts = jp.summarizeByProofTreeSubtreeWeight(rootStmtId);
+		
+		for(int i=0;i<kStmts.size();i++) {
+			
+			KnowledgeStatement kst = kStmts.get(i);
+			String stmtId = kst.getStatement().getContext().stringValue();
+			if(stmtId.equals(rootStmtId)) continue;
+			
+			//System.out.println("Statement:"+kst.getStatement().toString());
+			//System.out.println("Score:"+kst.getScore());
+			//System.out.println(kst.getStatement().getContext().stringValue()+" "+i);
+			
+			
+			stmts.add(kst);
+		}	
+		return stmts;
+	}	
+	@Test
+	public void testSalientAbstractionSimilaritySubtreeWeight() throws Exception {
+		
+		System.out.println("NCG Salient Abstraction Similarity SubtreeWeight");
+		System.out.println("#####################################");			
+		System.out.println("F-Measure Salient Abstraction Similarity SubtreeWeight");
+		System.out.println("#####################################");		
+		
+		
+		String questionName = QUESTION2_NAME;
+		double th = getAvgGroundTruthRating(questionName);		
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = summaryBySalientAbstractionSimilaritySubtreeWeight(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+	
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		computeNDCGMeasure(reList, sList, salienceAbstractSimilaritySubtreeNdcgCr);	
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		
+		computeFmeasure(reList, sList, salienceAbstractSimilaritySubtreeFMeasureCR,th);
+	}	
+	
+	@Test
+	public void testSalientAbstractionSubtreeReRank() throws Exception {
+		
+		System.out.println("NCG Salient Abstraction Subtree ReRank");
+		System.out.println("#####################################");			
+		System.out.println("F-Measure Salient Abstraction Subtree ReRank");
+		System.out.println("#####################################");		
+		
+		
+		String questionName = QUESTION1_NAME;
+		double th = getAvgGroundTruthRating(questionName);		
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = summaryBySalientAbstractionSubtreeReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+	
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		computeNDCGMeasure(reList, sList, salientAbstractionSubtreeReRankNdcgCr);	
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		
+		computeFmeasure(reList, sList, salientAbstractionSubtreeReRankFMeasureCR,th);
+	}
 
+	
+	
+	public List<KnowledgeStatement> summaryBySalientAbstractionSubtreeReRank(String justificationFile, String rootStmtId) throws Exception {
+		
+		JustificationProcessor jp = new JustificationProcessor();
+		List<KnowledgeStatement> stmtsByScore = summaryBySalientAbstractSubtree(justificationFile, rootStmtId,jp);
+		
+		//rerank
+		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
+
+		List<KnowledgeStatement> kStmts = jp.reRankByCoherence(rootStmtId, stmtsByScore);
+		
+		for(int i=0;i<kStmts.size();i++) {
+			
+
+			KnowledgeStatement kst = kStmts.get(i);
+			String stmtId = kst.getStatement().getContext().stringValue();
+			if(stmtId.equals(rootStmtId)) continue;
+			
+			//System.out.println("Statement:"+kst.getStatement().toString());
+			//System.out.println("Score:"+kst.getScore());
+			//System.out.println(kst.getStatement().getContext().stringValue()+" "+i);
+			
+			
+			stmts.add(kst);
+		}
+
+		return stmts;
+	}	
+	
+	
+	
+	@Test
+	public void testSalientAbstractionReRank() throws Exception {
+		
+		System.out.println("NCG Salient Abstraction ReRank");
+		System.out.println("#####################################");			
+		System.out.println("F-Measure Salient Abstraction ReRank");
+		System.out.println("#####################################");		
+		
+		
+		String questionName = QUESTION1_NAME;
+		double th = getAvgGroundTruthRating(questionName);		
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = summaryBySalientAbstractionReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+	
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		computeNDCGMeasure(reList, sList, salientAbstractionReRankNdcgCr);	
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		
+		computeFmeasure(reList, sList, salientAbstractionReRankFMeasureCR,th);
+	}	
+	public List<KnowledgeStatement> summaryBySalientAbstractionReRank(String justificationFile, String rootStmtId) throws Exception {
+		
+		JustificationProcessor jp = new JustificationProcessor();
+		List<KnowledgeStatement> stmtsByScore = summaryBySalientProofTreeAbstraction(justificationFile, rootStmtId,jp);
+		
+		//rerank
+		List<KnowledgeStatement> stmts = new ArrayList<KnowledgeStatement>();
+
+		List<KnowledgeStatement> kStmts = jp.reRankByCoherence(rootStmtId, stmtsByScore);
+		
+		for(int i=0;i<kStmts.size();i++) {
+			
+
+			KnowledgeStatement kst = kStmts.get(i);
+			String stmtId = kst.getStatement().getContext().stringValue();
+			if(stmtId.equals(rootStmtId)) continue;
+			
+			//System.out.println("Statement:"+kst.getStatement().toString());
+			//System.out.println("Score:"+kst.getScore());
+			//System.out.println(kst.getStatement().getContext().stringValue()+" "+i);
+			
+			
+			stmts.add(kst);
+		}
+
+		return stmts;
+	}	
+	
 	class EntryJudgmentDscCmp implements Comparator<RankEntry> {
 	
 		@Override
