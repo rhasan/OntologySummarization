@@ -543,15 +543,14 @@ public class JustificationProcessor {
 	public List<KnowledgeStatement> reRankByCoherence(String statementURI,List<KnowledgeStatement> kStatements) throws RepositoryException, MalformedQueryException, QueryEvaluationException {
 		
 		
-		System.out.println("Before reRanking:");
-		for(KnowledgeStatement kst:kStatements) {
-			System.out.println("Statement:"+kst.getStatement().toString());
-			System.out.println("Score:"+kst.getScore());
-			System.out.println("ReRanked Score:"+kst.getReRankedScore());
-			//System.out.println(kst.getStatement().getContext().stringValue()+" "+index++);
-
-			kst.setScore(kst.getReRankedScore());
-		}		
+//		System.out.println("Before reRanking:");
+//		for(KnowledgeStatement kst:kStatements) {
+//			System.out.println("Statement:"+kst.getStatement().toString());
+//			System.out.println("Score:"+kst.getScore());
+//			System.out.println("ReRanked Score:"+kst.getReRankedScore());
+//			//System.out.println(kst.getStatement().getContext().stringValue()+" "+index++);
+//
+//		}		
 		List<KnowledgeStatement> kStatementsReRanked = reRank(statementURI, kStatements);
 		Collections.sort(kStatementsReRanked, new Comparator<KnowledgeStatement>() {
 
@@ -563,12 +562,14 @@ public class JustificationProcessor {
 			}
 		});
 		
-		System.out.println("After reRanking:");
+//		System.out.println("After reRanking:");
 		for(KnowledgeStatement kst:kStatementsReRanked) {
-			System.out.println("Statement:"+kst.getStatement().toString());
-			System.out.println("Score:"+kst.getScore());
-			System.out.println("ReRanked Score:"+kst.getReRankedScore());
+//			System.out.println("Statement:"+kst.getStatement().toString());
+//			System.out.println("Score:"+kst.getScore());
+//			System.out.println("ReRanked Score:"+kst.getReRankedScore());
 			//System.out.println(kst.getStatement().getContext().stringValue()+" "+index++);
+			kst.setScore(kst.getReRankedScore());
+
 		}
 		return kStatementsReRanked;		
 	}
