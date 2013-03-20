@@ -350,7 +350,7 @@ public class JustificationProcessor {
 			public int compare(KnowledgeStatement o1, KnowledgeStatement o2) {
 				if(o1.getScore()>o2.getScore()) return -1;
 				if(o1.getScore()<o2.getScore()) return 1;
-				return 0;
+				return o1.getStatement().getContext().stringValue().compareTo(o2.getStatement().getContext().stringValue());
 			}
 			
 		});
@@ -453,7 +453,7 @@ public class JustificationProcessor {
 			public int compare(KnowledgeStatement o1, KnowledgeStatement o2) {
 				if(o1.getSubTreeWeight()>o2.getSubTreeWeight()) return -1;
 				if(o1.getSubTreeWeight()<o2.getSubTreeWeight()) return 1;
-				return 0;
+				return o1.getStatement().getContext().stringValue().compareTo(o2.getStatement().getContext().stringValue());
 			}
 			
 		});
@@ -516,7 +516,7 @@ public class JustificationProcessor {
 			public int compare(KnowledgeStatement o1, KnowledgeStatement o2) {
 				if(o1.getReRankedScore()>o2.getReRankedScore()) return -1;
 				if(o1.getReRankedScore()<o2.getReRankedScore()) return 1;
-				return 0;
+				return o1.getStatement().getContext().stringValue().compareTo(o2.getStatement().getContext().stringValue());
 			}
 		});
 		

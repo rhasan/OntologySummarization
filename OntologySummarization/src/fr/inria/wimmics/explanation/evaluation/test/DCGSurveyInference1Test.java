@@ -68,23 +68,34 @@ public class DCGSurveyInference1Test {
 	
 	//Scoresalience : SSL Scoresimilarity : SSM Scoresubtree: SST ScoreAbstraction: SAB ReRank by coherence: SCO
 	
-	static XYSeries soloCentralityNdcgCR = 												new XYSeries("SSL");
-	static XYSeries soloReRankNdcgCR = 													new XYSeries("SSL+SCO");
+//	static XYSeries soloCentralityNdcgCR = 												new XYSeries("SSL");
+//	static XYSeries soloReRankNdcgCR = 													new XYSeries("SSL+SCO");
+//	
+//	static XYSeries soloAbstractionNdcgCR = 											new XYSeries("SSL+SAB");
+//	static XYSeries salientAbstractionReRankNdcgCr = 									new XYSeries("SSL+SAB+SCO");	
+//	
+//	static XYSeries soloProofTreeSubtreeWeightNdcgCR = 									new XYSeries("SSL+SST");//rerank
+//	static XYSeries salientSubtreeReRankNdcgCR = 										new XYSeries("SSL+SST+SCO");
+//	
+//	static XYSeries salienceAndAbstractAndSubtreeWeightNdcgCR = 						new XYSeries("SSL+SAB+SST");
+//	static XYSeries salientAbstractionSubtreeReRankNdcgCr = 							new XYSeries("SSL+SAB+SST+SCO");
 	
-	static XYSeries soloAbstractionNdcgCR = 											new XYSeries("SSL+SAB");
-	static XYSeries salientAbstractionReRankNdcgCr = 									new XYSeries("SSL+SAB+SCO");	
+	static XYSeries soloCentralityNdcgCR = 												new XYSeries("salience");
+	static XYSeries soloReRankNdcgCR = 													new XYSeries("salience+coherence");
 	
-	static XYSeries soloProofTreeSubtreeWeightNdcgCR = 									new XYSeries("SSL+SST");//rerank
-	static XYSeries salientSubtreeReRankNdcgCR = 										new XYSeries("SSL+SST+SCO");
+	static XYSeries soloAbstractionNdcgCR = 											new XYSeries("salience+abstraction");
+	static XYSeries salientAbstractionReRankNdcgCr = 									new XYSeries("salience+abstraction+coherence");	
 	
-	static XYSeries salienceAndAbstractAndSubtreeWeightNdcgCR = 						new XYSeries("SSL+SAB+SST");
-	static XYSeries salientAbstractionSubtreeReRankNdcgCr = 							new XYSeries("SSL+SAB+SST+SCO");
+	static XYSeries soloProofTreeSubtreeWeightNdcgCR = 									new XYSeries("salience+subtree weight");//rerank
+	static XYSeries salientSubtreeReRankNdcgCR = 										new XYSeries("salience+subtree weight+coherence");
+	
+	static XYSeries salienceAndAbstractAndSubtreeWeightNdcgCR = 						new XYSeries("salience+abstraction+subtree weight");
+	static XYSeries salientAbstractionSubtreeReRankNdcgCr = 							new XYSeries("salience+abstraction+subtree weight+coherence");	
 	
 	
 	
-	
-	
-	static XYSeries sentenceGraphNdcgCR = new XYSeries("SG");
+//	static XYSeries sentenceGraphNdcgCR = new XYSeries("SG");
+	static XYSeries sentenceGraphNdcgCR = new XYSeries("sentence graph");
 	
 	
 	
@@ -239,9 +250,24 @@ public class DCGSurveyInference1Test {
 		// Configure chart to generate URLs?
 				);
 		
+		chart.setBorderVisible(true);
+		
+		XYPlot p = chart.getXYPlot();
+		XYLineAndShapeRenderer growthRenderer = new XYLineAndShapeRenderer(true,true);
+//		        
+//		growthRenderer.setSeriesPaint(0, Color.black);
+//		growthRenderer.setSeriesPaint(1, Color.cyan);
+//		growthRenderer.setShape(new Rectangle(-3,-3,6,6));
+//		growthRenderer.setOutlineStroke(new BasicStroke(2));
+//		growthRenderer.setOutlinePaint(Color.red);
+//		growthRenderer.setUseOutlinePaint(true); 
+//		        
+		//p.setRenderer(0,growthRenderer);	
+		p.setRenderer(growthRenderer);		
+		
 		try {
 			ChartUtilities.saveChartAsJPEG(new File("files/evaluation/dcg/survey/inf1/sim_ndcg_v_cr.jpg"), chart,
-					500, 300);
+					800, 600);
 		} catch (IOException e) {
 			System.err.println("Problem occurred creating chart.");
 		}			
@@ -282,9 +308,16 @@ public class DCGSurveyInference1Test {
 				false
 		// Configure chart to generate URLs?
 				);
+		
+		fMeasureCRchart.setBorderVisible(true);
+		
+		XYPlot p1 = fMeasureCRchart.getXYPlot();
+		XYLineAndShapeRenderer growthRenderer1 = new XYLineAndShapeRenderer(true,true);
+		
+		p1.setRenderer(growthRenderer1);		
 		try {
 			ChartUtilities.saveChartAsJPEG(new File("files/evaluation/dcg/survey/inf1/sim_fmeasure_v_cr.jpg"), fMeasureCRchart,
-					500, 300);
+					800, 600);
 		} catch (IOException e) {
 			System.err.println("Problem occurred creating fmeasure v cr chart.");
 		}	
@@ -1896,7 +1929,7 @@ public class DCGSurveyInference1Test {
 			
 			if(o2.getJudgmentScore()>o1.getJudgmentScore()) return 1;
 			if(o2.getJudgmentScore()<o1.getJudgmentScore()) return -1;
-			return 0;
+			return o1.getName().compareTo(o2.getName());
 		}
 		
 	}
