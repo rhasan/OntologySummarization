@@ -64,6 +64,7 @@ public class DCGSurveyInference1Test {
 	static String SIMILARITY_CONCEPT = "http://dbpedia.org/ontology/Event";
 	static String DBPEDIA_SCHEMA_LOCATION = "rdf/ontology/dbpedia_3.8.owl";
 	static String GEONAMES_SCHEMA_LOCATION = "rdf/ontology/geonames_ontology_v3.1.rdf";
+	static double SG_Nagivational_p = 0.8;
 	
 	
 	//Scoresalience : SSL Scoresimilarity : SSM Scoresubtree: SST ScoreAbstraction: SAB ReRank by coherence: SCO
@@ -233,7 +234,7 @@ public class DCGSurveyInference1Test {
 		
 		
 		// Generate the ndcg vs cr graph
-		JFreeChart chart = ChartFactory.createXYLineChart("nDCG vs CR",
+		JFreeChart chart = ChartFactory.createXYLineChart("",
 				// Title
 				"CR",
 				// x-axis Label
@@ -292,7 +293,7 @@ public class DCGSurveyInference1Test {
 		
 		
 		// Generate the ndcg vs cr graph
-		JFreeChart fMeasureCRchart = ChartFactory.createXYLineChart("F-Score vs CR",
+		JFreeChart fMeasureCRchart = ChartFactory.createXYLineChart("",
 				// Title
 				"CR",
 				// x-axis Label
@@ -369,7 +370,7 @@ public class DCGSurveyInference1Test {
 		
 		// Generate the ndcg vs cr graph
 		
-		JFreeChart chart = ChartFactory.createXYLineChart("nDCG vs CR",
+		JFreeChart chart = ChartFactory.createXYLineChart("",
 				// Title
 				"CR",
 				// x-axis Label
@@ -446,7 +447,7 @@ public class DCGSurveyInference1Test {
 		
 		
 		// Generate the ndcg vs cr graph
-		JFreeChart fMeasureCRchart = ChartFactory.createXYLineChart("F-Score vs CR",
+		JFreeChart fMeasureCRchart = ChartFactory.createXYLineChart("",
 				// Title
 				"CR",
 				// x-axis Label
@@ -1066,7 +1067,7 @@ public class DCGSurveyInference1Test {
 			statementSet.add(st);
 		}
 		
-		RDFSentenceGraph rdfSentenceGraph = new RDFSentenceGraph(statementSet, 0.5);
+		RDFSentenceGraph rdfSentenceGraph = new RDFSentenceGraph(statementSet,SG_Nagivational_p);
 		
 
 		SentenceGraphSummarizer summmarizer = new SentenceGraphSummarizer(rdfSentenceGraph);
