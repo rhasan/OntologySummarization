@@ -136,10 +136,10 @@ data:d13 {
 }
 
 # d13-1 derived d13-2 d14 
-data:d13-1 { 
+data:d131 { 
 	<http://sws.geonames.org/4699163/>  geo-ont:parentFeature <http://sws.geonames.org/6255149/> .
 }
-data:d13-2 { 
+data:d132 { 
 	<http://sws.geonames.org/4699163/>  geo-ont:parentFeature <http://sws.geonames.org/4680335/> . 
 }
 

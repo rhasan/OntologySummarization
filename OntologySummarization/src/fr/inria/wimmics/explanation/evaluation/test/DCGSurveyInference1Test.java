@@ -1042,7 +1042,7 @@ public class DCGSurveyInference1Test {
 			int p = (int) (cr * n);
 			double d = DCGMeasure.computeNDCG(reList, sList, p);
 			//double cr = (double) p / (double) reList.size();
-			//System.out.println("NCG["+p+"]:"+d+ " CR:"+cr);
+			System.out.println("NCG["+p+"]:"+d+ " CR:"+cr);
 			series.add(cr,d);
 			
 		}		
