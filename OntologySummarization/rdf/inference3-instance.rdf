@@ -80,4 +80,9 @@
 	<g-ont:name>France</g-ont:name>
 </rdf:Description>
 
+<rdf:Description rdf:about="http://sws.geonames.org/4461424/">
+	<rdf:type rdf:resource="http://www.geonames.org/ontology#Feature"/>
+	<g-ont:name>Collettsville</g-ont:name>
+</rdf:Description>
+
 </rdf:RDF>

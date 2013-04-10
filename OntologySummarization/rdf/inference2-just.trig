@@ -47,7 +47,7 @@ just:j5 {
 }
 just:j6 {
 	data:d12 r4ta:justifiedBy just:j6 .
-	data:d12 r4ta:derivedFrom data:d13-1 .
+	data:d12 r4ta:derivedFrom data:d131 .
 	data:d12 r4ta:derivedFrom data:d13 .
 
 }
@@ -72,10 +72,10 @@ just:j11 {
 	data:d24 r4ta:derivedFrom data:d10 .
 }
 just:j12 {
-	data:d13-1 r4ta:justifiedBy just:j12 .
+	data:d131 r4ta:justifiedBy just:j12 .
 
-	data:d13-1 r4ta:derivedFrom data:d13-2 .
-	data:d13-1 r4ta:derivedFrom data:d14 .
+	data:d131 r4ta:derivedFrom data:d13-2 .
+	data:d131 r4ta:derivedFrom data:d14 .
 
 }
 

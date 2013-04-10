@@ -68,12 +68,29 @@ data:d8 {
 just:j4 {
     data:d8 r4ta:justifiedBy just:j4 .
 
-    data:d8 r4ta:derivedFrom data:d9 .
-    data:d8 r4ta:derivedFrom data:d10 .
+    data:d8 r4ta:derivedFrom data:d91 .
+    data:d8 r4ta:derivedFrom data:d92 .
 }
-data:d9 {
-	<http://dbpedia.org/resource/Collettsville,_North_Carolina> owl:sameAs <http://sws.geonames.org/4482348/> .
+data:d91 {
+	<http://dbpedia.org/resource/Collettsville,_North_Carolina> owl:sameAs <http://sws.geonames.org/4461424/> .
 }
+
+
+just:j41 {
+    data:d92 r4ta:justifiedBy just:j41 .
+
+    data:d92 r4ta:derivedFrom data:d93 .
+    data:d92 r4ta:derivedFrom data:d10 .
+}
+data:d92 {
+	<http://sws.geonames.org/4461424/> geo-ont:parentFeature dbpedia:UnitedStates .
+}
+
+data:d93 {
+	<http://sws.geonames.org/4461424/> geo-ont:parentFeature <http://sws.geonames.org/4482348/> .
+}
+
+
 data:d10 {
 	<http://sws.geonames.org/4482348/> geo-ont:parentFeature dbpedia:UnitedStates .
 }

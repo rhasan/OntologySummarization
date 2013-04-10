@@ -56,3 +56,6 @@ dbpedia:France rdf:type dbpedia-owl:Country .
 
 <http://sws.geonames.org/3017382/> a g-ont:Feature.
 <http://sws.geonames.org/3017382/> g-ont:name "France".
+
+<http://sws.geonames.org/4461424/> a g-ont:Feature.
+<http://sws.geonames.org/4461424/> g-ont:name "Collettsville".
