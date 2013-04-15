@@ -323,4 +323,38 @@ public class DCGSurveyEntryProcessor {
 		hashMap.put(key, count);
 		
 	}
+
+	public Map<String, Integer> getSpecialisation() {
+		return specialisation;
+	}
+
+	public void setSpecialisation(Map<String, Integer> specialisation) {
+		this.specialisation = specialisation;
+	}
+
+	public Map<String, Integer> getRdfKnowledge() {
+		return rdfKnowledge;
+	}
+
+	public void setRdfKnowledge(Map<String, Integer> rdfKnowledge) {
+		this.rdfKnowledge = rdfKnowledge;
+	}
+
+	public Map<String, Integer> getGender() {
+		return gender;
+	}
+
+	public void setGender(Map<String, Integer> gender) {
+		this.gender = gender;
+	}
+
+	public Map<String, Integer> getAge() {
+		return age;
+	}
+
+	public void setAge(Map<String, Integer> age) {
+		this.age = age;
+	}
+	
+	
 }
