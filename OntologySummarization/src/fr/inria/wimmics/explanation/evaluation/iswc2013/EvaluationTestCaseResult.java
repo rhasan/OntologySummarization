@@ -19,10 +19,25 @@ public class EvaluationTestCaseResult {
 	Map<String,Integer> rdfKnowledge;
 	Map<String,Integer> gender;
 	Map<String,Integer> age;	
+	double[] cr_values;
+	List<Double> crValuesList;
+	
+	HashMap<String,List<Double>> ndcgValues;
+	HashMap<String,List<Double>> fmeasureValues;
+
+	HashMap<String,List<Double>> ndcgValuesWithSimilarity;
+	HashMap<String,List<Double>> fmeasureValuesWithSimilarity;
+	
+	
 	
 	public EvaluationTestCaseResult() {
 		cosineSimilarityQuestion1 = new ArrayList<Double>();
 		cosineSimilarityQuestion2 = new ArrayList<Double>();
+		ndcgValues = new HashMap<String,List<Double>>();
+		fmeasureValues = new HashMap<String,List<Double>>();
+		ndcgValuesWithSimilarity = new HashMap<String,List<Double>>();
+		fmeasureValuesWithSimilarity = new HashMap<String,List<Double>>();
+		crValuesList = new ArrayList<Double>();
 	}
 	
 	public void AddCosineSimilarityQuestion1(Double d) {
@@ -32,8 +47,55 @@ public class EvaluationTestCaseResult {
 	public void AddCosineSimilarityQuestion2(Double d) {
 		cosineSimilarityQuestion2.add(d);
 	}
+	
+	public void recordNdcgValues(String key,List<Double> values) {
+		ndcgValues.put(key, values);
+		
+	}
 
+	public void recordNdcgValuesWithSimilarity(String key,List<Double> values) {
+		ndcgValuesWithSimilarity.put(key, values);
+		
+	}
+	
+	public void recordfmeasureValues(String key,List<Double> values) {
+		fmeasureValues.put(key, values);
+		
+	}
+	
+	public void recordfmeasureValuesWithSimilarity(String key,List<Double> values) {
+		fmeasureValuesWithSimilarity.put(key, values);
+		
+	}
 	//generated code below
+	public HashMap<String, List<Double>> getNdcgValuesWithSimilarity() {
+		return ndcgValuesWithSimilarity;
+	}
+	public HashMap<String, List<Double>> getFmeasureValuesWithSimilarity() {
+		return fmeasureValuesWithSimilarity;
+	}
+	
+	public HashMap<String, List<Double>> getNdcgValues() {
+		return ndcgValues;
+	}
+	public HashMap<String, List<Double>> getFmeasureValues() {
+		return fmeasureValues;
+	}
+	public void setCr_values(double[] cr_values) {
+		this.cr_values = cr_values;
+		for(double d:cr_values) crValuesList.add(d);
+	}
+	
+	public double[] getCr_values() {
+		return cr_values;
+	}
+	public List<Double> getCrValuesList() {
+		return crValuesList;
+	}
+	public void setCrValuesList(List<Double> crValuesList) {
+		this.crValuesList = crValuesList;
+	}
+	
 	public void setAvgCosineSimilarityQuestion1(
 			double avgCosineSimilarityQuestion1) {
 		this.avgCosineSimilarityQuestion1 = avgCosineSimilarityQuestion1;

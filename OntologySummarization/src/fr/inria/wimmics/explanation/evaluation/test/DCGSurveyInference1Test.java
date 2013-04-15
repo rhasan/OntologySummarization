@@ -1128,7 +1128,7 @@ public class DCGSurveyInference1Test {
 		return res;
 	}
 	
-	//for sacelled summary and unscalled summary modify in this method
+	//for scaled summary and uncalled summary modify in this method
 	public List<String> getSummaryByThresholdRating(List<RankEntry> reList2, double th) {
 		
 		List<RankEntry> reList1 = new ArrayList<RankEntry>(reList2);
@@ -1139,7 +1139,7 @@ public class DCGSurveyInference1Test {
 		
 		List<String> res = new ArrayList<String>();
 		for(int i=0;i<reList1.size();i++) {
-			//double scalled = reList1.get(i).getJudgmentScore();
+			//double scaled = reList1.get(i).getJudgmentScore();
 			double scalled = (reList1.get(i).getJudgmentScore() / max) * 10.0;
 			if( scalled >=th) {
 				RankEntry re = reList1.get(i);

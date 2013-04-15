@@ -2,17 +2,30 @@ package fr.inria.wimmics.explanation.evaluation.iswc2013;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.jfree.data.xy.XYSeries;
 import org.junit.Test;
 
+import fr.inria.wimmics.explanation.KnowledgeStatement;
 import fr.inria.wimmics.explanation.evaluation.CosineSimilarity;
+import fr.inria.wimmics.explanation.evaluation.DCGMeasure;
+import fr.inria.wimmics.explanation.evaluation.PrecisionRecall;
+import fr.inria.wimmics.explanation.evaluation.PrecisionRecallCalculator;
 import fr.inria.wimmics.explanation.evaluation.RankEntry;
 import fr.inria.wimmics.explanation.evaluation.test.DCGSurveyEntryProcessor;
+
+
+
 import fr.inria.wimmics.util.Util;
 
 public class TestCaseEvaluator {
 	
+	double MAX_RATING = 10.0;
 	
 	String QUESTION1_NAME;
 	String QUESTION2_NAME;//context question
@@ -46,6 +59,8 @@ public class TestCaseEvaluator {
 	
 	public TestCaseEvaluator(EvaluationTestCase etc) throws IOException {
 		
+		etcResult = new EvaluationTestCaseResult();
+		
 		QUESTION1_NAME = etc.getQuestion1Name();
 		QUESTION2_NAME = etc.getQuestion2Name();
 		filePath = etc.getRatingFilePath();
@@ -60,7 +75,7 @@ public class TestCaseEvaluator {
 		
 		init();
 		
-		etcResult = new EvaluationTestCaseResult();
+		
 	}
 	
 	public void init() throws IOException {
@@ -75,6 +90,8 @@ public class TestCaseEvaluator {
 		//uncomment these lines if the ground truth summary should be with the statements greater than avg rating 
 		//AVG_GROUND_TRUTH_RATING_Q1 = avgGroundTruthRating(QUESTION1_NAME);
 		//AVG_GROUND_TRUTH_RATING_Q2 = avgGroundTruthRating(QUESTION2_NAME);
+		
+		etcResult.setCr_values(cr_values);
 	}
 	
 	public double getAvgGroundTruthRating(String questionName) {
@@ -156,7 +173,7 @@ public class TestCaseEvaluator {
 			}
 			double iAvgAgreement = iCosSimSum/iPairCount;
 			etcResult.AddCosineSimilarityQuestion1(iAvgAgreement);
-			System.out.println("P_{"+(i+1)+"} agv:"+Util.round(iAvgAgreement));
+			//System.out.println("P_{"+(i+1)+"} agv:"+Util.round(iAvgAgreement));
 			
 			//double iStdDev = Statistics.standardDeviation(iAvgAgreement, iCosineSimValues);
 			//System.out.println("P_{"+(i+1)+"} agv:"+iAvgAgreement + " StdDev:"+iStdDev);
@@ -201,7 +218,7 @@ public class TestCaseEvaluator {
 				
 		//double stdDev = Statistics.standardDeviation(avgCosine, cosineSimValues);
 		
-		System.out.println("Avg cosine similarity (new):"+Util.round(totalAvgCosine));
+		//System.out.println("Avg cosine similarity (new):"+Util.round(totalAvgCosine));
 		//System.out.println("Std dev:"+stdDev);
 		
 		
@@ -249,7 +266,7 @@ public class TestCaseEvaluator {
 			}
 			double iAvgAgreement = iCosSimSum/iPairCount;
 			etcResult.AddCosineSimilarityQuestion2(iAvgAgreement);
-			System.out.println("P_{"+(i+1)+"} agv:"+Util.round(iAvgAgreement));
+			//System.out.println("P_{"+(i+1)+"} agv:"+Util.round(iAvgAgreement));
 		}
 		
 		double totalAvgCosine = cosSimSum/totalValueCount;
@@ -257,13 +274,207 @@ public class TestCaseEvaluator {
 				
 		//double stdDev = Statistics.standardDeviation(avgCosine, cosineSimValues);
 		
-		System.out.println("Avg cosine similarity  (with concept similarity)(new):"+Util.round(totalAvgCosine));
+		//System.out.println("Avg cosine similarity  (with concept similarity)(new):"+Util.round(totalAvgCosine));
 		//System.out.println("Std dev:"+stdDev);
 		
 		
 
 	}
+	/**
+	 * test summary with salience measure 
+	 * @throws Exception
+	 */
+	public void test_salience() throws Exception {
+		
+		String questionName = QUESTION1_NAME;
+		double th = getAvgGroundTruthRating(questionName);			
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summarySoloCentrality(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+		
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		List<Double> ndcgValues = new ArrayList<Double>();
+		computeNDCGMeasure(reList, sList, ndcgValues);
+		//System.out.println("S_{SL} ndcg size:"+ndcgValues.size());
+		
+		String key = "S_{SL}";
+		etcResult.recordNdcgValues(key, ndcgValues);
+		
+		List<Double> fMeasures = new ArrayList<Double>();
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		computeFmeasure(reList, sList, fMeasures,th);
+		etcResult.recordfmeasureValues(key, fMeasures);
+	}
 	
+	public void test_salience_coherence() throws Exception {
+		
+		
+		String questionName = QUESTION1_NAME;
+		double th = getAvgGroundTruthRating(questionName);	
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);
+		
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summarySalientReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+		
+		computeNDCGMeasure(reList, sList, ndcgValues);
+		String key = "S_{SL}+S_{CO}";
+		etcResult.recordNdcgValues(key, ndcgValues);	
+		
+		List<Double> fMeasures = new ArrayList<Double>();
+		computeFmeasure(reList, sList, fMeasures,th);
+		etcResult.recordfmeasureValues(key, fMeasures);
+	}
+	
+	
+	//with similarity measures below
+	
+	/**
+	 * salience + similarity
+	 * @throws Exception
+	 */
+	public void test_salience_similarity() throws Exception {
+		
+		String questionName = QUESTION2_NAME;
+		double th = getAvgGroundTruthRating(questionName);			
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		
+		
+		//List<String> prefs = new ArrayList<String>();
+		
+		
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summarySimCentrality(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+		
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+		
+		computeNDCGMeasure(reList, sList, ndcgValues);
+		String key = "S_{SL}+S_{SM}";
+		etcResult.recordNdcgValuesWithSimilarity(key, ndcgValues);
+		
+		List<Double> fMeasures = new ArrayList<Double>();
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		computeFmeasure(reList, sList, fMeasures,th);
+		etcResult.recordfmeasureValuesWithSimilarity(key, fMeasures);
+	}	
+	
+	public void computeFmeasure(List<RankEntry> groundTruthList, List<RankEntry> summaryToCompareList,List<Double> fMeasures , double th) {
+		//Map<Double, Double> res = new HashMap<Double, Double>();
+		//System.out.println("Ground truth:"+th);
+		List<String> groundTruth = getSummaryByThresholdRating(groundTruthList, th);		
+		int n = summaryToCompareList.size();
+		for(int ci=0;ci<cr_values.length;ci++) {
+			double cr = cr_values[ci];
+			int p = (int) (cr * n);
+			
+			//List<String> groundTruth = getSummaryOfSizeP(groundTruthList, p);
+
+			//System.out.println("Summary");
+			List<String> summaryToCompare = getSummaryOfSizeP(summaryToCompareList, p);
+			PrecisionRecall pr = PrecisionRecallCalculator.calculatePrecisionRecall(groundTruth,summaryToCompare);
+			double precision = pr.getPrecision();
+			double recall = pr.getRecall();
+			Double f_measure = (2*precision*recall)/(precision+recall);
+			if(f_measure.isNaN()) {
+				f_measure = 0.0;
+				//System.out.println("*********************************");
+			}
+			//double cr = (double) p / (double) groundTruthList.size();
+			//System.out.println("Precision:"+precision);
+			//System.out.println("Recall:"+recall);
+			//System.out.println("F:"+f_measure+" CR:"+cr+" p:"+p);
+			//System.out.println("Precision:"+precision+" Recall:"+recall);
+			fMeasures.add(f_measure);
+			//res.put(cr, f_measure);
+		}
+
+	}	
+	
+	public void computeNDCGMeasure(List<RankEntry> reList, List<RankEntry> sList, List<Double> ndcg) {
+		
+		int n = reList.size();
+		for(int ci=0;ci<cr_values.length;ci++) {
+			double cr = cr_values[ci];
+			int p = (int) (cr * n);
+			double d = DCGMeasure.computeNDCG(reList, sList, p);
+			//double cr = (double) p / (double) reList.size();
+			//System.out.println("NCG["+p+"]:"+d+ " CR:"+cr);
+			ndcg.add(d);			
+		}		
+	}	
+	
+	//for scaled summary and uncalled summary modify in this method
+	public List<String> getSummaryByThresholdRating(List<RankEntry> reList2, double th) {
+		
+		List<RankEntry> reList1 = new ArrayList<RankEntry>(reList2);
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList1,cmp);
+		
+		double max = reList1.get(0).getJudgmentScore();
+		
+		List<String> res = new ArrayList<String>();
+		for(int i=0;i<reList1.size();i++) {
+			//double scaled = reList1.get(i).getJudgmentScore();
+			double scalled = (reList1.get(i).getJudgmentScore() / max) * MAX_RATING;
+			if( scalled >=th) {
+				RankEntry re = reList1.get(i);
+				res.add(re.getName());
+				//System.out.println(re.getName());
+			}
+		}
+		return res;
+	}
+	
+	public List<String> getSummaryOfSizeP(List<RankEntry> reList, int p) {
+		List<String> res = new ArrayList<String>();
+		for(int i=0;i<p;i++) {
+			RankEntry re = reList.get(i);
+			res.add(re.getName());
+			//System.out.println(re.getName());
+		}
+		return res;
+	}
+	
+
+	
+	class EntryJudgmentDscCmp implements Comparator<RankEntry> {
+		
+		@Override
+		public int compare(RankEntry o1, RankEntry o2) {
+			
+			if(o2.getJudgmentScore()>o1.getJudgmentScore()) return 1;
+			if(o2.getJudgmentScore()<o1.getJudgmentScore()) return -1;
+			return o1.getName().compareTo(o2.getName());
+		}
+		
+	}
 	
 	
 	public EvaluationTestCaseResult evaluate() throws Exception {
@@ -271,7 +482,14 @@ public class TestCaseEvaluator {
 		
 		testHumanAgreementQuestion1();
 		testHumanAgreementQuestion2();
+		test_salience();
+		test_salience_coherence();
+		
+		
+		//with similarity
+		test_salience_similarity();
+		
 		
 		return etcResult;
-	}
+	}	
 }
