@@ -65,6 +65,8 @@ public class EvaluationISWC2013 {
 		
 		List<Double> crValues = etcResult.getCrValuesList();
 		
+		
+		
 		int count = 0;
 		
 		
@@ -85,7 +87,7 @@ public class EvaluationISWC2013 {
 			//System.out.println(entry.getValue().size());
 			System.out.println(mlCode);
 			count++;
-		}		
+		}
 	}
 	
 	public static void main(String[] args) throws Exception {

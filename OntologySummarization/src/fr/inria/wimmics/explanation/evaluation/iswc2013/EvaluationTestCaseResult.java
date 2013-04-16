@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import fr.inria.wimmics.explanation.evaluation.CosineSimilarity;
+import fr.inria.wimmics.util.DefaultTreeMap;
 
 public class EvaluationTestCaseResult {
 
@@ -22,21 +23,21 @@ public class EvaluationTestCaseResult {
 	double[] cr_values;
 	List<Double> crValuesList;
 	
-	HashMap<String,List<Double>> ndcgValues;
-	HashMap<String,List<Double>> fmeasureValues;
+	DefaultTreeMap<String,List<Double>> ndcgValues;
+	DefaultTreeMap<String,List<Double>> fmeasureValues;
 
-	HashMap<String,List<Double>> ndcgValuesWithSimilarity;
-	HashMap<String,List<Double>> fmeasureValuesWithSimilarity;
+	DefaultTreeMap<String,List<Double>> ndcgValuesWithSimilarity;
+	DefaultTreeMap<String,List<Double>> fmeasureValuesWithSimilarity;
 	
 	
 	
 	public EvaluationTestCaseResult() {
 		cosineSimilarityQuestion1 = new ArrayList<Double>();
 		cosineSimilarityQuestion2 = new ArrayList<Double>();
-		ndcgValues = new HashMap<String,List<Double>>();
-		fmeasureValues = new HashMap<String,List<Double>>();
-		ndcgValuesWithSimilarity = new HashMap<String,List<Double>>();
-		fmeasureValuesWithSimilarity = new HashMap<String,List<Double>>();
+		ndcgValues = new DefaultTreeMap<String,List<Double>>(null);
+		fmeasureValues = new DefaultTreeMap<String,List<Double>>(null);
+		ndcgValuesWithSimilarity = new DefaultTreeMap<String,List<Double>>(null);
+		fmeasureValuesWithSimilarity = new DefaultTreeMap<String,List<Double>>(null);
 		crValuesList = new ArrayList<Double>();
 	}
 	
@@ -68,17 +69,17 @@ public class EvaluationTestCaseResult {
 		
 	}
 	//generated code below
-	public HashMap<String, List<Double>> getNdcgValuesWithSimilarity() {
+	public DefaultTreeMap<String, List<Double>> getNdcgValuesWithSimilarity() {
 		return ndcgValuesWithSimilarity;
 	}
-	public HashMap<String, List<Double>> getFmeasureValuesWithSimilarity() {
+	public DefaultTreeMap<String, List<Double>> getFmeasureValuesWithSimilarity() {
 		return fmeasureValuesWithSimilarity;
 	}
 	
-	public HashMap<String, List<Double>> getNdcgValues() {
+	public DefaultTreeMap<String, List<Double>> getNdcgValues() {
 		return ndcgValues;
 	}
-	public HashMap<String, List<Double>> getFmeasureValues() {
+	public DefaultTreeMap<String, List<Double>> getFmeasureValues() {
 		return fmeasureValues;
 	}
 	public void setCr_values(double[] cr_values) {

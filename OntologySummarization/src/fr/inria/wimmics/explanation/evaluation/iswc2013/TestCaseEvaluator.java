@@ -10,6 +10,9 @@ import java.util.Map;
 
 import org.jfree.data.xy.XYSeries;
 import org.junit.Test;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.rio.RDFHandlerException;
+import org.openrdf.rio.RDFParseException;
 
 import fr.inria.wimmics.explanation.KnowledgeStatement;
 import fr.inria.wimmics.explanation.evaluation.CosineSimilarity;
@@ -18,6 +21,9 @@ import fr.inria.wimmics.explanation.evaluation.PrecisionRecall;
 import fr.inria.wimmics.explanation.evaluation.PrecisionRecallCalculator;
 import fr.inria.wimmics.explanation.evaluation.RankEntry;
 import fr.inria.wimmics.explanation.evaluation.test.DCGSurveyEntryProcessor;
+
+
+
 
 
 
@@ -344,6 +350,79 @@ public class TestCaseEvaluator {
 		etcResult.recordfmeasureValues(key, fMeasures);
 	}
 	
+	/**
+	 * sentence graph
+	 * @throws RDFParseException
+	 * @throws RDFHandlerException
+	 * @throws RepositoryException
+	 * @throws IOException
+	 */
+	public void testSentenceGraph() throws RDFParseException, RDFHandlerException, RepositoryException, IOException {
+		
+	
+		
+		String questionName = QUESTION1_NAME;
+		double th = getAvgGroundTruthRating(questionName);		
+		List<RankEntry> reList1 = surveyProcessor.getAvgRankEntities(questionName);
+		
+		List<RankEntry> reList2 = SummarizationWrapper.summarySentenceGraph(FILE_JUSTIFICATION_INF, ROOT_STATEMENT,SG_Nagivational_p);
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+
+		computeNDCGMeasure(reList1, reList2, ndcgValues);	
+		
+		String key = "This is the sentence graph S_{SG}";
+		etcResult.recordNdcgValues(key, ndcgValues);	
+		
+		List<Double> fMeasures = new ArrayList<Double>();	
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList1,cmp);
+		
+		
+		computeFmeasure(reList1, reList2, fMeasures,th);
+		etcResult.recordfmeasureValues(key, fMeasures);
+		
+	
+		
+	}
+	
+	/**
+	 * salience+abstraction
+	 * @throws Exception
+	 */
+	
+	public void test_salience_abstraction() throws Exception {
+		
+		
+		String questionName = QUESTION1_NAME;
+		double th = getAvgGroundTruthRating(questionName);			
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientProofTreeAbstraction(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+	
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+		computeNDCGMeasure(reList, sList, ndcgValues);	
+		String key = "S_{SL}+S_{AB}";
+		etcResult.recordNdcgValues(key, ndcgValues);	
+		
+		List<Double> fMeasures = new ArrayList<Double>();	
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		
+		computeFmeasure(reList, sList, fMeasures,th);
+		etcResult.recordfmeasureValues(key, fMeasures);
+	}	
+	
 	
 	//with similarity measures below
 	
@@ -384,6 +463,98 @@ public class TestCaseEvaluator {
 		computeFmeasure(reList, sList, fMeasures,th);
 		etcResult.recordfmeasureValuesWithSimilarity(key, fMeasures);
 	}	
+	
+	
+	
+	/**
+	 *	salience+similarity+coherence 
+	 * @throws Exception
+	 */
+
+	public void test_salience_similarity_coherence() throws Exception {
+		
+		String questionName = QUESTION2_NAME;
+		double th = getAvgGroundTruthRating(questionName);	
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);
+		
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summarySimSalientReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT,similarityConceptList,ontologyLocationList,instanceLocationList);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+		
+		
+		System.out.println("NCG Sim ReRank");
+		System.out.println("#####################################");		
+		System.out.println("F-Measure Sim ReRank");
+		System.out.println("#####################################");
+
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+		
+		computeNDCGMeasure(reList, sList, ndcgValues);
+		String key = "S_{SL}+S_{SM}+S_{CO}";
+		etcResult.recordNdcgValuesWithSimilarity(key, ndcgValues);
+		
+		List<Double> fMeasures = new ArrayList<Double>();
+		
+		computeFmeasure(reList, sList, fMeasures,th);
+		etcResult.recordfmeasureValuesWithSimilarity(key, fMeasures);
+
+	}	
+	
+
+	/**
+	 * salience+abstraction+similarity
+	 * @throws Exception
+	 */
+	
+	public void test_salience_abstraction_similarity() throws Exception {
+		
+		System.out.println("NCG Proof Tree Abrstraction with concept similarity");
+		System.out.println("#####################################");			
+		System.out.println("F-Measure Proof Tree Abrstraction with concept similarity");
+		System.out.println("#####################################");		
+		
+		
+		String questionName = QUESTION2_NAME;
+		double th = getAvgGroundTruthRating(questionName);		
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientProofTreeAbstractionWithSimilarity(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+	
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+		
+		computeNDCGMeasure(reList, sList, ndcgValues);	
+		String key = "S_{SL}+S_{AB}+S_{SM}";
+		etcResult.recordNdcgValuesWithSimilarity(key, ndcgValues);
+		
+		List<Double> fMeasures = new ArrayList<Double>();
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		
+		computeFmeasure(reList, sList, fMeasures,th);
+		etcResult.recordfmeasureValuesWithSimilarity(key, fMeasures);
+	}
+
+	
 	
 	public void computeFmeasure(List<RankEntry> groundTruthList, List<RankEntry> summaryToCompareList,List<Double> fMeasures , double th) {
 		//Map<Double, Double> res = new HashMap<Double, Double>();
@@ -482,12 +653,19 @@ public class TestCaseEvaluator {
 		
 		testHumanAgreementQuestion1();
 		testHumanAgreementQuestion2();
+		
+		
 		test_salience();
 		test_salience_coherence();
+		test_salience_abstraction();
 		
+		testSentenceGraph();
 		
 		//with similarity
 		test_salience_similarity();
+		test_salience_similarity_coherence();
+		test_salience_abstraction_similarity();
+		
 		
 		
 		return etcResult;
