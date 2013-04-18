@@ -2,8 +2,13 @@ package fr.inria.wimmics.explanation.evaluation.iswc2013;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+
+import fr.inria.wimmics.explanation.evaluation.RankEntry;
+import fr.inria.wimmics.util.DefaultTreeMap;
 
 public class EvaluationISWC2013 {
 
@@ -12,7 +17,7 @@ public class EvaluationISWC2013 {
 		etc.setQuestion1Name("q1");
 		etc.setQuestion2Name("q2");
 
-		etc.setRatingFilePath("files/evaluation/dcg/survey/inf1/results-survey31573.csv");
+		etc.setRatingFilePath("files/evaluation/dcg/survey/inf1/testcase1.csv");
 		etc.setRootStatement("http://alphubel.unice.fr:8080/lodutil/data/d21");
 		
 		etc.setJustificationFilePath("rdf/inference1.trig");
@@ -21,6 +26,8 @@ public class EvaluationISWC2013 {
 		etc.setSimilarityConcept("http://dbpedia.org/ontology/Event");
 		etc.setDbpediaSchemaLocation("rdf/ontology/dbpedia_3.8.owl");
 		etc.setGeonamesSchemaLocation("rdf/ontology/geonames_ontology_v3.1.rdf");
+		
+		
 		
 		return etc;
 	}
@@ -69,9 +76,12 @@ public class EvaluationISWC2013 {
 		
 		int count = 0;
 		
+		EntryResCmp cmp = new EntryResCmp();
 		
+		DefaultTreeMap<String, List<Double>> tt = new DefaultTreeMap<String, List<Double>>(cmp,null);
+		tt.putAll(etcResult.getNdcgValues());
 		
-		for(Entry<String, List<Double>> entry:etcResult.getNdcgValues().entrySet()) {
+		for(Entry<String, List<Double>> entry:tt.entrySet()) {
 			String mlCode = plotVector(crValues, entry.getValue(), entry.getKey(),"CR","nDCG", count);
 			//System.out.println(entry.getValue().size());
 			System.out.println(mlCode);
@@ -81,8 +91,11 @@ public class EvaluationISWC2013 {
 		
 		
 		//with similarity
+		DefaultTreeMap<String, List<Double>> tt1 = new DefaultTreeMap<String, List<Double>>(cmp,null);
+		tt1.putAll(etcResult.getNdcgValuesWithSimilarity());
+		
 		System.out.println("######################### with similarity ################################");
-		for(Entry<String, List<Double>> entry:etcResult.getNdcgValuesWithSimilarity().entrySet()) {
+		for(Entry<String, List<Double>> entry:tt1.entrySet()) {
 			String mlCode = plotVector(crValues, entry.getValue(), entry.getKey(),"CR","nDCG", count);
 			//System.out.println(entry.getValue().size());
 			System.out.println(mlCode);
@@ -101,4 +114,69 @@ public class EvaluationISWC2013 {
 		
 		
 	}
+	
+	class EntryResCmp implements Comparator<String> {
+		
+	@Override
+	public int compare(String o1, String o2) {
+		int o1Val = getOrder(o1);
+		int o2Val = getOrder(o2);
+		return o1Val-o2Val;
+	}
+
+//		@Override
+//		public int compare(Entry<String, List<Double>> o1,
+//				Entry<String, List<Double>> o2) {
+//
+//			int o1Val = getOrder(o1.getKey());
+//			int o2Val = getOrder(o2.getKey());
+//			return o1Val-o2Val;
+//		}
+		
+	}
+	
+	public EvaluationISWC2013() {
+		setOrder();
+		
+	}
+	public void setOrder() {
+		order.put("S_{SL}",1);
+		order.put("S_{SL}+S_{AB}",2);
+		order.put("S_{SL}+S_{CO}",3);
+		order.put("S_{SL}+S_{ST}",4);
+		
+		order.put("S_{SL}+S_{AB}+S_{CO}",5);
+		order.put("S_{SL}+S_{AB}+S_{ST}",6);
+		order.put("S_{SL}+S_{ST}+S_{CO}",7);
+		order.put("S_{SL}+S_{AB}+S_{ST}+S_{CO}",8);
+		
+		
+		order.put("S_{SG}",9);
+		
+		//with similarity
+		
+		order.put("S_{SL}+S_{SM}",10);
+		order.put("S_{SL}+S_{AB}+S_{SM}",11);
+		order.put("S_{SL}+S_{SM}+S_{CO}",12);
+		order.put("S_{SL}+S_{SM}+S_{ST}",13);
+		
+		order.put("S_{SL}+S_{AB}+S_{SM}+S_{CO}}",14);
+		order.put("S_{SL}+S_{AB}+S_{SM}+S_{ST}",16);
+		order.put("S_{SL}+S_{SM}+S_{ST}+S_{CO}",17);
+		order.put("S_{SL}+S_{AB}+S_{SM}+S_{ST}+S_{CO}",18);
+		
+		
+		
+		
+	}
+	
+	public int getOrder(String key) {
+		if(order.containsKey(key))
+			return order.get(key);
+		
+		return key.hashCode();
+	}
+	
+	private HashMap<String,Integer> order = new HashMap<String,Integer>();
+		
 }

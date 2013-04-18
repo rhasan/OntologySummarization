@@ -373,7 +373,7 @@ public class TestCaseEvaluator {
 
 		computeNDCGMeasure(reList1, reList2, ndcgValues);	
 		
-		String key = "This is the sentence graph S_{SG}";
+		String key = "S_{SG}";
 		etcResult.recordNdcgValues(key, ndcgValues);	
 		
 		List<Double> fMeasures = new ArrayList<Double>();	

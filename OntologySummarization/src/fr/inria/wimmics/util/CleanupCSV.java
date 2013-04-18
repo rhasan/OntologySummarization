@@ -1,6 +1,9 @@
-package fr.inria.wimmics.explanation.evaluation.test;
+package fr.inria.wimmics.util;
 
+
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,12 +13,13 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fr.inria.wimmics.explanation.evaluation.RankEntry;
-
 import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
 
-public class DCGSurveyEntryProcessor {
-	
+import fr.inria.wimmics.explanation.evaluation.test.DCGSurveyEntry;
+import fr.inria.wimmics.explanation.evaluation.test.DCGSurveyEntryProcessor;
+
+public class CleanupCSV {
 	public static String QUESTION_REGEX = "^(.+)\\s+\\[(.+)\\]$";
 	public static String EXCLUDE_HEADER = "q-specialisation  [other]";
 	public static String SPECIALISATION_HEADER = "q-specialisation";
@@ -61,68 +65,56 @@ public class DCGSurveyEntryProcessor {
 	}
 	
 	
+
+	public static void main(String[] args) throws IOException {
+		CleanupCSV processor = new CleanupCSV("files/evaluation/dcg/survey/inf1/results-survey31573.csv");
+		
+		processor.printCSV();
+		
+		processor.cleanUp();
+		processor.printCSV();
+		
+		processor.writeCSV("files/evaluation/dcg/survey/inf1/testcase1.csv");
+	}
+	
+	public void writeCSV(String newFilePath) throws IOException {
+        BufferedWriter out = new BufferedWriter(new FileWriter(newFilePath));
+        CSVWriter writer = new CSVWriter(out);
+
+
+        //writer.writeAll(allOriginalValues);
+
+		for(String row[]:allOriginalValues) {
+			writer.writeNext(row);
+		}
+        out.close();
+	
+	}
+	
 	public List<String[]> readCSV(String filePath) throws IOException{
 		CSVReader reader = new CSVReader(new FileReader(filePath));
 		return reader.readAll();
 	}
 	
-	public void printValues() {
-		//print participant profile
-		System.out.println("Counts:");
-		System.out.println("Specialisation:");
-
-
-		for(Entry<String, Integer> en:specialisation.entrySet()) {
-			System.out.println(en.getKey()+"\t"+en.getValue());
+	public void printCSV() {
+		for(String row[]:allOriginalValues) {
+			for(String column:row) {
+				System.out.print(column+" ");
+			}
+			System.out.println();
+	
 		}
-		System.out.println("RDF Knowledge:");
-		for(Entry<String, Integer> en:rdfKnowledge.entrySet()) {
-			System.out.println(en.getKey()+"\t"+en.getValue());
-		}
-		System.out.println("Gender:");
-		for(Entry<String, Integer> en:gender.entrySet()) {
-			System.out.println(en.getKey()+"\t"+en.getValue());
-		}
-		System.out.println("Age:");
-		for(Entry<String, Integer> en:age.entrySet()) {
-			System.out.println(en.getKey()+"\t"+en.getValue());
-		}
-		System.out.println("All Age:");
-		List<String[]> valuesWoHeaders = allOriginalValues.subList(1, allOriginalValues.size());
-		for(String[] entries:valuesWoHeaders) {
-			System.out.println(entries[ageHeaderIndex]);
-		}		
 		
 	}
+		
 	
-	public QuestionHeader getStatementName(String line) {
-	      // String to be scanned to find the pattern.
-
-	      //String line = "q1 [d5]";
-
-	      String pattern = QUESTION_REGEX;
-
-	      // Create a Pattern object
-
-	      Pattern r = Pattern.compile(pattern);
-
-	      // Now create matcher object.
-
-	      Matcher m = r.matcher(line);
-
-	      if (m.find( )) {
-
-	         return new QuestionHeader(m.group(1), m.group(2));
-
-	      } else {
-
-	         //System.out.println("NO MATCH");
-	    	  return new QuestionHeader("", "");
-
-	      }		
-	}
-	public void setValues(String filePath) throws IOException {
+	
+	public CleanupCSV(String filePath) throws IOException {
 		allOriginalValues = readCSV(filePath);
+	}
+
+	public void cleanUp() throws IOException {
+		
 		
 		assert(allOriginalValues.size()>1);
 		
@@ -211,80 +203,26 @@ public class DCGSurveyEntryProcessor {
 //			else {
 //				statementRatings.put(qh.statementName, 0.0);
 //			}
+			int rowNum =0;
 			for(String[] entries:values) {
 				String ratingStr = entries[qh.index];
 				double trv = Double.valueOf(ratingStr);
-				ratingVal += trv;
+				
+				double nTrv = (trv/10)*5.0;
+				double ceil = Math.ceil(nTrv) ;
+				double floor = Math.ceil(nTrv);
+				double fraction = nTrv - floor;
+				double modified = fraction>0.5?ceil:floor;
+				
+				entries[qh.index] = Double.toString(modified);
+				
+				rowNum++;
 			}
-			statementRatings.put(qh.statementName, ratingVal);
+			
 
 			avgRatings.put(qh.questionName, statementRatings);
 			
 		}
-		
-		//set the avg here
-		
-		for(Entry<String, Map<String, Double>> entry:avgRatings.entrySet()) {
-			for(Entry<String, Double> te:entry.getValue().entrySet()) {
-				te.setValue(te.getValue()/values.size());
-			}
-		}
-		
-		//System.out.println(avgRatings);
-
-		
-		for(String[] entries:values) {
-			
-			DCGSurveyEntry se = new DCGSurveyEntry();
-			//List<RankEntry> reList = new ArrayList<RankEntry>();
-			for(int indx = 0;indx<entries.length;indx++) {
-				String entStr = entries[indx];
-				String entHdr = headers[indx];
-				//System.out.print(entStr+" ");
-				if(isProfileHeader(entHdr)) {
-					if(isSpecialisationHead(entHdr)) {
-						String spVal = getSpecialisationValeu(entries, qSpecialisationIndex, qSpecialisationOtherIndex);
-						se.putProfileInfo(SPECIALISATION_HEADER, spVal);
-					} else {
-						se.putProfileInfo(entHdr, entStr);
-					}
-					
-				} else if(isQuestionHeader(entHdr)) {
-					QuestionHeader qh = getStatementName(entHdr);
-					se.putQustionAnswer(qh.questionName,qh.statementName, entStr);
-				}
-			}
-			surveyEntries.add(se);
-			//System.out.println();
-			
-		}
-		
-	}
-	
-	public List<List<RankEntry>> getAllRankEntries(String questionName) {
-		List<List<RankEntry>> allRankedEntries = new ArrayList<List<RankEntry>>();
-		
-		for(DCGSurveyEntry se: surveyEntries) {
-			allRankedEntries.add(se.getQuestionAnswers(questionName));
-		}
-		
-		return allRankedEntries;
-	}
-	
-	
-	public List<RankEntry> getAvgRankEntities(String questionName) {
-		List<RankEntry> reList = new ArrayList<RankEntry>();
-		
-		Map<String, Double> entities = avgRatings.get(questionName);
-		
-		for(Entry<String,Double> en:entities.entrySet()) {
-			RankEntry re = new RankEntry();
-			re.setName(en.getKey());
-			re.setJudgmentScore(en.getValue());
-			reList.add(re);
-		}
-		
-		return reList;
 	}
 	
 	private String getSpecialisationValeu(String[] entries, int qSpecialisationIndex, int qSpecialisationOtherIndex) {
@@ -356,5 +294,31 @@ public class DCGSurveyEntryProcessor {
 		this.age = age;
 	}
 	
+	public QuestionHeader getStatementName(String line) {
+	      // String to be scanned to find the pattern.
+
+	      //String line = "q1 [d5]";
+
+	      String pattern = QUESTION_REGEX;
+
+	      // Create a Pattern object
+
+	      Pattern r = Pattern.compile(pattern);
+
+	      // Now create matcher object.
+
+	      Matcher m = r.matcher(line);
+
+	      if (m.find( )) {
+
+	         return new QuestionHeader(m.group(1), m.group(2));
+
+	      } else {
+
+	         //System.out.println("NO MATCH");
+	    	  return new QuestionHeader("", "");
+
+	      }		
+	}
 	
 }
