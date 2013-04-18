@@ -514,7 +514,7 @@ public class DCGSurveyInference1Test {
 		}
 		System.out.println();
 	}
-	
+	//done
 	/**
 	 * computes cosine similarities between the rating vectors of each evaluators 
 	 * (without similarity)
@@ -595,7 +595,7 @@ public class DCGSurveyInference1Test {
 		
 
 	}
-	
+	//done
 	/**
 	 * computes cosine similarities between the rating vectors of each evaluators 
 	 * (with conecept similarity)
@@ -680,6 +680,7 @@ public class DCGSurveyInference1Test {
 //
 //	}	
 	
+	
 	/**
 	 * computes nDCG between each pairs of evaluators for different p values
 	 * then computes average nDCG value for each p value
@@ -741,7 +742,7 @@ public class DCGSurveyInference1Test {
 		
 	}
 	
-	
+	//done
 	@Test
 	public void testSoloCentrality() throws Exception {
 		
@@ -771,6 +772,7 @@ public class DCGSurveyInference1Test {
 		computeFmeasure(reList, sList, soloCentralityFMeasureCR,th);
 	}
 	
+	//done
 	@Test
 	public void testSimCentrality() throws Exception {
 		
@@ -806,7 +808,7 @@ public class DCGSurveyInference1Test {
 	}	
 
 	
-	
+	//done
 	@Test
 	public void testSalientReRank() throws Exception {
 		
@@ -841,7 +843,7 @@ public class DCGSurveyInference1Test {
 		computeFmeasure(reList, sList, soloReRankFMeasureCR,th);
 	}
 	
-	
+	//done
 	@Test
 	public void testSimSalientReRank() throws Exception {
 		
@@ -876,7 +878,7 @@ public class DCGSurveyInference1Test {
 	}	
 	
 
-	
+	//done
 	@Test
 	public void testSentenceGraph() throws RDFParseException, RDFHandlerException, RepositoryException, IOException {
 		
@@ -904,7 +906,7 @@ public class DCGSurveyInference1Test {
 		
 	}
 	
-	
+	//done
 	@Test
 	public void testSalientProofTreeAbstraction() throws Exception {
 		
@@ -971,7 +973,7 @@ public class DCGSurveyInference1Test {
 		computeFmeasure(reList, sList, simAbstractionFMeasureCR,th);
 	}
 
-	
+	//done
 	@Test
 	public void testSalientProofTreeSubtreeWeight() throws Exception {
 		
@@ -1003,7 +1005,7 @@ public class DCGSurveyInference1Test {
 		computeFmeasure(reList, sList, soloProofTreeSubtreeWeightFMeasureCR,th);
 	}
 	
-	
+	//done
 	@Test
 	public void testSimSalientProofTreeSubtreeWeight() throws Exception {
 		
@@ -1035,6 +1037,7 @@ public class DCGSurveyInference1Test {
 		
 		computeFmeasure(reList, sList, simProofTreeSubtreeWeightFMeasureCR,th);
 	}		
+	
 	
 	public void computeNDCGMeasure(List<RankEntry> reList, List<RankEntry> sList, XYSeries series) {
 		
@@ -1328,7 +1331,7 @@ public class DCGSurveyInference1Test {
 		return stmts;
 	}
 	
-	
+	//done
 	@Test
 	public void testSalientAbstractSubtree() throws Exception {
 		
@@ -1509,6 +1512,8 @@ public class DCGSurveyInference1Test {
 		}	
 		return stmts;
 	}	
+	
+	//done
 	@Test
 	public void testSalientAbstractionSimilaritySubtreeWeight() throws Exception {
 		
@@ -1542,6 +1547,7 @@ public class DCGSurveyInference1Test {
 		computeFmeasure(reList, sList, salienceAbstractSimilaritySubtreeFMeasureCR,th);
 	}	
 	
+	//done
 	@Test
 	public void testSalientAbstractionSubtreeReRank() throws Exception {
 		
@@ -1606,7 +1612,7 @@ public class DCGSurveyInference1Test {
 	}	
 	
 	
-	
+	//done
 	@Test
 	public void testSalientAbstractionReRank() throws Exception {
 		
@@ -1699,6 +1705,7 @@ public class DCGSurveyInference1Test {
 		return stmts;
 	}	
 
+	//done
 	@Test
 	public void testSalientAbstractionSimilaritySubtreeWeightReRank() throws Exception {
 		
@@ -1732,7 +1739,7 @@ public class DCGSurveyInference1Test {
 		computeFmeasure(reList, sList, salienceAbstractionSimilaritySubtreeWeightReRankFMeasureCR,th);
 	}
 	
-	
+	//done
 	@Test
 	public void testSalientAbstractionSimilarityReRank() throws Exception {
 		
@@ -1798,7 +1805,7 @@ public class DCGSurveyInference1Test {
 		return stmts;
 	}	
 	
-	
+	//done
 	@Test
 	public void testSalientSubtreeSimilarityReRank() throws Exception {
 		
@@ -1893,7 +1900,7 @@ public class DCGSurveyInference1Test {
 		return stmts;
 	}	
 	
-	
+	//done
 	@Test
 	public void testSalientSubtreeReRank() throws Exception {
 		

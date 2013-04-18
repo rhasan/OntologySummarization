@@ -27,6 +27,8 @@ import fr.inria.wimmics.explanation.evaluation.test.DCGSurveyEntryProcessor;
 
 
 
+
+
 import fr.inria.wimmics.util.Util;
 
 public class TestCaseEvaluator {
@@ -424,6 +426,212 @@ public class TestCaseEvaluator {
 	}	
 	
 	
+	/**
+	 * salience+subtree weight 
+	 * @throws Exception
+	 */
+	public void test_salience_subtreeWeight() throws Exception {
+		
+	
+		
+		String questionName = QUESTION1_NAME;
+		double th = getAvgGroundTruthRating(questionName);
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientAndProofTreeSubtreeWeight(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+
+		computeNDCGMeasure(reList, sList, ndcgValues);		
+		
+		
+		String key = "S_{SL}+S_{ST}";
+		etcResult.recordNdcgValues(key, ndcgValues);	
+		List<Double> fMeasures = new ArrayList<Double>();	
+		
+		
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);
+		computeFmeasure(reList, sList, fMeasures,th);
+		
+		etcResult.recordfmeasureValues(key, fMeasures);
+
+	}
+	
+	/**
+	 * salience+abstraction+subtree weight
+	 * @throws Exception
+	 */
+	public void test_salience_abstraction_subtreeWeight() throws Exception {
+		
+		
+		String questionName = QUESTION1_NAME;
+		double th = getAvgGroundTruthRating(questionName);			
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientAbstractSubtree(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+	
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+
+		computeNDCGMeasure(reList, sList, ndcgValues);		
+		
+		
+		String key = "S_{SL}+S_{AB}+S_{ST}";
+		etcResult.recordNdcgValues(key, ndcgValues);	
+		List<Double> fMeasures = new ArrayList<Double>();	
+		
+		
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);
+		computeFmeasure(reList, sList, fMeasures,th);
+		
+		etcResult.recordfmeasureValues(key, fMeasures);
+	}	
+
+	/**
+	 * salience+abstraction+subtree weight+coherence
+	 * @throws Exception
+	 */
+	public void test_salience_abstraction_subtreeWeight_coherence() throws Exception {
+		
+		String questionName = QUESTION1_NAME;
+		double th = getAvgGroundTruthRating(questionName);		
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts =  SummarizationWrapper.summaryBySalientAbstractionSubtreeReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+	
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name =  SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+
+		computeNDCGMeasure(reList, sList, ndcgValues);		
+		
+		
+		String key = "S_{SL}+S_{AB}+S_{ST}+S_{CO}";
+		etcResult.recordNdcgValues(key, ndcgValues);	
+		List<Double> fMeasures = new ArrayList<Double>();	
+		
+		
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);
+		computeFmeasure(reList, sList, fMeasures,th);
+		
+		etcResult.recordfmeasureValues(key, fMeasures);
+	}
+	
+	/**
+	 * salience+abstraction+coherence
+	 * @throws Exception
+	 */
+	public void test_salience_abstraction_coherence() throws Exception {
+		
+		String questionName = QUESTION1_NAME;
+		double th = getAvgGroundTruthRating(questionName);		
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientAbstractionReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+	
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+
+		computeNDCGMeasure(reList, sList, ndcgValues);		
+		
+		
+		String key = "S_{SL}+S_{AB}+S_{CO}";
+		etcResult.recordNdcgValues(key, ndcgValues);	
+		List<Double> fMeasures = new ArrayList<Double>();	
+		
+		
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);
+		computeFmeasure(reList, sList, fMeasures,th);
+		
+		etcResult.recordfmeasureValues(key, fMeasures);
+	}	
+	
+	/**
+	 * salience+subtree weight+coherence
+	 * @throws Exception
+	 */
+	
+	public void test_salience_subtreeWeight_coherence() throws Exception {
+		
+		
+		String questionName = QUESTION1_NAME;
+		double th = getAvgGroundTruthRating(questionName);
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientSubtreeReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+
+		computeNDCGMeasure(reList, sList, ndcgValues);		
+		
+		
+		String key = "S_{SL}+S_{ST}+S_{CO}";
+		etcResult.recordNdcgValues(key, ndcgValues);	
+		List<Double> fMeasures = new ArrayList<Double>();	
+		
+		
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);
+		computeFmeasure(reList, sList, fMeasures,th);
+		
+		etcResult.recordfmeasureValues(key, fMeasures);
+	}	
+
+	
 	//with similarity measures below
 	
 	/**
@@ -483,11 +691,7 @@ public class TestCaseEvaluator {
 		List<KnowledgeStatement> kstmts = SummarizationWrapper.summarySimSalientReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT,similarityConceptList,ontologyLocationList,instanceLocationList);
 		List<RankEntry> sList = new ArrayList<RankEntry>();
 		
-		
-		System.out.println("NCG Sim ReRank");
-		System.out.println("#####################################");		
-		System.out.println("F-Measure Sim ReRank");
-		System.out.println("#####################################");
+	
 
 		//System.out.println(reList.size()+":"+kstmts.size());
 		for(KnowledgeStatement kst:kstmts) {
@@ -518,12 +722,7 @@ public class TestCaseEvaluator {
 	
 	public void test_salience_abstraction_similarity() throws Exception {
 		
-		System.out.println("NCG Proof Tree Abrstraction with concept similarity");
-		System.out.println("#####################################");			
-		System.out.println("F-Measure Proof Tree Abrstraction with concept similarity");
-		System.out.println("#####################################");		
-		
-		
+			
 		String questionName = QUESTION2_NAME;
 		double th = getAvgGroundTruthRating(questionName);		
 		
@@ -553,7 +752,200 @@ public class TestCaseEvaluator {
 		computeFmeasure(reList, sList, fMeasures,th);
 		etcResult.recordfmeasureValuesWithSimilarity(key, fMeasures);
 	}
+	
+	/**
+	 * salience+similarity+subtree weight
+	 * @throws Exception
+	 */
+	public void test_salience_similarity_subtreeWeight() throws Exception {
+		
+		
+		String questionName = QUESTION2_NAME;
+		double th = getAvgGroundTruthRating(questionName);
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientAndProofTreeSubtreeWeightWithSimilarity(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+		
+		computeNDCGMeasure(reList, sList, ndcgValues);	
+		String key = "S_{SL}+S_{SM}+S_{ST}";
+		etcResult.recordNdcgValuesWithSimilarity(key, ndcgValues);
+		
+		List<Double> fMeasures = new ArrayList<Double>();
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		
+		computeFmeasure(reList, sList, fMeasures,th);
+		etcResult.recordfmeasureValuesWithSimilarity(key, fMeasures);
+	}		
+	
+	/**
+	 * salience+abstraction+similarity+subtree weight
+	 * @throws Exception
+	 */
+	public void test_salience_abstraction_similarity_subtreeWeight() throws Exception {
+		
+		
+		String questionName = QUESTION2_NAME;
+		double th = getAvgGroundTruthRating(questionName);		
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientAbstractionSimilaritySubtreeWeight(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+	
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+		
+		computeNDCGMeasure(reList, sList, ndcgValues);	
+		String key = "S_{SL}+S_{AB}+S_{SM}+S_{ST}";
+		etcResult.recordNdcgValuesWithSimilarity(key, ndcgValues);
+		
+		List<Double> fMeasures = new ArrayList<Double>();
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		
+		computeFmeasure(reList, sList, fMeasures,th);
+		etcResult.recordfmeasureValuesWithSimilarity(key, fMeasures);
+	}	
+	
+	/**
+	 * salience+abstraction+similarity+subtree weight+coherence
+	 * @throws Exception
+	 */
+	public void test_salience_abstraction_similarity_subtreeWeight_coherence() throws Exception {
+		
+		
+		String questionName = QUESTION2_NAME;
+		double th = getAvgGroundTruthRating(questionName);		
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientAbstractionSimilaritySubtreeWeightReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+	
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+		
+		computeNDCGMeasure(reList, sList, ndcgValues);	
+		String key = "S_{SL}+S_{AB}+S_{SM}+S_{ST}+S_{CO}";
+		etcResult.recordNdcgValuesWithSimilarity(key, ndcgValues);
+		
+		List<Double> fMeasures = new ArrayList<Double>();
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		
+		computeFmeasure(reList, sList, fMeasures,th);
+		etcResult.recordfmeasureValuesWithSimilarity(key, fMeasures);
+	}
+	
+	/**
+	 * salience+abstraction+similarity+coherence
+	 * @throws Exception
+	 */
+	public void test_salience_abstraction_similarity_coherence() throws Exception {
+		
+		
+		String questionName = QUESTION2_NAME;
+		double th = getAvgGroundTruthRating(questionName);		
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientAbstractionSimilarityReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+	
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+		
+		computeNDCGMeasure(reList, sList, ndcgValues);	
+		String key = "S_{SL}+S_{AB}+S_{SM}+S_{CO}";
+		etcResult.recordNdcgValuesWithSimilarity(key, ndcgValues);
+		
+		List<Double> fMeasures = new ArrayList<Double>();
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		
+		computeFmeasure(reList, sList, fMeasures,th);
+		etcResult.recordfmeasureValuesWithSimilarity(key, fMeasures);
+	}
 
+	/**
+	 * salience+similarity+subtree weight+coherence
+	 * @throws Exception
+	 */
+	public void testSalientSubtreeSimilarityReRank() throws Exception {
+		
+		
+		String questionName = QUESTION2_NAME;
+		double th = getAvgGroundTruthRating(questionName);		
+		
+		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
+		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientSubtreeSimilarityReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
+		List<RankEntry> sList = new ArrayList<RankEntry>();
+	
+		//System.out.println(reList.size()+":"+kstmts.size());
+		for(KnowledgeStatement kst:kstmts) {
+			String name = SummarizationWrapper.getStatementName(kst.getStatement().getContext().stringValue());
+			RankEntry re = new RankEntry();
+			re.setName(name);
+			sList.add(re);
+		}
+		
+		
+		
+		List<Double> ndcgValues = new ArrayList<Double>();
+		
+		computeNDCGMeasure(reList, sList, ndcgValues);	
+		String key = "S_{SL}+S_{SM}+S_{ST}+S_{CO}";
+		etcResult.recordNdcgValuesWithSimilarity(key, ndcgValues);
+		
+		List<Double> fMeasures = new ArrayList<Double>();
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(reList,cmp);		
+		
+		computeFmeasure(reList, sList, fMeasures,th);
+		etcResult.recordfmeasureValuesWithSimilarity(key, fMeasures);
+	}	
+	
+
+
+
+	//evaluation measure related below
 	
 	
 	public void computeFmeasure(List<RankEntry> groundTruthList, List<RankEntry> summaryToCompareList,List<Double> fMeasures , double th) {
@@ -658,6 +1050,11 @@ public class TestCaseEvaluator {
 		test_salience();
 		test_salience_coherence();
 		test_salience_abstraction();
+		test_salience_subtreeWeight();
+		test_salience_abstraction_subtreeWeight();
+		test_salience_abstraction_subtreeWeight_coherence();
+		test_salience_abstraction_coherence();
+		test_salience_subtreeWeight_coherence();
 		
 		testSentenceGraph();
 		
@@ -665,6 +1062,11 @@ public class TestCaseEvaluator {
 		test_salience_similarity();
 		test_salience_similarity_coherence();
 		test_salience_abstraction_similarity();
+		test_salience_similarity_subtreeWeight();
+		test_salience_abstraction_similarity_subtreeWeight();
+		test_salience_abstraction_similarity_subtreeWeight_coherence();
+		test_salience_abstraction_similarity_coherence();
+		testSalientSubtreeSimilarityReRank();
 		
 		
 		
