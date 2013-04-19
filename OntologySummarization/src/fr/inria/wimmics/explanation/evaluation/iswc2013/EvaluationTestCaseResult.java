@@ -16,6 +16,12 @@ public class EvaluationTestCaseResult {
 	List<Double> cosineSimilarityQuestion2;
 	double avgCosineSimilarityQuestion2;	
 	
+	List<Double> kendallTauQuestion1;
+	double avgKendallTauQuestion1;
+
+	List<Double> kendallTauQuestion2;
+	double avgKendallTauQuestion2;	
+	
 	Map<String,Integer> specialisation;
 	Map<String,Integer> rdfKnowledge;
 	Map<String,Integer> gender;
@@ -34,11 +40,18 @@ public class EvaluationTestCaseResult {
 	public EvaluationTestCaseResult() {
 		cosineSimilarityQuestion1 = new ArrayList<Double>();
 		cosineSimilarityQuestion2 = new ArrayList<Double>();
+		
+		kendallTauQuestion1 = new ArrayList<Double>();
+		kendallTauQuestion2 = new ArrayList<Double>();
+		
+		
 		ndcgValues = new DefaultTreeMap<String,List<Double>>(null);
 		fmeasureValues = new DefaultTreeMap<String,List<Double>>(null);
 		ndcgValuesWithSimilarity = new DefaultTreeMap<String,List<Double>>(null);
 		fmeasureValuesWithSimilarity = new DefaultTreeMap<String,List<Double>>(null);
 		crValuesList = new ArrayList<Double>();
+	
+	
 	}
 	
 	public void AddCosineSimilarityQuestion1(Double d) {
@@ -160,4 +173,46 @@ public class EvaluationTestCaseResult {
 	public double getAvgCosineSimilarityQuestion2() {
 		return avgCosineSimilarityQuestion2;
 	}
+	
+	public List<Double> getKendallTauQuestion1() {
+		return kendallTauQuestion1;
+	}
+
+	public void setKendallTauQuestion1(List<Double> kendallTauQuestion1) {
+		this.kendallTauQuestion1 = kendallTauQuestion1;
+	}
+
+	public double getAvgKendallTauQuestion1() {
+		return avgKendallTauQuestion1;
+	}
+
+	public void setAvgKendallTauQuestion1(double avgKendallTauQuestion1) {
+		this.avgKendallTauQuestion1 = avgKendallTauQuestion1;
+	}
+
+	public List<Double> getKendallTauQuestion2() {
+		return kendallTauQuestion2;
+	}
+
+	public void setKendallTauQuestion2(List<Double> kendallTauQuestion2) {
+		this.kendallTauQuestion2 = kendallTauQuestion2;
+	}
+
+	public double getAvgKendallTauQuestion2() {
+		return avgKendallTauQuestion2;
+	}
+
+	public void setAvgKendallTauQuestion2(double avgKendallTauQuestion2) {
+		this.avgKendallTauQuestion2 = avgKendallTauQuestion2;
+	}
+
+	
+	public void addKendallTauQuestion1(double d) {
+		this.kendallTauQuestion1.add(d);
+	}
+	
+	public void addKendallTauQuestion2(double d) {
+		this.kendallTauQuestion2.add(d);
+	}
+
 }

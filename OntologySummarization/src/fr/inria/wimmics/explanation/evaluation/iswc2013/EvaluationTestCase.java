@@ -30,6 +30,12 @@ public class EvaluationTestCase {
 		return result;
 	}
 	
+	public EvaluationTestCaseResult evaluateTest() throws Exception {
+		evaluator = new TestCaseEvaluator(this);
+		result = evaluator.evaluateTest();
+		return result;
+	}	
+	
 	public EvaluationTestCaseResult getResult() throws Exception {
 		if(result==null) {
 			throw new Exception("test case not evaluated");

@@ -68,6 +68,19 @@ public class EvaluationISWC2013 {
 		System.out.println("%"+legend);
 		return yStr;
 	}
+	public String matlabVector(List<Double> x, String x_or_y_var, int count) {
+		
+		String str =x_or_y_var+String.valueOf(count)+" = [";
+		
+		for(double v:x) {
+			String t = (" "+String.valueOf(v));
+			str += t;
+			//System.out.println("val:"+v);
+		}
+		str += "];\n";
+	
+		return str;
+	}
 	
 	public void generateMatlabCode(EvaluationTestCaseResult etcResult) {
 		
@@ -129,21 +142,26 @@ public class EvaluationISWC2013 {
 			
 		}		
 		
+		System.out.println("%######################### [Cosine similarity without similarity] ################################");
+		String mlCode = matlabVector(etcResult.getCosineSimilarityQuestion1(), "x", 0);
+		System.out.println(mlCode);
+		
+		System.out.println("%######################### [Cosine similarity with similarity] ################################");
+		String mlCode1 = matlabVector(etcResult.getCosineSimilarityQuestion2(), "x", 1);
+		System.out.println(mlCode1);
+		
+		System.out.println("%######################### [Kendall tau human agreement without similarity] ################################");
+		String mlCode2 = matlabVector(etcResult.getKendallTauQuestion1(), "x", 2);
+		System.out.println(mlCode2);	
+		
+		System.out.println("%######################### [Kendall tau human agreement with similarity] ################################");
+		String mlCode3 = matlabVector(etcResult.getKendallTauQuestion2(), "x", 3);
+		System.out.println(mlCode3);
+		
 		
 		
 	}
-	
-	public static void main(String[] args) throws Exception {
-		
-		EvaluationISWC2013 iswc2013 = new EvaluationISWC2013();
-		EvaluationTestCase etc1 = iswc2013.getTestCase1();
-		
-		EvaluationTestCaseResult etcResult1 = etc1.evaluate();
-		
-		iswc2013.generateMatlabCode(etcResult1);
-		
-		
-	}
+
 	
 	class EntryResCmp implements Comparator<String> {
 		
@@ -208,5 +226,20 @@ public class EvaluationISWC2013 {
 	}
 	
 	private HashMap<String,Integer> order = new HashMap<String,Integer>();
+
+	
+	
+	public static void main(String[] args) throws Exception {
 		
+		EvaluationISWC2013 iswc2013 = new EvaluationISWC2013();
+		EvaluationTestCase etc1 = iswc2013.getTestCase1();
+		
+		EvaluationTestCaseResult etcResult1 = etc1.evaluate();
+		//EvaluationTestCaseResult etcResult1 = etc1.evaluateTest();
+		//TODO: merge all the testcases to 1 result by averaging 
+		
+		iswc2013.generateMatlabCode(etcResult1);
+		
+		
+	}	
 }

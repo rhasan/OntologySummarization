@@ -17,9 +17,11 @@ import org.openrdf.rio.RDFParseException;
 import fr.inria.wimmics.explanation.KnowledgeStatement;
 import fr.inria.wimmics.explanation.evaluation.CosineSimilarity;
 import fr.inria.wimmics.explanation.evaluation.DCGMeasure;
+import fr.inria.wimmics.explanation.evaluation.KendallTauCalculator;
 import fr.inria.wimmics.explanation.evaluation.PrecisionRecall;
 import fr.inria.wimmics.explanation.evaluation.PrecisionRecallCalculator;
 import fr.inria.wimmics.explanation.evaluation.RankEntry;
+import fr.inria.wimmics.explanation.evaluation.SentenceRankCorrelation;
 import fr.inria.wimmics.explanation.evaluation.test.DCGSurveyEntryProcessor;
 
 
@@ -58,10 +60,12 @@ public class TestCaseEvaluator {
 	List<String> similarityConceptList = new ArrayList<String>();
 	List<String> ontologyLocationList = new ArrayList<String>();
 	
-	double MAX_RATING = 5.0;
+	//double MAX_RATING = 5.0;
 	//uncomment initialization method calls in init() if the ground truth summary should be with the statements greater than avg rating 
-	double AVG_GROUND_TRUTH_RATING_Q1 = 3.0;
-	double AVG_GROUND_TRUTH_RATING_Q2 = 3.0;
+	//double AVG_GROUND_TRUTH_RATING_Q1 = 3.0;
+	//double AVG_GROUND_TRUTH_RATING_Q2 = 3.0;
+	//value in percent
+	double HUMAN_SUMMARY_TH = 60.0/100.0;
 	
 	EvaluationTestCaseResult etcResult;
 	
@@ -101,15 +105,26 @@ public class TestCaseEvaluator {
 		
 		etcResult.setCr_values(cr_values);
 	}
+//	
+//	public double getAvgGroundTruthRating(String questionName) {
+//		if(questionName.equals(QUESTION1_NAME))
+//			return AVG_GROUND_TRUTH_RATING_Q1;
+//		else if(questionName.equals(QUESTION2_NAME))
+//			return AVG_GROUND_TRUTH_RATING_Q2;
+//		return 0.0;
+//		
+//	}
 	
-	public double getAvgGroundTruthRating(String questionName) {
-		if(questionName.equals(QUESTION1_NAME))
-			return AVG_GROUND_TRUTH_RATING_Q1;
-		else if(questionName.equals(QUESTION2_NAME))
-			return AVG_GROUND_TRUTH_RATING_Q2;
-		return 0.0;
+	public double getGroundTruthSummaryPercentThreshold(String questionName) {
+//		if(questionName.equals(QUESTION1_NAME))
+//			return AVG_GROUND_TRUTH_RATING_Q1;
+//		else if(questionName.equals(QUESTION2_NAME))
+//			return AVG_GROUND_TRUTH_RATING_Q2;
+//		return 0.0;
+		return HUMAN_SUMMARY_TH;
 		
 	}
+	
 	public double avgGroundTruthRating(String questionName) {
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		
@@ -153,7 +168,7 @@ public class TestCaseEvaluator {
 	 * (without similarity)
 	 * @throws Exception 
 	 */
-	@Test
+
 	public void testHumanAgreementQuestion1() throws Exception {
 		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION1_NAME);
 		//en.printValues();
@@ -249,7 +264,7 @@ public class TestCaseEvaluator {
 	 * (with conecept similarity)
 	 * @throws Exception 
 	 */
-	@Test
+
 	public void testHumanAgreementQuestion2() throws Exception {
 		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION2_NAME);
 
@@ -288,6 +303,99 @@ public class TestCaseEvaluator {
 		
 
 	}
+	
+	/**
+	 * computes Kendall Tau between the rating vectors of each evaluators 
+	 * (without conecept similarity)
+	 * @throws Exception 
+	 */
+
+	public void testTauHumanAgreementQuestion1() throws Exception {
+		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION1_NAME);
+
+		
+		double tauSum = 0;
+		double totalValueCount = 0;
+		for(int i=0;i<reList.size();i++) {
+			List<Double> iCosineSimValues = new ArrayList<Double>();
+			double iTauSum = 0;
+			int iPairCount = 0;
+			for(int j=0;j<reList.size();j++) {
+				
+				if(i!=j) {
+					double tau = computeKendallTau(reList.get(i), reList.get(j));
+					iTauSum += tau;
+					iPairCount++;
+					
+					tauSum += tau;
+					totalValueCount++;
+					iCosineSimValues.add(tau);
+				}
+			}
+			double iAvgAgreement = iTauSum/iPairCount;
+			etcResult.addKendallTauQuestion1(iAvgAgreement);
+			//etcResult.AddCosineSimilarityQuestion2(iAvgAgreement);
+			//System.out.println("P_{"+(i+1)+"} agv:"+Util.round(iAvgAgreement));
+		}
+		
+		double totalAvgTau = tauSum/totalValueCount;
+		//etcResult.setAvgCosineSimilarityQuestion2(totalAvgCosine);
+		etcResult.setAvgKendallTauQuestion1(totalAvgTau);
+				
+		//double stdDev = Statistics.standardDeviation(avgCosine, cosineSimValues);
+		
+		//System.out.println("Avg cosine similarity  (with concept similarity)(new):"+Util.round(totalAvgCosine));
+		//System.out.println("Std dev:"+stdDev);
+
+	}	
+	
+	
+	/**
+	 * computes Kendall Tau between the rating vectors of each evaluators 
+	 * (with conecept similarity)
+	 * @throws Exception 
+	 */
+
+	public void testTauHumanAgreementQuestion2() throws Exception {
+		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION2_NAME);
+
+		
+		double tauSum = 0;
+		double totalValueCount = 0;
+		for(int i=0;i<reList.size();i++) {
+			List<Double> iCosineSimValues = new ArrayList<Double>();
+			double iTauSum = 0;
+			int iPairCount = 0;
+			for(int j=0;j<reList.size();j++) {
+				
+				if(i!=j) {
+					double tau = computeKendallTau(reList.get(i), reList.get(j));
+					iTauSum += tau;
+					iPairCount++;
+					
+					tauSum += tau;
+					totalValueCount++;
+					iCosineSimValues.add(tau);
+				}
+			}
+			double iAvgAgreement = iTauSum/iPairCount;
+			etcResult.addKendallTauQuestion2(iAvgAgreement);
+			//etcResult.AddCosineSimilarityQuestion2(iAvgAgreement);
+			//System.out.println("P_{"+(i+1)+"} agv:"+Util.round(iAvgAgreement));
+		}
+		
+		double totalAvgTau = tauSum/totalValueCount;
+		//etcResult.setAvgCosineSimilarityQuestion2(totalAvgCosine);
+		etcResult.setAvgKendallTauQuestion2(totalAvgTau);
+				
+		//double stdDev = Statistics.standardDeviation(avgCosine, cosineSimValues);
+		
+		//System.out.println("Avg cosine similarity  (with concept similarity)(new):"+Util.round(totalAvgCosine));
+		//System.out.println("Std dev:"+stdDev);
+		
+		
+
+	}	
 	/**
 	 * test summary with salience measure 
 	 * @throws Exception
@@ -295,7 +403,7 @@ public class TestCaseEvaluator {
 	public void test_salience() throws Exception {
 		
 		String questionName = QUESTION1_NAME;
-		double th = getAvgGroundTruthRating(questionName);			
+		double th = getGroundTruthSummaryPercentThreshold(questionName);			
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		List<KnowledgeStatement> kstmts = SummarizationWrapper.summarySoloCentrality(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
 		List<RankEntry> sList = new ArrayList<RankEntry>();
@@ -316,7 +424,7 @@ public class TestCaseEvaluator {
 		
 		List<Double> fMeasures = new ArrayList<Double>();
 		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
-		Collections.sort(reList,cmp);		
+		Collections.sort(reList,cmp);	
 		computeFmeasure(reList, sList, fMeasures,th);
 		etcResult.recordfmeasureValues(key, fMeasures);
 	}
@@ -325,7 +433,7 @@ public class TestCaseEvaluator {
 		
 		
 		String questionName = QUESTION1_NAME;
-		double th = getAvgGroundTruthRating(questionName);	
+		double th = getGroundTruthSummaryPercentThreshold(questionName);	
 		
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
@@ -364,7 +472,7 @@ public class TestCaseEvaluator {
 	
 		
 		String questionName = QUESTION1_NAME;
-		double th = getAvgGroundTruthRating(questionName);		
+		double th = getGroundTruthSummaryPercentThreshold(questionName);		
 		List<RankEntry> reList1 = surveyProcessor.getAvgRankEntities(questionName);
 		
 		List<RankEntry> reList2 = SummarizationWrapper.summarySentenceGraph(FILE_JUSTIFICATION_INF, ROOT_STATEMENT,SG_Nagivational_p);
@@ -398,7 +506,7 @@ public class TestCaseEvaluator {
 		
 		
 		String questionName = QUESTION1_NAME;
-		double th = getAvgGroundTruthRating(questionName);			
+		double th = getGroundTruthSummaryPercentThreshold(questionName);			
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientProofTreeAbstraction(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
 		List<RankEntry> sList = new ArrayList<RankEntry>();
@@ -435,7 +543,7 @@ public class TestCaseEvaluator {
 	
 		
 		String questionName = QUESTION1_NAME;
-		double th = getAvgGroundTruthRating(questionName);
+		double th = getGroundTruthSummaryPercentThreshold(questionName);
 		
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientAndProofTreeSubtreeWeight(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
@@ -475,7 +583,7 @@ public class TestCaseEvaluator {
 		
 		
 		String questionName = QUESTION1_NAME;
-		double th = getAvgGroundTruthRating(questionName);			
+		double th = getGroundTruthSummaryPercentThreshold(questionName);			
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientAbstractSubtree(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
 		List<RankEntry> sList = new ArrayList<RankEntry>();
@@ -515,7 +623,7 @@ public class TestCaseEvaluator {
 	public void test_salience_abstraction_subtreeWeight_coherence() throws Exception {
 		
 		String questionName = QUESTION1_NAME;
-		double th = getAvgGroundTruthRating(questionName);		
+		double th = getGroundTruthSummaryPercentThreshold(questionName);		
 		
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		List<KnowledgeStatement> kstmts =  SummarizationWrapper.summaryBySalientAbstractionSubtreeReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
@@ -556,7 +664,7 @@ public class TestCaseEvaluator {
 	public void test_salience_abstraction_coherence() throws Exception {
 		
 		String questionName = QUESTION1_NAME;
-		double th = getAvgGroundTruthRating(questionName);		
+		double th = getGroundTruthSummaryPercentThreshold(questionName);		
 		
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientAbstractionReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
@@ -598,7 +706,7 @@ public class TestCaseEvaluator {
 		
 		
 		String questionName = QUESTION1_NAME;
-		double th = getAvgGroundTruthRating(questionName);
+		double th = getGroundTruthSummaryPercentThreshold(questionName);
 		
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientSubtreeReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT);
@@ -641,7 +749,7 @@ public class TestCaseEvaluator {
 	public void test_salience_similarity() throws Exception {
 		
 		String questionName = QUESTION2_NAME;
-		double th = getAvgGroundTruthRating(questionName);			
+		double th = getGroundTruthSummaryPercentThreshold(questionName);			
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		
 		
@@ -682,7 +790,7 @@ public class TestCaseEvaluator {
 	public void test_salience_similarity_coherence() throws Exception {
 		
 		String questionName = QUESTION2_NAME;
-		double th = getAvgGroundTruthRating(questionName);	
+		double th = getGroundTruthSummaryPercentThreshold(questionName);	
 		
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
@@ -724,7 +832,7 @@ public class TestCaseEvaluator {
 		
 			
 		String questionName = QUESTION2_NAME;
-		double th = getAvgGroundTruthRating(questionName);		
+		double th = getGroundTruthSummaryPercentThreshold(questionName);		
 		
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientProofTreeAbstractionWithSimilarity(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
@@ -761,7 +869,7 @@ public class TestCaseEvaluator {
 		
 		
 		String questionName = QUESTION2_NAME;
-		double th = getAvgGroundTruthRating(questionName);
+		double th = getGroundTruthSummaryPercentThreshold(questionName);
 		
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientAndProofTreeSubtreeWeightWithSimilarity(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
@@ -798,7 +906,7 @@ public class TestCaseEvaluator {
 		
 		
 		String questionName = QUESTION2_NAME;
-		double th = getAvgGroundTruthRating(questionName);		
+		double th = getGroundTruthSummaryPercentThreshold(questionName);		
 		
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientAbstractionSimilaritySubtreeWeight(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
@@ -836,7 +944,7 @@ public class TestCaseEvaluator {
 		
 		
 		String questionName = QUESTION2_NAME;
-		double th = getAvgGroundTruthRating(questionName);		
+		double th = getGroundTruthSummaryPercentThreshold(questionName);		
 		
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientAbstractionSimilaritySubtreeWeightReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
@@ -874,7 +982,7 @@ public class TestCaseEvaluator {
 		
 		
 		String questionName = QUESTION2_NAME;
-		double th = getAvgGroundTruthRating(questionName);		
+		double th = getGroundTruthSummaryPercentThreshold(questionName);		
 		
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientAbstractionSimilarityReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
@@ -911,7 +1019,7 @@ public class TestCaseEvaluator {
 		
 		
 		String questionName = QUESTION2_NAME;
-		double th = getAvgGroundTruthRating(questionName);		
+		double th = getGroundTruthSummaryPercentThreshold(questionName);		
 		
 		List<RankEntry> reList = surveyProcessor.getAvgRankEntities(questionName);
 		List<KnowledgeStatement> kstmts = SummarizationWrapper.summaryBySalientSubtreeSimilarityReRank(FILE_JUSTIFICATION_INF, ROOT_STATEMENT, similarityConceptList, ontologyLocationList, instanceLocationList);
@@ -993,6 +1101,44 @@ public class TestCaseEvaluator {
 		}		
 	}	
 	
+	public void computeKendallTau(List<RankEntry> reList, List<RankEntry> sList, List<Double> tau) throws Exception {
+		
+		
+		int n = reList.size();
+		for(int ci=0;ci<cr_values.length;ci++) {
+			double cr = cr_values[ci];
+			int p = (int) (cr * n);
+			List<RankEntry> entryList1 = reList.subList(0, p);
+			List<RankEntry> entryList2 = sList.subList(0, p);
+			double d = computeKendallTau(entryList1, entryList2);
+			//double cr = (double) p / (double) reList.size();
+			//System.out.println("NCG["+p+"]:"+d+ " CR:"+cr);
+			tau.add(d);			
+		}		
+	}
+	
+	public void printList(List<RankEntry> l) {
+		System.out.println();
+		for(RankEntry e:l) {
+			System.out.print(" ["+e.getName()+" "+e.getJudgmentScore()+"] ");
+		}
+		System.out.println();
+	}
+	public double computeKendallTau(List<RankEntry> reList, List<RankEntry> sList) throws Exception {
+		
+		List<RankEntry> entryList1 = new ArrayList<RankEntry>(reList);
+		List<RankEntry> entryList2 = new ArrayList<RankEntry>(sList);
+		
+		EntryJudgmentDscCmp cmp = new EntryJudgmentDscCmp();
+		Collections.sort(entryList1,cmp);
+		Collections.sort(entryList2,cmp);
+		
+		//printList(entryList1);
+		//printList(entryList2);
+		
+		return SentenceRankCorrelation.sentenceRankCorrelationTau(entryList1, entryList2);
+	}
+	
 	//for scaled summary and unscaled summary modify in this method
 	public List<String> getSummaryByThresholdRating(List<RankEntry> reList2, double th) {
 		
@@ -1005,8 +1151,10 @@ public class TestCaseEvaluator {
 		List<String> res = new ArrayList<String>();
 		for(int i=0;i<reList1.size();i++) {
 			//double scaled = reList1.get(i).getJudgmentScore();
-			double scaled = (reList1.get(i).getJudgmentScore() / max) * MAX_RATING;
-			if( scaled >=th) {
+			//double scaled = (reList1.get(i).getJudgmentScore() / max) * MAX_RATING;
+			double ratio_to_max = (reList1.get(i).getJudgmentScore() / max);
+
+			if( ratio_to_max >=th) {
 				RankEntry re = reList1.get(i);
 				res.add(re.getName());
 				//System.out.println(re.getName());
@@ -1069,6 +1217,14 @@ public class TestCaseEvaluator {
 		testSalientSubtreeSimilarityReRank();
 		
 		
+		return etcResult;
+	}
+	
+	public EvaluationTestCaseResult evaluateTest() throws Exception {
+
+		
+		testTauHumanAgreementQuestion1();
+		testTauHumanAgreementQuestion2();
 		
 		return etcResult;
 	}	

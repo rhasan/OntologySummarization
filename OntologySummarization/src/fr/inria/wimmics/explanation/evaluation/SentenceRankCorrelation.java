@@ -104,6 +104,43 @@ public class SentenceRankCorrelation {
 		in.close();
 		return tau;
 	}
+
+	public static double sentenceRankCorrelationTau(List<RankEntry> entryList1, List<RankEntry> entryList2) throws Exception {
+		List<RankEntry> list1 = new ArrayList<RankEntry>();
+		List<RankEntry> list2 = new ArrayList<RankEntry>();
+			
+
+//		while(in.hasNext()) {
+			
+			//start list1
+			int rank = 1;
+			for(RankEntry en:entryList1) {
+				String name = en.getName();
+				
+				RankEntry e = new RankEntry();
+				e.setName(name);
+				e.setRank(rank++);
+				list1.add(e);
+			}
+
+			rank = 1;
+			//start list2
+			for(RankEntry en:entryList2) {
+				String name = en.getName();
+				
+				RankEntry e = new RankEntry();
+				e.setName(name);
+				e.setRank(rank++);
+				list2.add(e);
+				
+			}
+//
+//		}
+		double tau = KendallTauCalculator.computeKendallTau(list1, list2);
+		
+		
+		return tau;
+	}
 	
 
 	public static void main(String[] args) throws Exception {
