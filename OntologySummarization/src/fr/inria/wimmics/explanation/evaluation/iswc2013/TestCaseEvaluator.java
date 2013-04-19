@@ -33,7 +33,7 @@ import fr.inria.wimmics.util.Util;
 
 public class TestCaseEvaluator {
 	
-	double MAX_RATING = 10.0;
+	
 	
 	String QUESTION1_NAME;
 	String QUESTION2_NAME;//context question
@@ -58,10 +58,10 @@ public class TestCaseEvaluator {
 	List<String> similarityConceptList = new ArrayList<String>();
 	List<String> ontologyLocationList = new ArrayList<String>();
 	
-	
+	double MAX_RATING = 5.0;
 	//uncomment initialization method calls in init() if the ground truth summary should be with the statements greater than avg rating 
-	double AVG_GROUND_TRUTH_RATING_Q1 = 6.0;
-	double AVG_GROUND_TRUTH_RATING_Q2 = 6.0;
+	double AVG_GROUND_TRUTH_RATING_Q1 = 3.0;
+	double AVG_GROUND_TRUTH_RATING_Q2 = 3.0;
 	
 	EvaluationTestCaseResult etcResult;
 	
@@ -993,7 +993,7 @@ public class TestCaseEvaluator {
 		}		
 	}	
 	
-	//for scaled summary and uncalled summary modify in this method
+	//for scaled summary and unscaled summary modify in this method
 	public List<String> getSummaryByThresholdRating(List<RankEntry> reList2, double th) {
 		
 		List<RankEntry> reList1 = new ArrayList<RankEntry>(reList2);
@@ -1005,8 +1005,8 @@ public class TestCaseEvaluator {
 		List<String> res = new ArrayList<String>();
 		for(int i=0;i<reList1.size();i++) {
 			//double scaled = reList1.get(i).getJudgmentScore();
-			double scalled = (reList1.get(i).getJudgmentScore() / max) * MAX_RATING;
-			if( scalled >=th) {
+			double scaled = (reList1.get(i).getJudgmentScore() / max) * MAX_RATING;
+			if( scaled >=th) {
 				RankEntry re = reList1.get(i);
 				res.add(re.getName());
 				//System.out.println(re.getName());

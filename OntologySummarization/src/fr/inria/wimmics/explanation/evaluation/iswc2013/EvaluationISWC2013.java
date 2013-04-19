@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import fr.inria.wimmics.explanation.evaluation.RankEntry;
 import fr.inria.wimmics.util.DefaultTreeMap;
@@ -73,7 +74,7 @@ public class EvaluationISWC2013 {
 		List<Double> crValues = etcResult.getCrValuesList();
 		
 		
-		
+		System.out.println("%######################### [CR vs nDCG: without similarity] ################################");
 		int count = 0;
 		
 		EntryResCmp cmp = new EntryResCmp();
@@ -91,16 +92,45 @@ public class EvaluationISWC2013 {
 		
 		
 		//with similarity
-		DefaultTreeMap<String, List<Double>> tt1 = new DefaultTreeMap<String, List<Double>>(cmp,null);
+		TreeMap<String, List<Double>> tt1 = new TreeMap<String, List<Double>>(cmp);
 		tt1.putAll(etcResult.getNdcgValuesWithSimilarity());
 		
-		System.out.println("######################### with similarity ################################");
+		System.out.println("%######################### [CR vs nDCG: with similarity] ################################");
 		for(Entry<String, List<Double>> entry:tt1.entrySet()) {
 			String mlCode = plotVector(crValues, entry.getValue(), entry.getKey(),"CR","nDCG", count);
 			//System.out.println(entry.getValue().size());
 			System.out.println(mlCode);
 			count++;
 		}
+		
+		
+		
+		//cr vs f-measure without similarity
+		count =0;
+		System.out.println("%######################### [CR vs F-score: without similarity] ################################");
+		TreeMap<String, List<Double>> f_score1 = new TreeMap<String, List<Double>>(cmp);
+		f_score1.putAll(etcResult.getFmeasureValues());
+		for(Entry<String, List<Double>> entry:f_score1.entrySet()) {
+			String mlCode = plotVector(crValues, entry.getValue(), entry.getKey(),"CR","F-score", count);
+			//System.out.println(entry.getValue().size());
+			System.out.println(mlCode);
+			count++;
+			
+		}
+		
+		System.out.println("%######################### [CR vs F-score: with similarity] ################################");
+		TreeMap<String, List<Double>> f_score2 = new TreeMap<String, List<Double>>(cmp);
+		f_score2.putAll(etcResult.getFmeasureValuesWithSimilarity());
+		for(Entry<String, List<Double>> entry:f_score2.entrySet()) {
+			String mlCode = plotVector(crValues, entry.getValue(), entry.getKey(),"CR","F-score", count);
+			//System.out.println(entry.getValue().size());
+			System.out.println(mlCode);
+			count++;
+			
+		}		
+		
+		
+		
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -160,7 +190,7 @@ public class EvaluationISWC2013 {
 		order.put("S_{SL}+S_{SM}+S_{CO}",12);
 		order.put("S_{SL}+S_{SM}+S_{ST}",13);
 		
-		order.put("S_{SL}+S_{AB}+S_{SM}+S_{CO}}",14);
+		order.put("S_{SL}+S_{AB}+S_{SM}+S_{CO}",14);
 		order.put("S_{SL}+S_{AB}+S_{SM}+S_{ST}",16);
 		order.put("S_{SL}+S_{SM}+S_{ST}+S_{CO}",17);
 		order.put("S_{SL}+S_{AB}+S_{SM}+S_{ST}+S_{CO}",18);
