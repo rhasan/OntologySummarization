@@ -74,7 +74,7 @@ just:j11 {
 just:j12 {
 	data:d131 r4ta:justifiedBy just:j12 .
 
-	data:d131 r4ta:derivedFrom data:d13-2 .
+	data:d131 r4ta:derivedFrom data:d132 .
 	data:d131 r4ta:derivedFrom data:d14 .
 
 }

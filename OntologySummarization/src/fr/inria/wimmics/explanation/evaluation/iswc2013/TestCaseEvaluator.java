@@ -60,12 +60,12 @@ public class TestCaseEvaluator {
 	List<String> similarityConceptList = new ArrayList<String>();
 	List<String> ontologyLocationList = new ArrayList<String>();
 	
-	//double MAX_RATING = 5.0;
+	double MAX_RATING = 5.0;
 	//uncomment initialization method calls in init() if the ground truth summary should be with the statements greater than avg rating 
-	//double AVG_GROUND_TRUTH_RATING_Q1 = 3.0;
-	//double AVG_GROUND_TRUTH_RATING_Q2 = 3.0;
+	double AVG_GROUND_TRUTH_RATING_Q1 = 3.0;
+	double AVG_GROUND_TRUTH_RATING_Q2 = 3.0;
 	//value in percent
-	double HUMAN_SUMMARY_TH = 60.0/100.0;
+	//double HUMAN_SUMMARY_TH = 60.0/100.0;
 	
 	EvaluationTestCaseResult etcResult;
 	
@@ -116,12 +116,12 @@ public class TestCaseEvaluator {
 //	}
 	
 	public double getGroundTruthSummaryPercentThreshold(String questionName) {
-//		if(questionName.equals(QUESTION1_NAME))
-//			return AVG_GROUND_TRUTH_RATING_Q1;
-//		else if(questionName.equals(QUESTION2_NAME))
-//			return AVG_GROUND_TRUTH_RATING_Q2;
-//		return 0.0;
-		return HUMAN_SUMMARY_TH;
+		if(questionName.equals(QUESTION1_NAME))
+			return AVG_GROUND_TRUTH_RATING_Q1;
+		else if(questionName.equals(QUESTION2_NAME))
+			return AVG_GROUND_TRUTH_RATING_Q2;
+		return 0.0;
+		//return HUMAN_SUMMARY_TH;
 		
 	}
 	
@@ -1151,8 +1151,8 @@ public class TestCaseEvaluator {
 		List<String> res = new ArrayList<String>();
 		for(int i=0;i<reList1.size();i++) {
 			//double scaled = reList1.get(i).getJudgmentScore();
-			//double scaled = (reList1.get(i).getJudgmentScore() / max) * MAX_RATING;
-			double ratio_to_max = (reList1.get(i).getJudgmentScore() / max);
+			double ratio_to_max = (reList1.get(i).getJudgmentScore() / max) * MAX_RATING;
+			//double ratio_to_max = (reList1.get(i).getJudgmentScore() / max);
 
 			if( ratio_to_max >=th) {
 				RankEntry re = reList1.get(i);

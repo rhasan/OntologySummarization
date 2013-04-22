@@ -84,6 +84,7 @@ public class JustificationProcessor {
 		for(Statement st:myList) {
 			String stKey = st.getContext().stringValue();
 			stmtMap.put(stKey, st);
+			//System.out.println(stKey);
 
 
 		}
@@ -93,6 +94,8 @@ public class JustificationProcessor {
 			if(st.getPredicate().toString().equals(Ratio4TA.derivedFrom)) {
 				String keyA = st.getSubject().stringValue();
 				String keyB = st.getObject().stringValue();
+				
+				//System.out.println("### "+keyA+" is derivedFrom"+keyB);
 				
 				Statement a = stmtMap.getFirst(keyA);
 				Statement b = stmtMap.getFirst(keyB);

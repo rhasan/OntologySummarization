@@ -215,4 +215,23 @@ public class EvaluationTestCaseResult {
 		this.kendallTauQuestion2.add(d);
 	}
 
+	public void setNdcgValues(DefaultTreeMap<String, List<Double>> ndcgValues) {
+		this.ndcgValues = ndcgValues;
+	}
+
+	public void setFmeasureValues(
+			DefaultTreeMap<String, List<Double>> fmeasureValues) {
+		this.fmeasureValues = fmeasureValues;
+	}
+
+	public void setNdcgValuesWithSimilarity(
+			DefaultTreeMap<String, List<Double>> ndcgValuesWithSimilarity) {
+		this.ndcgValuesWithSimilarity = ndcgValuesWithSimilarity;
+	}
+
+	public void setFmeasureValuesWithSimilarity(
+			DefaultTreeMap<String, List<Double>> fmeasureValuesWithSimilarity) {
+		this.fmeasureValuesWithSimilarity = fmeasureValuesWithSimilarity;
+	}
+	
 }
