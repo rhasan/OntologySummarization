@@ -272,8 +272,8 @@ public class EvaluationISWC2013 {
 		
 		
 		
-		if(valueList2.size()==0) {
-			
+		if(valueList2==null ||valueList2.size()==0) {
+			if(valueList2==null) valueList2 = new ArrayList<Double>();
 			for(double d:valueList1) {
 				valueList2.add(d);
 			}
@@ -283,7 +283,7 @@ public class EvaluationISWC2013 {
 		
 		
 		for(int i=0;i<valueList1.size();i++) {
-			double mVal = (valueList1.get(i)+valueList2.get(i))/2.0;
+			double mVal = (valueList1.get(i) + valueList2.get(i))/2.0;
 			valueList2.set(i, mVal);
 		}
 	}
@@ -293,18 +293,18 @@ public class EvaluationISWC2013 {
 		EvaluationTestCaseResult mergedResult = new EvaluationTestCaseResult();
 		
 		
-		EntryResCmp cmp = new EntryResCmp();
+		//EntryResCmp cmp = new EntryResCmp();
 		
 		List<Double> crValues = allResults.get(0).getCrValuesList();
 		mergedResult.setCrValuesList(crValues);
 		
-		DefaultTreeMap<String,List<Double>> ndcgValues = new DefaultTreeMap<String,List<Double>>(new ArrayList<Double>());
+		DefaultTreeMap<String,List<Double>> ndcgValues = new DefaultTreeMap<String,List<Double>>(null);
 		
-		DefaultTreeMap<String,List<Double>> fscoreValues = new DefaultTreeMap<String,List<Double>>(new ArrayList<Double>());
+		DefaultTreeMap<String,List<Double>> fscoreValues = new DefaultTreeMap<String,List<Double>>(null);
 		
-		DefaultTreeMap<String,List<Double>> ndcgValuesSim = new DefaultTreeMap<String,List<Double>>(new ArrayList<Double>());
+		DefaultTreeMap<String,List<Double>> ndcgValuesSim = new DefaultTreeMap<String,List<Double>>(null);
 		
-		DefaultTreeMap<String,List<Double>> fscoreValuesSim = new DefaultTreeMap<String,List<Double>>(new ArrayList<Double>());		
+		DefaultTreeMap<String,List<Double>> fscoreValuesSim = new DefaultTreeMap<String,List<Double>>(null);		
 		
 		List<Double> cosineQ1 = new ArrayList<Double>();
 		List<Double> cosineQ2 = new ArrayList<Double>();
@@ -318,32 +318,38 @@ public class EvaluationISWC2013 {
 
 			
 			//ndcg
-			DefaultTreeMap<String, List<Double>> tt = new DefaultTreeMap<String, List<Double>>(cmp,null);
-			tt.putAll(result.getNdcgValues());
 			
-			for(Entry<String, List<Double>> entry:tt.entrySet()) {
+			for(Entry<String, List<Double>> entry:result.getNdcgValues().entrySet()) {
 				String key = entry.getKey();
 				List<Double> valueList = entry.getValue();
 				
-				
+
+				if(ndcgValues.containsKey(key)==false) {
+					List<Double> tl = new ArrayList<Double>();
+					
+					ndcgValues.put(key, tl);
+
+				}
+
 				List<Double>  ndcgValuesList = ndcgValues.get(key);			
 				
 				mergeList(valueList, ndcgValuesList); //merge result is stored in the second one
 				
-				//if(ndcgValues.containsKey(key)==false) {
-					ndcgValues.put(key, ndcgValuesList);
-				//}
+				ndcgValues.put(key, ndcgValuesList);
+				
 				
 			}
 			
 			//f-score
-			DefaultTreeMap<String, List<Double>> tt1 = new DefaultTreeMap<String, List<Double>>(cmp,null);
-			tt1.putAll(result.getFmeasureValues());
-			
-			for(Entry<String, List<Double>> entry:tt1.entrySet()) {
+			for(Entry<String, List<Double>> entry:result.getFmeasureValues().entrySet()) {
 
 				String key = entry.getKey();
 				List<Double> valueList = entry.getValue();
+				
+				if(fscoreValues.containsKey(key)==false) {
+					fscoreValues.put(key, new ArrayList<Double>());
+				}			
+				
 				
 				List<Double>  fscoreValuesList = fscoreValues.get(key);				
 				
@@ -363,14 +369,15 @@ public class EvaluationISWC2013 {
 			//with similarity below
 			
 			//ndcg
-			DefaultTreeMap<String, List<Double>> tt3 = new DefaultTreeMap<String, List<Double>>(cmp,null);
-			tt3.putAll(result.getNdcgValuesWithSimilarity());
+
 			
-			for(Entry<String, List<Double>> entry:tt3.entrySet()) {
+			for(Entry<String, List<Double>> entry:result.getNdcgValuesWithSimilarity().entrySet()) {
 				String key = entry.getKey();
 				List<Double> valueList = entry.getValue();
 				
-				
+				if(ndcgValuesSim.containsKey(key)==false) {
+					ndcgValuesSim.put(key, new ArrayList<Double>());
+				}		
 				List<Double>  ndcgValuesList = ndcgValuesSim.get(key);				
 				
 				mergeList(valueList, ndcgValuesList); //merge result is stored in the second one
@@ -382,13 +389,16 @@ public class EvaluationISWC2013 {
 			}
 			
 			//f-score
-			DefaultTreeMap<String, List<Double>> tt4 = new DefaultTreeMap<String, List<Double>>(cmp,null);
-			tt4.putAll(result.getFmeasureValuesWithSimilarity());
+
 			
-			for(Entry<String, List<Double>> entry:tt4.entrySet()) {
+			for(Entry<String, List<Double>> entry:result.getFmeasureValuesWithSimilarity().entrySet()) {
 
 				String key = entry.getKey();
 				List<Double> valueList = entry.getValue();
+				
+				if(fscoreValuesSim.containsKey(key)==false) {
+					fscoreValuesSim.put(key, new ArrayList<Double>());
+				}
 				
 				List<Double>  fscoreValuesList = fscoreValuesSim.get(key);				
 				
@@ -425,7 +435,7 @@ public class EvaluationISWC2013 {
 		EvaluationISWC2013 iswc2013 = new EvaluationISWC2013();
 		EvaluationTestCase etc1 = iswc2013.getTestCase1();
 		EvaluationTestCase etc2 = iswc2013.getTestCase2();
-		EvaluationTestCase etc3 = iswc2013.getTestCase2();
+		EvaluationTestCase etc3 = iswc2013.getTestCase3();
 		
 		
 		EvaluationTestCaseResult etcResult1 = etc1.evaluate();
