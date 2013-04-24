@@ -137,7 +137,7 @@ public class SimilarityCalculator {
 	
 	public double resourceSimilarityScore(String resURI) {
 		List<Double> scores = new ArrayList<Double>();
-		if(isClass(resURI)) {
+		if(isClass(resURI)) { // j \in SC, when the resURI is a class that is in the ontologies/schemas
 			
 			for(String pref:prefs) {
 				
@@ -168,8 +168,44 @@ public class SimilarityCalculator {
 		return max;
 	}
 	
+	public double resourceSimilarityScoreNew(String resURI) {
+		
+		List<Double> scores = new ArrayList<Double>();
+		List<String> types = new ArrayList<String>();
+		if(isClass(resURI)) { // j \in SC, when the resURI is a class that is in the ontologies/schemas
+			types.add(resURI);
+
+		} else {
+			types = getResourceTypes(resURI);
+		}
+		
+		if(types==null) return 0.0;
+		if(types.size()==0) return 0.0;
+		double maxSum = 0.0;
+		for(String type:types) {
+			//System.out.println("Type:"+type);
+			double max = Double.NEGATIVE_INFINITY;
+			for(String pref:prefs) {
+				
+				double d = similarity(type, pref);
+				if(max<d)
+					max = d;
+			}
+			maxSum += max;
+		}
+		
+		
+		
+		return maxSum/types.size();
+	}
+	
+//	public double statementSimilarityScore(String subjectUri, String predicateUri, String objectUri) {
+//		
+//		return (resourceSimilarityScore(subjectUri)+resourceSimilarityScore(predicateUri)+resourceSimilarityScore(objectUri))/3.0;
+//	}
+	
 	public double statementSimilarityScore(String subjectUri, String predicateUri, String objectUri) {
 		
-		return (resourceSimilarityScore(subjectUri)+resourceSimilarityScore(predicateUri)+resourceSimilarityScore(objectUri))/3.0;
+		return (resourceSimilarityScoreNew(subjectUri)+resourceSimilarityScoreNew(predicateUri)+resourceSimilarityScoreNew(objectUri))/3.0;
 	}
 }
