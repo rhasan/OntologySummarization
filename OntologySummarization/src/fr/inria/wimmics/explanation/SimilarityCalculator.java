@@ -180,12 +180,12 @@ public class SimilarityCalculator {
 		}
 		
 		if(types==null) return 0.0;
-		if(types.size()==0) return 0.0;
+		if(prefs.size()==0) return 0.0;
 		double maxSum = 0.0;
-		for(String type:types) {
+		for(String pref:prefs) {
 			//System.out.println("Type:"+type);
 			double max = Double.NEGATIVE_INFINITY;
-			for(String pref:prefs) {
+			for(String type:types) {
 				
 				double d = similarity(type, pref);
 				if(max<d)
@@ -196,7 +196,7 @@ public class SimilarityCalculator {
 		
 		
 		
-		return maxSum/types.size();
+		return maxSum/prefs.size();
 	}
 	
 //	public double statementSimilarityScore(String subjectUri, String predicateUri, String objectUri) {
