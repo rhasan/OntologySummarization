@@ -425,6 +425,9 @@ public class EvaluationISWC2013 {
 		mergedResult.setFmeasureValuesWithSimilarity(fscoreValuesSim);
 		mergedResult.setNdcgValuesWithSimilarity(ndcgValuesSim);
 		
+		System.out.println("Without Filter:"+avgCosineQ1);
+		System.out.println("With Filter:"+avgCosineQ2);
+		
 		return mergedResult;
 	}
 	
@@ -450,9 +453,13 @@ public class EvaluationISWC2013 {
 		allResults.add(etcResult3);
 		
 		
+		
 		EvaluationTestCaseResult mergedResult = iswc2013.mergeResults(allResults);
 		iswc2013.generateMatlabCode(mergedResult);
 		
+		etc1.printProfiles();
+		etc2.printProfiles();
+		etc3.printProfiles();
 		
 	}	
 }

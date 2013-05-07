@@ -30,6 +30,10 @@ public class EvaluationTestCase {
 		return result;
 	}
 	
+	public void printProfiles() {
+		evaluator.printParticipantProfiles();
+	}
+	
 	public EvaluationTestCaseResult evaluateTest() throws Exception {
 		evaluator = new TestCaseEvaluator(this);
 		result = evaluator.evaluateTest();

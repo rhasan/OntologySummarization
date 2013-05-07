@@ -100,8 +100,8 @@ public class TestCaseEvaluator {
 		ontologyLocationList.add(GEONAMES_SCHEMA_LOCATION);		
 		
 		//uncomment these lines if the ground truth summary should be with the statements greater than avg rating 
-		//AVG_GROUND_TRUTH_RATING_Q1 = avgGroundTruthRating(QUESTION1_NAME);
-		//AVG_GROUND_TRUTH_RATING_Q2 = avgGroundTruthRating(QUESTION2_NAME);
+		AVG_GROUND_TRUTH_RATING_Q1 = avgGroundTruthRating(QUESTION1_NAME);
+		AVG_GROUND_TRUTH_RATING_Q2 = avgGroundTruthRating(QUESTION2_NAME);
 		
 		etcResult.setCr_values(cr_values);
 	}
@@ -1151,8 +1151,9 @@ public class TestCaseEvaluator {
 		List<String> res = new ArrayList<String>();
 		for(int i=0;i<reList1.size();i++) {
 			//double scaled = reList1.get(i).getJudgmentScore();
-			double ratio_to_max = (reList1.get(i).getJudgmentScore() / max) * MAX_RATING;
+			//double ratio_to_max = (reList1.get(i).getJudgmentScore() / max) * MAX_RATING;
 			//double ratio_to_max = (reList1.get(i).getJudgmentScore() / max);
+			double ratio_to_max = reList1.get(i).getJudgmentScore();
 
 			if( ratio_to_max >=th) {
 				RankEntry re = reList1.get(i);
