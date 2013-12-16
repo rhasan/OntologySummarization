@@ -126,9 +126,29 @@ public class EvaluationISWC2013 {
 	public void generateMatlabCode(EvaluationTestCaseResult etcResult) {
 		
 		List<Double> crValues = etcResult.getCrValuesList();
+		List<Double> pValues = new ArrayList<Double>();
+		
+		for(int i=0;i<etcResult.getNdcgValues().size();i++) {
+			pValues.add(i+1.0);
+		}
 		
 		
-		System.out.println("%######################### [CR vs nDCG: without similarity] ################################");
+//		System.out.println("%######################### [CR vs nDCG: without similarity] ################################");
+//		int count = 0;
+//		
+//		EntryResCmp cmp = new EntryResCmp();
+//		
+//		DefaultTreeMap<String, List<Double>> tt = new DefaultTreeMap<String, List<Double>>(cmp,null);
+//		tt.putAll(etcResult.getNdcgValues());
+//		
+//		for(Entry<String, List<Double>> entry:tt.entrySet()) {
+//			String mlCode = plotVector(crValues, entry.getValue(), entry.getKey(),"CR","nDCG", count);
+//			//System.out.println(entry.getValue().size());
+//			System.out.println(mlCode);
+//			count++;
+//		}
+		
+		System.out.println("%######################### [Rank vs nDCG: without similarity] ################################");
 		int count = 0;
 		
 		EntryResCmp cmp = new EntryResCmp();
@@ -137,26 +157,35 @@ public class EvaluationISWC2013 {
 		tt.putAll(etcResult.getNdcgValues());
 		
 		for(Entry<String, List<Double>> entry:tt.entrySet()) {
-			String mlCode = plotVector(crValues, entry.getValue(), entry.getKey(),"CR","nDCG", count);
+			String mlCode = plotVector(pValues, entry.getValue(), entry.getKey(),"Rank","nDCG", count);
 			//System.out.println(entry.getValue().size());
 			System.out.println(mlCode);
 			count++;
 		}
 		
 		
-		
+//		//with similarity
+//		TreeMap<String, List<Double>> tt1 = new TreeMap<String, List<Double>>(cmp);
+//		tt1.putAll(etcResult.getNdcgValuesWithSimilarity());
+//		
+//		System.out.println("%######################### [CR vs nDCG: with similarity] ################################");
+//		for(Entry<String, List<Double>> entry:tt1.entrySet()) {
+//			String mlCode = plotVector(crValues, entry.getValue(), entry.getKey(),"CR","nDCG", count);
+//			//System.out.println(entry.getValue().size());
+//			System.out.println(mlCode);
+//			count++;
+//		}
 		//with similarity
 		TreeMap<String, List<Double>> tt1 = new TreeMap<String, List<Double>>(cmp);
 		tt1.putAll(etcResult.getNdcgValuesWithSimilarity());
 		
-		System.out.println("%######################### [CR vs nDCG: with similarity] ################################");
+		System.out.println("%######################### [Rank vs nDCG: with similarity] ################################");
 		for(Entry<String, List<Double>> entry:tt1.entrySet()) {
-			String mlCode = plotVector(crValues, entry.getValue(), entry.getKey(),"CR","nDCG", count);
+			String mlCode = plotVector(pValues, entry.getValue(), entry.getKey(),"Rank","nDCG", count);
 			//System.out.println(entry.getValue().size());
 			System.out.println(mlCode);
 			count++;
-		}
-		
+		}		
 		
 		
 		//cr vs f-measure without similarity
@@ -280,9 +309,9 @@ public class EvaluationISWC2013 {
 			return;
 		}
 		
+		int size = valueList1.size()<valueList2.size()?valueList1.size():valueList2.size();
 		
-		
-		for(int i=0;i<valueList1.size();i++) {
+		for(int i=0;i<size;i++) {
 			double mVal = (valueList1.get(i) + valueList2.get(i))/2.0;
 			valueList2.set(i, mVal);
 		}

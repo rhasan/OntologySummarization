@@ -1088,6 +1088,8 @@ public class TestCaseEvaluator {
 
 	}	
 	
+	/**
+	
 	public void computeNDCGMeasure(List<RankEntry> reList, List<RankEntry> sList, List<Double> ndcg) {
 		
 		int n = reList.size();
@@ -1100,6 +1102,24 @@ public class TestCaseEvaluator {
 			ndcg.add(d);			
 		}		
 	}	
+	**/
+
+	public void computeNDCGMeasure(List<RankEntry> reList, List<RankEntry> sList, List<Double> ndcg) {
+		
+		int n = reList.size();
+		//for(int ci=0;ci<cr_values.length;ci++) {
+		for(int p=0 ;p<reList.size(); p++) {
+			//double cr = cr_values[ci];
+			//int p = (int) (cr * n);
+			
+			double d = DCGMeasure.computeNDCG(reList, sList, p);
+			
+			//double cr = (double) p / (double) reList.size();
+			//System.out.println("NCG["+p+"]:"+d+ " CR:"+cr);
+			ndcg.add(d);			
+		}		
+	}	
+	
 	
 	public void computeKendallTau(List<RankEntry> reList, List<RankEntry> sList, List<Double> tau) throws Exception {
 		
