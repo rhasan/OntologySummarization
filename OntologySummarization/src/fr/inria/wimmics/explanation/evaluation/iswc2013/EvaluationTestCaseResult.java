@@ -16,6 +16,14 @@ public class EvaluationTestCaseResult {
 	List<Double> cosineSimilarityQuestion2;
 	double avgCosineSimilarityQuestion2;	
 	
+
+	List<Double> pearsonCorrelationQuestion1;
+	double avgPearsonCorrelatioQuestion1;
+
+	List<Double> pearsonCorrelationQuestion2;
+	double avgPearsonCorrelatioQuestion2;	
+	
+	
 	List<Double> kendallTauQuestion1;
 	double avgKendallTauQuestion1;
 
@@ -44,6 +52,9 @@ public class EvaluationTestCaseResult {
 		kendallTauQuestion1 = new ArrayList<Double>();
 		kendallTauQuestion2 = new ArrayList<Double>();
 		
+		pearsonCorrelationQuestion1 = new ArrayList<Double>();
+		pearsonCorrelationQuestion2 = new ArrayList<Double>();
+		
 		
 		ndcgValues = new DefaultTreeMap<String,List<Double>>(null);
 		fmeasureValues = new DefaultTreeMap<String,List<Double>>(null);
@@ -52,6 +63,50 @@ public class EvaluationTestCaseResult {
 		crValuesList = new ArrayList<Double>();
 	
 	
+	}
+	
+	public List<Double> getPearsonCorrelationQuestion1() {
+		return pearsonCorrelationQuestion1;
+	}
+
+	public void setPearsonCorrelationQuestion1(
+			List<Double> pearsonCorrelationQuestion1) {
+		this.pearsonCorrelationQuestion1 = pearsonCorrelationQuestion1;
+	}
+
+	public double getAvgPearsonCorrelatioQuestion1() {
+		return avgPearsonCorrelatioQuestion1;
+	}
+
+	public void setAvgPearsonCorrelatioQuestion1(
+			double avgPearsonCorrelatioQuestion1) {
+		this.avgPearsonCorrelatioQuestion1 = avgPearsonCorrelatioQuestion1;
+	}
+
+	public List<Double> getPearsonCorrelationQuestion2() {
+		return pearsonCorrelationQuestion2;
+	}
+
+	public void setPearsonCorrelationQuestion2(
+			List<Double> pearsonCorrelationQuestion2) {
+		this.pearsonCorrelationQuestion2 = pearsonCorrelationQuestion2;
+	}
+
+	public double getAvgPearsonCorrelatioQuestion2() {
+		return avgPearsonCorrelatioQuestion2;
+	}
+
+	public void setAvgPearsonCorrelatioQuestion2(
+			double avgPearsonCorrelatioQuestion2) {
+		this.avgPearsonCorrelatioQuestion2 = avgPearsonCorrelatioQuestion2;
+	}
+
+	public void AddPearsonCorrelationQuestion1(Double d) {
+		pearsonCorrelationQuestion1.add(d);
+	}
+
+	public void AddPearsonCorrelationQuestion2(Double d) {
+		pearsonCorrelationQuestion2.add(d);
 	}
 	
 	public void AddCosineSimilarityQuestion1(Double d) {

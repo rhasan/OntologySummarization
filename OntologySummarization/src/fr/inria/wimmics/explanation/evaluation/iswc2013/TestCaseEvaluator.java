@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.jfree.data.xy.XYSeries;
 import org.junit.Test;
 import org.openrdf.repository.RepositoryException;
@@ -31,6 +33,7 @@ import fr.inria.wimmics.explanation.evaluation.test.DCGSurveyEntryProcessor;
 
 
 
+import fr.inria.wimmics.util.Statistics;
 import fr.inria.wimmics.util.Util;
 
 public class TestCaseEvaluator {
@@ -303,6 +306,125 @@ public class TestCaseEvaluator {
 		
 
 	}
+	
+	
+	public static double computePearsonCorrelation(List<RankEntry> a, List<RankEntry> b) throws Exception {
+		
+		double[] vecA = new double[a.size()];
+		double[] vecB = new double[b.size()];
+		
+		//System.out.println("Vector A:");
+		for(int i=0;i<a.size();i++) {
+			if(a.get(i).getName().equals(b.get(i).getName())==false) {
+				throw new Exception("Vectors don't have same orders");
+			}
+			vecA[i] = a.get(i).getJudgmentScore();
+			//System.out.println(a.get(i).getName());
+			//System.out.print(vecA[i]+", ");
+		}
+		
+		//System.out.println("\nVector B:");
+		for(int i=0;i<b.size();i++) {
+			vecB[i] = b.get(i).getJudgmentScore();
+			//System.out.println(b.get(i).getName());
+			//System.out.print(vecB[i]+", ");
+		}
+		//System.out.println();
+		//PearsonsCorrelation correlationCalculator = new PearsonsCorrelation();
+		
+		//return correlationCalculator.correlation(vecA, vecB);
+		return Statistics.getPearsonCorrelation(vecA, vecB);
+	}
+	/**
+	 * computes Pearson correlation between the rating vectors of each evaluators 
+	 * (with conecept similarity)
+	 * @throws Exception 
+	 */
+
+	public void testPearsonCorrelationQuestion2() throws Exception {
+		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION2_NAME);
+		
+		
+		
+		double correlationSum = 0;
+		double totalValueCount = 0;
+		for(int i=0;i<reList.size();i++) {
+			List<Double> iCorrelationValues = new ArrayList<Double>();
+			double iCorrelationSum = 0;
+			int iPairCount = 0;
+			for(int j=0;j<reList.size();j++) {
+				
+				if(i!=j) {
+					
+					double correlation = computePearsonCorrelation(reList.get(i),reList.get(j));
+					System.out.println("Corr:"+correlation);
+					iCorrelationSum += correlation;
+					iPairCount++;
+					
+					correlationSum += correlation;
+					totalValueCount++;
+					iCorrelationValues.add(correlation);
+				}
+			}
+			double iAvgAgreement = iCorrelationSum/iPairCount;
+			etcResult.AddPearsonCorrelationQuestion2(iAvgAgreement);
+			//System.out.println("P_{"+(i+1)+"} agv:"+Util.round(iAvgAgreement));
+		}
+		
+		double totalAvgCorrelation = correlationSum/totalValueCount;
+		etcResult.setAvgPearsonCorrelatioQuestion2(totalAvgCorrelation);
+
+		//double stdDev = Statistics.standardDeviation(avgCosine, cosineSimValues);
+		
+		//System.out.println("Avg cosine similarity  (with concept similarity)(new):"+Util.round(totalAvgCosine));
+		//System.out.println("Std dev:"+stdDev);
+		
+		System.out.println("Avg pearson correlation  (with concept similarity):"+totalAvgCorrelation);
+		
+		
+
+	}
+	
+	public void testPearsonCorrelationQuestion1() throws Exception {
+		//List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION1_NAME);
+		List<List<RankEntry>> reList = surveyProcessor.getAllRankEntries(QUESTION1_NAME);
+		
+		
+		double correlationSum = 0;
+		double totalValueCount = 0;
+		for(int i=0;i<reList.size();i++) {
+			List<Double> iCorrelationValues = new ArrayList<Double>();
+			double iCorrelationSum = 0;
+			int iPairCount = 0;
+			for(int j=0;j<reList.size();j++) {
+				
+				if(i!=j) {
+					double correlation = computePearsonCorrelation(reList.get(i),reList.get(j));
+					System.out.println("Corr:"+correlation);
+					iCorrelationSum += correlation;
+					iPairCount++;
+					
+					correlationSum += correlation;
+					totalValueCount++;
+					iCorrelationValues.add(correlation);
+				}
+			}
+			double iAvgAgreement = iCorrelationSum/iPairCount;
+			etcResult.AddPearsonCorrelationQuestion1(iAvgAgreement);
+			//System.out.println("P_{"+(i+1)+"} agv:"+iAvgAgreement);
+		}
+		
+		double totalAvgCorrelation = correlationSum/totalValueCount;
+		etcResult.setAvgPearsonCorrelatioQuestion1(totalAvgCorrelation);
+
+		//double stdDev = Statistics.standardDeviation(avgCosine, cosineSimValues);
+		
+		System.out.println("Avg pearson correlation  (without concept similarity):"+totalAvgCorrelation);
+		//System.out.println("Std dev:"+stdDev);
+		
+		
+
+	}	
 	
 	/**
 	 * computes Kendall Tau between the rating vectors of each evaluators 
@@ -1214,6 +1336,10 @@ public class TestCaseEvaluator {
 		
 		testHumanAgreementQuestion1();
 		testHumanAgreementQuestion2();
+		//testPearsonCorrelationQuestion1();
+		//testPearsonCorrelationQuestion2();
+		//testTauHumanAgreementQuestion1();
+		//testTauHumanAgreementQuestion2();
 		
 		
 		test_salience();

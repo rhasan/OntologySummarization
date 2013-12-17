@@ -219,6 +219,8 @@ public class EvaluationISWC2013 {
 		System.out.println("%######################### [Cosine similarity with similarity] ################################");
 		String mlCode1 = matlabVector(etcResult.getCosineSimilarityQuestion2(), "x", 1);
 		System.out.println(mlCode1);
+
+		
 		
 		System.out.println("%######################### [Kendall tau human agreement without similarity] ################################");
 		String mlCode2 = matlabVector(etcResult.getKendallTauQuestion1(), "x", 2);
@@ -228,7 +230,15 @@ public class EvaluationISWC2013 {
 		String mlCode3 = matlabVector(etcResult.getKendallTauQuestion2(), "x", 3);
 		System.out.println(mlCode3);
 		
+
 		
+		System.out.println("%######################### [Pearson correlation without similarity] ################################");
+		String mlCode4 = matlabVector(etcResult.getPearsonCorrelationQuestion1(), "x", 4);
+		System.out.println(mlCode4);
+		
+		System.out.println("%######################### [Pearson correlation with similarity] ################################");
+		String mlCode5 = matlabVector(etcResult.getPearsonCorrelationQuestion2(), "x", 5);
+		System.out.println(mlCode5);		
 		
 	}
 
@@ -339,6 +349,11 @@ public class EvaluationISWC2013 {
 		List<Double> cosineQ2 = new ArrayList<Double>();
 		double avgCosineQ1 = 0.0;
 		double avgCosineQ2 = 0.0;
+	
+		List<Double> correlationQ1 = new ArrayList<Double>();
+		List<Double> correlationQ2 = new ArrayList<Double>();
+		double avgCorrelationQ1 = 0.0;
+		double avgCorrelationQ2 = 0.0;		
 		
 		//List<Double> fscoreValues = new ArrayList<Double>();
 		
@@ -395,6 +410,10 @@ public class EvaluationISWC2013 {
 			avgCosineQ1 += result.getAvgCosineSimilarityQuestion1();
 			
 			
+			//correlation q1
+			correlationQ1.addAll(result.getPearsonCorrelationQuestion1());
+			avgCorrelationQ1 += result.getAvgPearsonCorrelatioQuestion1();
+			
 			//with similarity below
 			
 			//ndcg
@@ -441,10 +460,17 @@ public class EvaluationISWC2013 {
 			cosineQ2.addAll(result.getCosineSimilarityQuestion2());
 			avgCosineQ2 += result.getAvgCosineSimilarityQuestion2();
 			
+			//correlation q2
+			correlationQ2.addAll(result.getPearsonCorrelationQuestion2());
+			avgCorrelationQ2 += result.getAvgPearsonCorrelatioQuestion2();
+			
 			
 		}
 		avgCosineQ1 = avgCosineQ1/allResults.size();
 		avgCosineQ2 = avgCosineQ2/allResults.size();
+		
+		avgCorrelationQ1 = avgCorrelationQ1/allResults.size();
+		avgCorrelationQ2 = avgCorrelationQ2/allResults.size();
 		
 		
 		mergedResult.setCosineSimilarityQuestion1(cosineQ1);
@@ -454,8 +480,12 @@ public class EvaluationISWC2013 {
 		mergedResult.setFmeasureValuesWithSimilarity(fscoreValuesSim);
 		mergedResult.setNdcgValuesWithSimilarity(ndcgValuesSim);
 		
-		System.out.println("Without Filter:"+avgCosineQ1);
-		System.out.println("With Filter:"+avgCosineQ2);
+		System.out.println("Cosine similarity Without Filter:"+avgCosineQ1);
+		System.out.println("Cosine similarity With Filter:"+avgCosineQ2);
+		
+		System.out.println("Pearson correlation Without Filter:"+avgCorrelationQ1);
+		System.out.println("Pearson correlation With Filter:"+avgCorrelationQ2);
+
 		
 		return mergedResult;
 	}
@@ -489,6 +519,8 @@ public class EvaluationISWC2013 {
 		etc1.printProfiles();
 		etc2.printProfiles();
 		etc3.printProfiles();
+		
+		
 		
 	}	
 }
