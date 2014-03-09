@@ -129,6 +129,8 @@ public class DCGMeasure {
 		double dcg = computeDCG(list, p);
 		double idcg = computeIDCG(list, p);
 		
+		System.out.println("dcg:"+dcg);
+		System.out.println("idcg:"+idcg);
 		if(idcg==0.0) return 0.0;
 		
 		double ndcg = dcg/idcg;
@@ -196,7 +198,9 @@ public class DCGMeasure {
 		double o = computeNDCG(list, 6);
 		System.out.println("nDCG₆:"+o);
 		*/
-		double o = computeNDCG("files/evaluation/dcg/dcg-test.in", "files/evaluation/dcg/dcg-algo-test.in", 6);
-		System.out.println("nDCG₆:"+o);
+		//double o = computeNDCG("files/evaluation/dcg/dcg-test.in", "files/evaluation/dcg/dcg-algo-test.in", 6);
+		//System.out.println("nDCG₆:"+o);
+		double o = computeNDCG("files/evaluation/dcg/dcg-test.in", "files/evaluation/dcg/dcg-algo-test.in", 1);
+		System.out.println("nDCG1:"+o);
 	}
 }
